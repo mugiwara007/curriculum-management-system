@@ -12,6 +12,10 @@ import { ShoppingBag as ShoppingBagIcon } from '../icons/shopping-bag';
 import { User as UserIcon } from '../icons/user';
 import { UserAdd as UserAddIcon } from '../icons/user-add';
 import { Users as UsersIcon } from '../icons/users';
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import SchoolIcon from '@mui/icons-material/School';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
@@ -25,7 +29,27 @@ const items = [
   {
     href: '/customers',
     icon: (<UsersIcon fontSize="small" />),
-    title: 'Customers'
+    title: 'Users'
+  },
+  {
+    href: '/subjects',
+    icon: (<MenuBookIcon fontSize="small" />),
+    title: 'Subjects'
+  },
+  {
+    href: '/departments',
+    icon: (<HomeWorkIcon fontSize="small" />),
+    title: 'Departments'
+  },
+  {
+    href: '/colleges',
+    icon: (<SchoolIcon fontSize="small" />),
+    title: 'Colleges'
+  },
+  {
+    href: '/curriculum',
+    icon: (<LocalLibraryIcon fontSize="small" />),
+    title: 'Curriculum'
   },
   {
     href: '/products',
@@ -91,23 +115,24 @@ export const DashboardSidebar = (props) => {
         }}
       >
         <div>
-          <Box sx={{ p: 3 }}>
-            <NextLink
-              href="/"
-              passHref
-            >
-              <a>
-                <Logo
-                  sx={{
-                    height: 42,
-                    width: 42
-                  }}
-                />
-              </a>
-            </NextLink>
-          </Box>
-          <Box sx={{ px: 2 }}>
-            <Box
+          <Box sx={{ px: 2, my: 3, mx: 3 }}>
+          <div>
+          <Box sx={{ mx: 6 }}>
+                <img
+              alt="Bulsu Image"
+              src="/static/images/bulsu logo png.png"
+              loading="lazy"
+              width="85%"
+            />
+            </Box>
+                <Typography
+                  color="inherit"
+                  variant="subtitle1"
+                >
+                  Curriculum Management
+                </Typography>
+              </div>
+            {/* <Box
               sx={{
                 alignItems: 'center',
                 backgroundColor: 'rgba(255, 255, 255, 0.04)',
@@ -142,15 +167,15 @@ export const DashboardSidebar = (props) => {
                   height: 14
                 }}
               />
-            </Box>
+            </Box> */}
           </Box>
         </div>
-        <Divider
+        {/* <Divider
           sx={{
             borderColor: '#2D3748',
             my: 3
           }}
-        />
+        /> */}
         <Box sx={{ flexGrow: 1 }}>
           {items.map((item) => (
             <NavItem
