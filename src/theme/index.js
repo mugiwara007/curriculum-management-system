@@ -157,15 +157,15 @@ export const theme = createTheme({
     },
     divider: '#E6E8F0',
     primary: {
-      main: '#5048E5',
-      light: '#828DF8',
-      dark: '#3832A0',
+      main: '#2196f3',
+      light: '#1976d2',
+      dark: '#0e4686',
       contrastText: '#FFFFFF'
     },
     secondary: {
-      main: '#10B981',
-      light: '#3FC79A',
-      dark: '#0B815A',
+      main: '#fdd835',
+      light: '#ffee33',
+      dark: '#b2a300',
       contrastText: '#FFFFFF'
     },
     success: {

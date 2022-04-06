@@ -11,7 +11,7 @@ import { Search as SearchIcon } from '../../icons/search';
 import { Upload as UploadIcon } from '../../icons/upload';
 import { Download as DownloadIcon } from '../../icons/download';
 
-export const CustomerListToolbar = (props) => (
+export const CollegeListToolbar = (props) => (
   <Box {...props}>
     <Box
       sx={{
@@ -26,26 +26,38 @@ export const CustomerListToolbar = (props) => (
         sx={{ m: 1 }}
         variant="h4"
       >
-        Customers
+        College
       </Typography>
       <Box sx={{ m: 1 }}>
-        <Button
+      <Button
           startIcon={(<UploadIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
-          Import
+          Create
         </Button>
         <Button
           startIcon={(<DownloadIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
-          Export
+          Retrieve
+        </Button>
+        <Button
+          startIcon={(<DownloadIcon fontSize="small" />)}
+          sx={{ mr: 1 }}
+        >
+          Update
+        </Button>
+        <Button
+          startIcon={(<DownloadIcon fontSize="small" />)}
+          sx={{ mr: 1 }}
+        >
+          Archive
         </Button>
         <Button
           color="primary"
           variant="contained"
         >
-          Add Customers
+          Add College
         </Button>
       </Box>
     </Box>
