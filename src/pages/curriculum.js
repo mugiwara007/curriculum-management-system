@@ -1,15 +1,15 @@
 import Head from 'next/head';
 import { Box, Container } from '@mui/material';
-import { CustomerListResults } from '../components/user/customer-list-results';
-import { CustomerListToolbar } from '../components/user/customer-list-toolbar';
+import { CurriculumListResults } from '../components/curriculum/curriculum-list-results';
+import { CurriculumListToolbar } from '../components/curriculum/curriculum-list-toolbar';
 import { DashboardLayout } from '../components/dashboard-layout';
 import { customers } from '../__mocks__/customers';
 
-const Customers = () => (
+const Curriculum = () => (
   <>
     <Head>
       <title>
-        Customers | Material Kit
+        Departments | Material Kit
       </title>
     </Head>
     <Box
@@ -20,18 +20,18 @@ const Customers = () => (
       }}
     >
       <Container maxWidth={false}>
-        <CustomerListToolbar />
+        <CurriculumListToolbar />
         <Box sx={{ mt: 3 }}>
-          <CustomerListResults customers={customers} />
+          <CurriculumListResults customers={customers} />
         </Box>
       </Container>
     </Box>
   </>
 );
-Customers.getLayout = (page) => (
+Curriculum.getLayout = (page) => (
   <DashboardLayout>
     {page}
   </DashboardLayout>
 );
 
-export default Customers;
+export default Curriculum;
