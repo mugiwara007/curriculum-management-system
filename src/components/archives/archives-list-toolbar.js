@@ -5,14 +5,35 @@ import {
   CardContent,
   TextField,
   InputAdornment,
-  SvgIcon,
-  Typography
+  SvgIcon, Typography
 } from '@mui/material';
-import { Download as DownloadIcon } from '../../icons/download';
 import { Search as SearchIcon } from '../../icons/search';
 import { Upload as UploadIcon } from '../../icons/upload';
+import { Download as DownloadIcon } from '../../icons/download';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import * as React from 'react';
 
-export const ProductListToolbar = (props) => (
+export default function CenteredTabs() {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: '100%',}}>
+      <Tabs value={value} onChange={handleChange} centered>
+        <Tab label="Archive Subject Records" />
+        <Tab label="Archive User Records" />
+        <Tab label="Archive College Records" />
+        <Tab label="Archive Department Records" />
+      </Tabs>
+    </Box>
+  );
+}
+
+export const ArchivesListToolbar = (props) => (
   <Box {...props}>
     <Box
       sx={{
@@ -23,30 +44,19 @@ export const ProductListToolbar = (props) => (
         m: -1
       }}
     >
+      <CenteredTabs></CenteredTabs>
       <Typography
         sx={{ m: 1 }}
         variant="h4"
       >
-        Products
+        Archives
       </Typography>
       <Box sx={{ m: 1 }}>
-        <Button
-          startIcon={(<UploadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Import
-        </Button>
-        <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Export
-        </Button>
         <Button
           color="primary"
           variant="contained"
         >
-          Add products
+          Retrieve
         </Button>
       </Box>
     </Box>
@@ -60,15 +70,15 @@ export const ProductListToolbar = (props) => (
                 startAdornment: (
                   <InputAdornment position="start">
                     <SvgIcon
-                      fontSize="small"
                       color="action"
+                      fontSize="small"
                     >
                       <SearchIcon />
                     </SvgIcon>
                   </InputAdornment>
                 )
               }}
-              placeholder="Search product"
+              placeholder="Search customer"
               variant="outlined"
             />
           </Box>

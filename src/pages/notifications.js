@@ -1,15 +1,15 @@
 import Head from 'next/head';
 import { Box, Container, Grid, Pagination } from '@mui/material';
-import { products } from '../__mocks__/products';
-import { ProductListToolbar } from '../components/product/product-list-toolbar';
-import { ProductCard } from '../components/product/product-card';
+import { products } from '../__mocks__/notifications';
+import { NotificationsListToolbar } from '../components/notifications/product-list-toolbar';
+import { ProductCard } from '../components/notifications/product-card';
 import { DashboardLayout } from '../components/dashboard-layout';
 
-const Products = () => (
+const Notifications = () => (
   <>
     <Head>
       <title>
-        Products | Material Kit
+        All Notifications
       </title>
     </Head>
     <Box
@@ -20,7 +20,7 @@ const Products = () => (
       }}
     >
       <Container maxWidth={false}>
-        <ProductListToolbar />
+        <NotificationsListToolbar />
         <Box sx={{ pt: 3 }}>
           <Grid
             container
@@ -57,10 +57,10 @@ const Products = () => (
   </>
 );
 
-Products.getLayout = (page) => (
+Notifications.getLayout = (page) => (
   <DashboardLayout>
     {page}
   </DashboardLayout>
 );
 
-export default Products;
+export default Notifications;

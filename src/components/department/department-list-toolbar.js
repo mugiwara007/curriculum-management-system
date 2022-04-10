@@ -39,12 +39,6 @@ export const DepartmentListToolbar = (props) => (
           startIcon={(<DownloadIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
-          Retrieve
-        </Button>
-        <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
           Update
         </Button>
         <Button
