@@ -14,6 +14,8 @@ import {
   Typography
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { auth } from 'src/firebase/firebase-auth';
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Register = () => {
   const router = useRouter();
@@ -56,7 +58,18 @@ const Register = () => {
         )
     }),
     onSubmit: () => {
-      router.push('/');
+      createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        router.push('/');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+
     }
   });
 
