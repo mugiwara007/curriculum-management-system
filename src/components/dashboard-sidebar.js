@@ -17,6 +17,8 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import SchoolIcon from '@mui/icons-material/School';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import LogoutIcon from '@mui/icons-material/Logout';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
@@ -59,7 +61,7 @@ const items = [
   },
   {
     href: '/notifications',
-    icon: (<ShoppingBagIcon fontSize="small" />),
+    icon: (<NotificationsActiveIcon fontSize="small" />),
     title: 'All Notification'
   },
   {
@@ -86,6 +88,11 @@ const items = [
     href: '/404',
     icon: (<XCircleIcon fontSize="small" />),
     title: 'Error'
+  },
+  {
+    href: '/',
+    icon: (<LogoutIcon fontSize="small" />),
+    title: 'Sign Out'
   }
 ];
 
