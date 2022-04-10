@@ -10,6 +10,10 @@ import {
 import { Search as SearchIcon } from '../../icons/search';
 import { Upload as UploadIcon } from '../../icons/upload';
 import { Download as DownloadIcon } from '../../icons/download';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import PrintIcon from '@mui/icons-material/Print';
 
 export const CurriculumListToolbar = (props) => (
   <Box {...props}>
@@ -30,25 +34,19 @@ export const CurriculumListToolbar = (props) => (
       </Typography>
       <Box sx={{ m: 1 }}>
         <Button
-          startIcon={(<UploadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Create
-        </Button>
-        <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
+          startIcon={(<SaveIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
           Save
         </Button>
         <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
+          startIcon={(<EditIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
           Edit
         </Button>
         <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
+          startIcon={(<PrintIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
           Print
@@ -56,6 +54,7 @@ export const CurriculumListToolbar = (props) => (
         <Button
           color="primary"
           variant="contained"
+          startIcon={(<AddIcon fontSize="small" />)}
         >
           Add Curriculum
         </Button>

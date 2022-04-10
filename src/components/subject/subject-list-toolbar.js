@@ -10,6 +10,9 @@ import {
 import { Search as SearchIcon } from '../../icons/search';
 import { Upload as UploadIcon } from '../../icons/upload';
 import { Download as DownloadIcon } from '../../icons/download';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import ArchiveIcon from '@mui/icons-material/Archive';
 
 export const SubjectListToolbar = (props) => (
   <Box {...props}>
@@ -30,19 +33,13 @@ export const SubjectListToolbar = (props) => (
       </Typography>
       <Box sx={{ m: 1 }}>
         <Button
-          startIcon={(<UploadIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Create
-        </Button>
-        <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
+          startIcon={(<EditIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
           Update
         </Button>
         <Button
-          startIcon={(<DownloadIcon fontSize="small" />)}
+          startIcon={(<ArchiveIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
           Archive
@@ -50,6 +47,7 @@ export const SubjectListToolbar = (props) => (
         <Button
           color="primary"
           variant="contained"
+          startIcon={(<AddIcon fontSize="small" />)}
         >
           Add Subject
         </Button>
