@@ -6,16 +6,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Bell as BellIcon } from '../icons/bell';
 import { UserCircle as UserCircleIcon } from '../icons/user-circle';
 import { Users as UsersIcon } from '../icons/users';
-
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar1 from '@mui/material/Avatar';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import Divider from '@mui/material/Divider';
+import { NotificationDiv } from 'src/pages/NotificationList';
+import { useState } from 'react';
 
 const style = {
   width: '100%',
@@ -30,13 +22,20 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
+  const [visibility,setVisibility] = useState('none');
 
   const handleClick = () => {
-    
+    setVisibility('block');
+    if(visibility == 'none'){
+      setVisibility('block');
+    }else{
+      setVisibility('none')
+    }
   }
 
   return (
     <>
+    <NotificationDiv visibility = {visibility}/>
       <DashboardNavbarRoot
         sx={{
           left: {
