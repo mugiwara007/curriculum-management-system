@@ -7,10 +7,11 @@ import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Facebook as FacebookIcon } from '../icons/facebook';
 import { Google as GoogleIcon } from '../icons/google';
-import { auth } from 'src/firebase/firebase-auth';
-import { getAuth ,signInWithEmailAndPassword } from "firebase/auth";
+import { fetchSignInMethodsForEmail } from 'firebase/auth';
+import { useAuth } from 'src/contexts/AuthContext';
 
 const Login = () => {
+  const { login } = useAuth()
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -32,16 +33,8 @@ const Login = () => {
           'Password is required')
     }),
     onSubmit: () => {
-      const auth = getAuth();
-        signInWithEmailAndPassword(auth, formik.values.email, formik.values.password).then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        router.push('/');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+      login(formik.values.email, formik.values.password);
+      router.push('/');
     }
   });
 

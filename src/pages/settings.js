@@ -35,9 +35,9 @@ const Settings = () => (
 );
 
 Settings.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
+    <DashboardLayout>
+      {page}
+    </DashboardLayout>
 );
 
 export default Settings;

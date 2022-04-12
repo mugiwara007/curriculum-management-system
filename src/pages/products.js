@@ -58,9 +58,9 @@ const Products = () => (
 );
 
 Products.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
+    <DashboardLayout>
+      {page}
+    </DashboardLayout>
 );
 
 export default Products;

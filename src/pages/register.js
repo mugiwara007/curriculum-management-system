@@ -14,10 +14,12 @@ import {
   Typography
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { auth } from 'src/firebase/firebase-auth';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from 'src/contexts/AuthContext';
+import { useState } from 'react';
+
 
 const Register = () => {
+  const { register } = useAuth()
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -25,6 +27,7 @@ const Register = () => {
       firstName: '',
       lastName: '',
       password: '',
+      passConfirm: '',
       policy: false
     },
     validationSchema: Yup.object({
@@ -47,7 +50,14 @@ const Register = () => {
           'Last name is required'),
       password: Yup
         .string()
+        .min(6, 'Password must be atleast 6 characters')
         .max(255)
+        .required(
+          'Password is required'),
+      passConfirm: Yup
+        .string()
+        .oneOf([Yup.ref("password")],
+          'Password does not match')
         .required(
           'Password is required'),
       policy: Yup
@@ -58,18 +68,8 @@ const Register = () => {
         )
     }),
     onSubmit: () => {
-      createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        router.push('/');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-      });
-
+      register(formik.values.email,formik.values.password)
+      router.push('/login')
     }
   });
 
@@ -91,14 +91,14 @@ const Register = () => {
       >
         <Container maxWidth="sm">
           <NextLink
-            href="/"
+            href="/login"
             passHref
           >
             <Button
               component="a"
               startIcon={<ArrowBackIcon fontSize="small" />}
             >
-              Dashboard
+              Login
             </Button>
           </NextLink>
           <form onSubmit={formik.handleSubmit}>
@@ -165,6 +165,19 @@ const Register = () => {
               onChange={formik.handleChange}
               type="password"
               value={formik.values.password}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.passConfirm && formik.errors.passConfirm)}
+              fullWidth
+              helperText={formik.touched.passConfirm && formik.errors.passConfirm}
+              label="Confirm Password"
+              margin="normal"
+              name="passConfirm"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="password"
+              value={formik.values.passConfirm}
               variant="outlined"
             />
             <Box

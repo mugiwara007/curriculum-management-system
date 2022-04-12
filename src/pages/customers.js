@@ -29,9 +29,9 @@ const Customers = () => (
   </>
 );
 Customers.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
+    <DashboardLayout>
+      {page}
+    </DashboardLayout>
 );
 
 export default Customers;
