@@ -43,26 +43,91 @@ export default function FormDialog() {
         >
           Add Users
         </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+      <Dialog open={open}
+      onClose={handleClose}
+      >
+        <DialogTitle
+        display="flex"
+        justifyContent="center" >Add User</DialogTitle>
+
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
+
+              <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="username"
+              label="Username"
+              type="text"
+              fullWidth
+              variant="outlined"
+              />
+
+
+              <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="email"
+              label="Email"
+              type="email"
+              fullWidth
+              variant="outlined"
+              />
+
+
+              <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="password"
+              label="Password"
+              type="password"
+              fullWidth
+              variant="outlined"
+              />
+
+
+              <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Name"
+              type="text"
+              fullWidth
+              variant="outlined"
+              />
+
+
+              <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="userCode"
+              label="User Code"
+              type="number"
+              fullWidth
+              variant="outlined"
+              />
+
+
         </DialogContent>
+
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Box>
+            <Button
+            color="primary"
+            onClick={handleClose}>Cancel
+            </Button>
+          </Box>
+          <Box p={2}>
+            <Button
+            color="primary"
+            variant='contained'
+            onClick={handleClose}>Done
+            </Button>
+          </Box>
         </DialogActions>
       </Dialog>
       </div>
