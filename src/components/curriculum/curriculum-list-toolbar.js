@@ -16,139 +16,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import PrintIcon from '@mui/icons-material/Print';
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-
-import * as React from 'react';
-
-export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div style={{display : 'inline-block'}} >
-      <Button
-          color="primary"
-          variant="contained"
-          startIcon={(<AddIcon fontSize="small" />)}
-          onClick={handleClickOpen}
-        >
-          Add curriculum
-        </Button>
-      <Dialog open={open}
-      onClose={handleClose}>
-        <DialogTitle
-        display="flex"
-        justifyContent="center"
-        >Add Curriculum</DialogTitle>
-        <DialogContent>
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="currCode"
-                label="Curriculum Code"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="cmo"
-                label="CMO"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="version"
-                label="Version"
-                type="number"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="version"
-                label="Version"
-                type="date"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="version"
-                label="Version"
-                type="date"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="depCode"
-                label="Department Code"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="userName"
-                label="Username"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-        </DialogContent>
-        <DialogActions>
-        <Box>
-              <Button
-                color="primary"
-                onClick={handleClose}>Cancel
-              </Button>
-          </Box>
-          <Box p={2}>
-              <Button
-                color="primary"
-                variant='contained'
-                onClick={handleClose}>Done
-              </Button>
-          </Box>
-        </DialogActions>
-      </Dialog>
-      </div>
-  );
-}
 
 export const CurriculumListToolbar = (props) => (
   <Box {...props}>
@@ -186,8 +53,13 @@ export const CurriculumListToolbar = (props) => (
         >
           Print
         </Button>
-        <FormDialog>
-        </FormDialog>
+        <Button
+          color="primary"
+          variant="contained"
+          startIcon={(<AddIcon fontSize="small" />)}
+        >
+          Add curriculum
+        </Button>
       </Box>
     </Box>
     <Box sx={{ mt: 3 }}>
