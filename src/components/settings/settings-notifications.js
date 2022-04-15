@@ -15,7 +15,7 @@ export const SettingsNotifications = (props) => (
   <form {...props}>
     <Card>
       <CardHeader
-        subheader="Manage the notifications"
+        subheader="Manage notifications you want to recieve"
         title="Notifications"
       />
       <Divider />
@@ -31,7 +31,7 @@ export const SettingsNotifications = (props) => (
             sm={6}
             sx={{
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
             }}
             xs={12}
           >
@@ -47,6 +47,8 @@ export const SettingsNotifications = (props) => (
                 <Checkbox
                   color="primary"
                   defaultChecked
+                  sx={{
+                    '& .MuiSvgIcon-root': { fontSize: 30 } }}
                 />
               )}
               label="Email"
@@ -56,22 +58,49 @@ export const SettingsNotifications = (props) => (
                 <Checkbox
                   color="primary"
                   defaultChecked
+                  sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }}
                 />
               )}
               label="Push Notifications"
             />
             <FormControlLabel
-              control={<Checkbox />}
-              label="Text Messages"
+              control={
+                <Checkbox 
+                  sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }}
+                />}
+              label="SMS"
             />
             <FormControlLabel
               control={(
                 <Checkbox
                   color="primary"
                   defaultChecked
+                  sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }}
                 />
               )}
               label="Phone calls"
+            />
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  color="primary"
+                  defaultChecked
+                  sx={{
+                    '& .MuiSvgIcon-root': { fontSize: 30 } }}
+                />
+              )}
+              label="Events"
+            />
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  color="primary"
+                  defaultChecked
+                  sx={{
+                    '& .MuiSvgIcon-root': { fontSize: 30 } }}
+                />
+              )}
+              label="Reminders"
             />
           </Grid>
           <Grid
@@ -89,19 +118,23 @@ export const SettingsNotifications = (props) => (
               gutterBottom
               variant="h6"
             >
-              Messages
+              Mobile
             </Typography>
             <FormControlLabel
               control={(
                 <Checkbox
                   color="primary"
                   defaultChecked
+                  sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }}
                 />
               )}
               label="Email"
             />
             <FormControlLabel
-              control={<Checkbox />}
+              control={
+                <Checkbox 
+                sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }}
+                />}
               label="Push Notifications"
             />
             <FormControlLabel
@@ -109,9 +142,42 @@ export const SettingsNotifications = (props) => (
                 <Checkbox
                   color="primary"
                   defaultChecked
+                  sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }}
+                />
+              )}
+              label="SMS"
+            />
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  color="primary"
+                  defaultChecked
+                  sx={{ '& .MuiSvgIcon-root': { fontSize: 30 } }}
                 />
               )}
               label="Phone calls"
+            />
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  color="primary"
+                  defaultChecked
+                  sx={{
+                    '& .MuiSvgIcon-root': { fontSize: 30 } }}
+                />
+              )}
+              label="Events"
+            />
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  color="primary"
+                  defaultChecked
+                  sx={{
+                    '& .MuiSvgIcon-root': { fontSize: 30 } }}
+                />
+              )}
+              label="Reminders"
             />
           </Grid>
         </Grid>
@@ -128,7 +194,7 @@ export const SettingsNotifications = (props) => (
           color="primary"
           variant="contained"
         >
-          Save
+          Save Changes
         </Button>
       </Box>
     </Card>

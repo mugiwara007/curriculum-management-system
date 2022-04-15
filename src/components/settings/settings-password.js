@@ -18,24 +18,37 @@ export const SettingsPassword = (props) => {
     <form {...props}>
       <Card>
         <CardHeader
-          subheader="Update password"
+          subheader="Use a password you have not used before"
           title="Password"
         />
         <Divider />
         <CardContent>
+          <h3>Current</h3>
           <TextField
             fullWidth
-            label="Password"
+            label="Current Password"
             margin="normal"
-            name="password"
+            name="current"
             onChange={handleChange}
             type="password"
-            value={values.password}
+            value={values.current}
             variant="outlined"
           />
+          <h3>New</h3>
           <TextField
             fullWidth
-            label="Confirm password"
+            label="New Password"
+            margin="normal"
+            name="new"
+            onChange={handleChange}
+            type="password"
+            value={values.new}
+            variant="outlined"
+          />
+          <h3>Retype new</h3>
+          <TextField
+            fullWidth
+            label="Confirm Password"
             margin="normal"
             name="confirm"
             onChange={handleChange}
@@ -49,14 +62,14 @@ export const SettingsPassword = (props) => {
           sx={{
             display: 'flex',
             justifyContent: 'flex-end',
-            p: 2
+            p: 1
           }}
         >
           <Button
             color="primary"
             variant="contained"
           >
-            Update
+            Update password
           </Button>
         </Box>
       </Card>
