@@ -14,8 +14,11 @@ import { UserAdd as UserAddIcon } from '../icons/user-add';
 import { Users as UsersIcon } from '../icons/users';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import ArchiveIcon from '@mui/icons-material/Archive';
 import SchoolIcon from '@mui/icons-material/School';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import LogoutIcon from '@mui/icons-material/Logout';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
@@ -52,9 +55,14 @@ const items = [
     title: 'Curriculum'
   },
   {
-    href: '/products',
-    icon: (<ShoppingBagIcon fontSize="small" />),
-    title: 'Products'
+    href: '/archives',
+    icon: (<ArchiveIcon fontSize="small" />),
+    title: 'Archives'
+  },
+  {
+    href: '/notifications',
+    icon: (<NotificationsActiveIcon fontSize="small" />),
+    title: 'All Notification'
   },
   {
     href: '/account',
@@ -80,6 +88,11 @@ const items = [
     href: '/404',
     icon: (<XCircleIcon fontSize="small" />),
     title: 'Error'
+  },
+  {
+    href: '/',
+    icon: (<LogoutIcon fontSize="small" />),
+    title: 'Sign Out'
   }
 ];
 

@@ -64,10 +64,10 @@ export const ProductCard = ({ product, ...rest }) => (
             sx={{ pl: 1 }}
             variant="body2"
           >
-            Updated 2hr ago
+            Notification Received Date Here
           </Typography>
         </Grid>
-        <Grid
+        {/* <Grid
           item
           sx={{
             alignItems: 'center',
@@ -85,7 +85,7 @@ export const ProductCard = ({ product, ...rest }) => (
             {' '}
             Downloads
           </Typography>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   </Card>

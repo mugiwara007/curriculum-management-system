@@ -13,14 +13,11 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
-  Button,
+  Typography
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
-import EditIcon from '@mui/icons-material/Edit';
-import PrintIcon from '@mui/icons-material/Print';
 
-export const CurriculumListResults = ({ customers, ...rest }) => {
+export const ArchivesListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -98,9 +95,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                 <TableCell>
                   Registration date
                 </TableCell>
-                <TableCell>
-                  Action
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -150,22 +144,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                   <TableCell>
                     {format(customer.createdAt, 'dd/MM/yyyy')}
                   </TableCell>
-                  <TableCell>
-                    <Button
-                    startIcon={(<EditIcon fontSize="small" />)}
-                    variant="outlined"
-                    sx={{ mr: 1 }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    startIcon={(<PrintIcon fontSize="small" />)}
-                    variant="outlined"
-                    sx={{ mr: 1 }}
-                  >
-                    Print
-                  </Button>
-                </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -185,6 +163,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
   );
 };
 
-CurriculumListResults.propTypes = {
+ArchivesListResults.propTypes = {
   customers: PropTypes.array.isRequired
 };
