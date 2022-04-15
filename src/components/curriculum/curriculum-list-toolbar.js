@@ -1,3 +1,4 @@
+
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import PrintIcon from '@mui/icons-material/Print';
+
 
 export const CurriculumListToolbar = (props) => (
   <Box {...props}>
@@ -34,29 +36,11 @@ export const CurriculumListToolbar = (props) => (
       </Typography>
       <Box sx={{ m: 1 }}>
         <Button
-          startIcon={(<SaveIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Save
-        </Button>
-        <Button
-          startIcon={(<EditIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Edit
-        </Button>
-        <Button
-          startIcon={(<PrintIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Print
-        </Button>
-        <Button
           color="primary"
           variant="contained"
           startIcon={(<AddIcon fontSize="small" />)}
         >
-          Add Curriculum
+          Add curriculum
         </Button>
       </Box>
     </Box>

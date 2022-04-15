@@ -14,6 +14,98 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import ArchiveIcon from '@mui/icons-material/Archive';
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+import * as React from 'react';
+
+export default function FormDialog() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+          color="primary"
+          variant="contained"
+          startIcon={(<AddIcon fontSize="small" />)}
+          onClick={handleClickOpen}
+        >
+          Add college
+        </Button>
+      <Dialog open={open}
+      onClose={handleClose}>
+        <DialogTitle
+        display="flex"
+        justifyContent="center"
+        >Add College</DialogTitle>
+        <DialogContent>
+
+             <TextField
+                required
+                autoFocus
+                margin="dense"
+                id="colCode"
+                label="College Code"
+                type="text"
+                fullWidth
+                variant="outlined"
+              />
+
+              <TextField
+                required
+                autoFocus
+                margin="dense"
+                id="description"
+                label="Description"
+                type="text"
+                fullWidth
+                variant="outlined"
+              />
+
+              <TextField
+                required
+                autoFocus
+                margin="dense"
+                id="logo"
+                label="Logo"
+                type="blob"
+                fullWidth
+                variant="outlined"
+              />
+
+
+        </DialogContent>
+        <DialogActions>
+          <Box>
+              <Button
+                color="primary"
+                onClick={handleClose}>Cancel
+              </Button>
+          </Box>
+          <Box p={2}>
+              <Button
+                color="primary"
+                variant='contained'
+                onClick={handleClose}>Done
+              </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+      </div>
+  );
+}
+
 export const CollegeListToolbar = (props) => (
   <Box {...props}>
     <Box
@@ -33,24 +125,13 @@ export const CollegeListToolbar = (props) => (
       </Typography>
       <Box sx={{ m: 1 }}>
         <Button
-          startIcon={(<EditIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Update
-        </Button>
-        <Button
           startIcon={(<ArchiveIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >
           Archive
         </Button>
-        <Button
-          color="primary"
-          variant="contained"
-          startIcon={(<AddIcon fontSize="small" />)}
-        >
-          Add College
-        </Button>
+        <FormDialog>
+        </FormDialog>
       </Box>
     </Box>
     <Box sx={{ mt: 3 }}>
@@ -80,3 +161,4 @@ export const CollegeListToolbar = (props) => (
     </Box>
   </Box>
 );
+
