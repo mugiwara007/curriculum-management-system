@@ -8,11 +8,11 @@ const AuthRoute = ({ children }) => {
 
 useEffect(() => {
     if (currentUser) {
-        return <>{children}</>
+        return 
     }
     else {
         router.push('/login')
-        return <></>
+        return
     }
 }, []);
 

@@ -16,6 +16,8 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useAuth } from 'src/contexts/AuthContext';
 import { useState } from 'react';
+import { DashboardLayout } from '../components/dashboard-layout';
+import PageAuth from 'src/routes/PageAuth';
 
 
 const Register = () => {
@@ -77,7 +79,7 @@ const Register = () => {
     <>
       <Head>
         <title>
-          Register | Material Kit
+          CurrMa | Create A New User
         </title>
       </Head>
       <Box
@@ -90,24 +92,13 @@ const Register = () => {
         }}
       >
         <Container maxWidth="sm">
-          <NextLink
-            href="/login"
-            passHref
-          >
-            <Button
-              component="a"
-              startIcon={<ArrowBackIcon fontSize="small" />}
-            >
-              Login
-            </Button>
-          </NextLink>
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography
                 color="textPrimary"
                 variant="h4"
               >
-                Create a new account
+                Create A New User
               </Typography>
               <Typography
                 color="textSecondary"
@@ -226,7 +217,7 @@ const Register = () => {
                 type="submit"
                 variant="contained"
               >
-                Sign Up Now
+                Create New User
               </Button>
             </Box>
             <Typography
@@ -253,5 +244,11 @@ const Register = () => {
     </>
   );
 };
+
+Register.getLayout = (page) => (
+  <DashboardLayout>
+    {page}
+  </DashboardLayout>
+);
 
 export default Register;
