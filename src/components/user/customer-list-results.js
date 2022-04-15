@@ -13,9 +13,11 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
+  Typography,
+  Button,
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
+import EditIcon from '@mui/icons-material/Edit';
 
 export const CustomerListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -95,6 +97,9 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                 <TableCell>
                   Registration date
                 </TableCell>
+                <TableCell>
+                  Action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -143,6 +148,15 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   </TableCell>
                   <TableCell>
                     {format(customer.createdAt, 'dd/MM/yyyy')}
+                  </TableCell>
+                  <TableCell>
+                  <Button
+                  startIcon={(<EditIcon fontSize="small" />)}
+                  variant="outlined"
+                  sx={{ mr: 1 }}
+                >
+                  Update
+                </Button>
                   </TableCell>
                 </TableRow>
               ))}

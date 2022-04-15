@@ -36,24 +36,6 @@ export const CurriculumListToolbar = (props) => (
       </Typography>
       <Box sx={{ m: 1 }}>
         <Button
-          startIcon={(<SaveIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Save
-        </Button>
-        <Button
-          startIcon={(<EditIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Edit
-        </Button>
-        <Button
-          startIcon={(<PrintIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Print
-        </Button>
-        <Button
           color="primary"
           variant="contained"
           startIcon={(<AddIcon fontSize="small" />)}

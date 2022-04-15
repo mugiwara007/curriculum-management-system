@@ -125,12 +125,6 @@ export const CollegeListToolbar = (props) => (
       </Typography>
       <Box sx={{ m: 1 }}>
         <Button
-          startIcon={(<EditIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Update
-        </Button>
-        <Button
           startIcon={(<ArchiveIcon fontSize="small" />)}
           sx={{ mr: 1 }}
         >

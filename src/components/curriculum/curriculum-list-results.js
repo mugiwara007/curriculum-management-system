@@ -13,9 +13,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
+  Typography,
+  Button,
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
+import EditIcon from '@mui/icons-material/Edit';
+import PrintIcon from '@mui/icons-material/Print';
 
 export const CurriculumListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -95,6 +98,9 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                 <TableCell>
                   Registration date
                 </TableCell>
+                <TableCell>
+                  Action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -144,6 +150,22 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                   <TableCell>
                     {format(customer.createdAt, 'dd/MM/yyyy')}
                   </TableCell>
+                  <TableCell>
+                    <Button
+                    startIcon={(<EditIcon fontSize="small" />)}
+                    variant="outlined"
+                    sx={{ mr: 1 }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    startIcon={(<PrintIcon fontSize="small" />)}
+                    variant="outlined"
+                    sx={{ mr: 1 }}
+                  >
+                    Print
+                  </Button>
+                </TableCell>
                 </TableRow>
               ))}
             </TableBody>
