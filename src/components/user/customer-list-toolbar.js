@@ -61,6 +61,8 @@ export default function FormDialog() {
               type="text"
               fullWidth
               variant="outlined"
+              error
+              helperText="Please fill up this field"
               />
 
 
@@ -73,6 +75,8 @@ export default function FormDialog() {
               type="email"
               fullWidth
               variant="outlined"
+              error
+              helperText="Please fill up this field"
               />
 
 
@@ -85,6 +89,8 @@ export default function FormDialog() {
               type="password"
               fullWidth
               variant="outlined"
+              error
+              helperText="Please fill up this field"
               />
 
 
@@ -97,6 +103,8 @@ export default function FormDialog() {
               type="text"
               fullWidth
               variant="outlined"
+              error
+              helperText="Please fill up this field"
               />
 
 
@@ -109,6 +117,8 @@ export default function FormDialog() {
               type="number"
               fullWidth
               variant="outlined"
+              error
+              helperText="Please fill up this field"
               />
 
 

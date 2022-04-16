@@ -60,6 +60,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -71,6 +73,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
 
@@ -83,6 +87,8 @@ export default function FormDialog() {
                 type="number"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -94,6 +100,8 @@ export default function FormDialog() {
                 type="number"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -105,6 +113,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -116,17 +126,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="username"
-                label="Username"
-                type="text"
-                fullWidth
-                variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -138,6 +139,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -149,6 +152,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -160,6 +165,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
         </DialogContent>

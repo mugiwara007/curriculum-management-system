@@ -8,6 +8,7 @@ import {
   Card,
   Checkbox,
   Table,
+  TextField,
   TableBody,
   TableCell,
   TableHead,
@@ -18,6 +19,98 @@ import {
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+import * as React from 'react';
+
+export default function FormDialog() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div style={{display : 'inline-block'}} >
+        <Button
+         startIcon={(<EditIcon fontSize="small" />)}
+         variant="outlined"
+         sx={{ mr: 1 }}
+         onClick={handleClickOpen}>
+         Update
+        </Button>
+      <Dialog open={open}
+      onClose={handleClose}>
+        <DialogTitle
+        display="flex"
+        justifyContent="center"
+        >Update Data</DialogTitle>
+        <DialogContent>
+
+             <TextField
+                required
+                autoFocus
+                margin="dense"
+                id="colCode"
+                label="College Code"
+                type="text"
+                fullWidth
+                variant="outlined"
+              />
+
+              <TextField
+                required
+                autoFocus
+                margin="dense"
+                id="description"
+                label="Description"
+                type="text"
+                fullWidth
+                variant="outlined"
+              />
+
+              <TextField
+                required
+                autoFocus
+                margin="dense"
+                id="logo"
+                label="Logo"
+                type="blob"
+                fullWidth
+                variant="outlined"
+              />
+
+
+        </DialogContent>
+        <DialogActions>
+          <Box>
+              <Button
+                color="primary"
+                onClick={handleClose}>Cancel
+              </Button>
+          </Box>
+          <Box p={2}>
+              <Button
+                color="primary"
+                variant='contained'
+                onClick={handleClose}>Done
+              </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+      </div>
+  );
+}
 
 export const CollegeListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -150,13 +243,8 @@ export const CollegeListResults = ({ customers, ...rest }) => {
                     {format(customer.createdAt, 'dd/MM/yyyy')}
                   </TableCell>
                   <TableCell>
-                    <Button
-                    startIcon={(<EditIcon fontSize="small" />)}
-                    variant="outlined"
-                    sx={{ mr: 1 }}
-                  >
-                    Update
-                  </Button>
+                   <FormDialog>
+                   </FormDialog>
                 </TableCell>
                 </TableRow>
               ))}

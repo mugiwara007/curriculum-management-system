@@ -60,6 +60,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -71,6 +73,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -82,6 +86,8 @@ export default function FormDialog() {
                 type="blob"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
 

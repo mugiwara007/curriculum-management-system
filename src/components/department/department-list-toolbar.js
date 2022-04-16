@@ -11,7 +11,6 @@ import { Search as SearchIcon } from '../../icons/search';
 import { Upload as UploadIcon } from '../../icons/upload';
 import { Download as DownloadIcon } from '../../icons/download';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import ArchiveIcon from '@mui/icons-material/Archive';
 
 import Dialog from '@mui/material/Dialog';
@@ -59,6 +58,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -70,6 +71,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -81,6 +84,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
         </DialogContent>
