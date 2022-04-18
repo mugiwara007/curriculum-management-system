@@ -150,9 +150,9 @@ import NativeSelect from '@mui/material/NativeSelect';
                 </TableCell>
                 <TableCell>
                 </TableCell>
-                <TableCell sx={{ minWidth: 95 }}>
+                <TableCell>
                 </TableCell>
-                <TableCell sx={{ minWidth: 85 }}>
+                <TableCell sx={{ minWidth: 76 }}>
                 </TableCell>
                     
                 </TableRow>
@@ -252,7 +252,8 @@ import NativeSelect from '@mui/material/NativeSelect';
                       />
                     </TableCell>
                     <TableCell>
-                    <TextField
+                    <TextField 
+                     sx={{ minWidth: 50 }}
                      id="standard-multiline-static"
                      label="Pre-Req"
                      multiline
@@ -266,6 +267,84 @@ import NativeSelect from '@mui/material/NativeSelect';
                       variant="standard" />
                     </TableCell> 
                     
+            </Table>
+            <Table>
+            <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    defaultValue="Course Code"
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 76 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    defaultValue="Description"
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                 
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     defaultValue="Pre-Req"
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
             </Table>
             
           </Box>
@@ -345,6 +424,7 @@ import NativeSelect from '@mui/material/NativeSelect';
               height: '100%',
               borderRadius: 1,
               border: '1px solid #D3D3D3',
+              
              
               }}>
             <CreateTables/> 
