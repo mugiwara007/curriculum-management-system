@@ -105,7 +105,7 @@ import { TocTwoTone } from '@mui/icons-material';
     return (
       <Card>
         <PerfectScrollbar>
-          <Box sx={{ minWidth: 710 }}>
+          <Box sx={{ minWidth: 720 }}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -136,23 +136,67 @@ import { TocTwoTone } from '@mui/icons-material';
                   </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-      
+              <TableBody >
                     <TableCell>
-                  
-            
+                    <TextField id="standard-basic"
+                     label="Standard"
+                      variant="standard" />
+
+                    </TableCell>
+                    <TextField id="standard-basic"
+                     label="Standard"
+                      variant="standard" />
+                    <TableCell>
+                    <TextField
+                     id="standard-number"
+                     label="Number"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
                     </TableCell>
                     <TableCell>
-                     
+                    <TextField
+                     id="standard-number"
+                     label="Number"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     id="standard-number"
+                     label="Number"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     id="standard-number"
+                     label="Number"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
                     </TableCell>
                     <TableCell>
-                   
+                    <TextField id="standard-basic"
+                     label="Standard"
+                      variant="standard" />
                     </TableCell>
                     <TableCell>
-                    
-                    </TableCell>
-                    <TableCell>
-                     
+                    <TextField id="standard-basic"
+                     label="Standard"
+                      variant="standard" />
                     </TableCell>
                
             
