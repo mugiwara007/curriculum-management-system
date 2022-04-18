@@ -180,10 +180,13 @@ import { TocTwoTone } from '@mui/icons-material';
                       />
 
                     </TableCell>
-                    <TextField id="standard-basic"
-                     label="Standard"
-                      variant="standard"
-                       />
+                    <TextField
+                     id="standard-textarea"
+                     label="Descriptive Title"
+                     placeholder="Placeholder"
+                     multiline
+                     variant="standard"
+        />
                     <TableCell>
                     <TextField
                       fullWidth
