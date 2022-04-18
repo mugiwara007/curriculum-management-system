@@ -11,7 +11,6 @@ import { Search as SearchIcon } from '../../icons/search';
 import { Upload as UploadIcon } from '../../icons/upload';
 import { Download as DownloadIcon } from '../../icons/download';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import ArchiveIcon from '@mui/icons-material/Archive';
 
 import Dialog from '@mui/material/Dialog';
@@ -59,6 +58,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -70,6 +71,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
               <TextField
@@ -81,6 +84,8 @@ export default function FormDialog() {
                 type="text"
                 fullWidth
                 variant="outlined"
+                error
+                helperText="Please fill up this field"
               />
 
         </DialogContent>
@@ -104,6 +109,67 @@ export default function FormDialog() {
   );
 }
 
+
+function SimpleDialog() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div style={{display : 'inline-block'}} >
+        <Button
+          startIcon={(<ArchiveIcon fontSize="small" />)}
+          sx={{ mr: 1 }}
+          onClick={handleClickOpen}
+        >
+          Archive
+        </Button>
+      <Dialog open={open}
+      onClose={handleClose}
+      >
+        <DialogTitle
+        display="flex"
+        justifyContent="center" >Archive Data</DialogTitle>
+
+        <DialogContent>
+          <Box>
+            Are you sure you want to Archive this data?
+          </Box>
+        </DialogContent>
+
+        <DialogActions>
+          <Box>
+            <Button
+            color="primary"
+            onClick={handleClose}>Cancel
+            </Button>
+          </Box>
+          <Box pr={1}>
+            <Button
+             style={{
+              borderRadius: 10,
+              backgroundColor: "#FF0000",
+              padding: "5px 10px",
+              fontSize: "13px"
+              }}
+            color="primary"
+            variant='contained'
+            onClick={handleClose}>Comfirm
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+      </div>
+  );
+}
+
+
 export const DepartmentListToolbar = (props) => (
   <Box {...props}>
     <Box
@@ -122,12 +188,8 @@ export const DepartmentListToolbar = (props) => (
         Department
       </Typography>
       <Box sx={{ m: 1 }}>
-        <Button
-          startIcon={(<ArchiveIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Archive
-        </Button>
+        <SimpleDialog>
+        </SimpleDialog>
         <FormDialog>
         </FormDialog>
       </Box>
