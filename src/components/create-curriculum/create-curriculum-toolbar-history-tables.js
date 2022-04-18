@@ -997,21 +997,19 @@ import React, { Component } from 'react';
                   </TableCell>
                   </TableBody>
 
- {/*Second Semester */}
+ {/*Second Semester TextField*/}
 
-                 <Table>
+                  <Table label =" Line1">
                   <TableCell>
-                   <TextField
-                   sx={{width:110,}}
+                   <TextField sx={{ minWidth: 95 }}
                     id="standard-multiline-static"
                     label="Course Code"
                     multiline
-                 
+                    
                     variant="standard"
                     />
                     </TableCell>
-                    <TextField
-                    sx={{width:120,left:5}}
+                    <TextField sx={{ minWidth: 105 }}
                     id="standard-multiline-static"
                     label="Descriptive Title"
                     multiline
@@ -1020,7 +1018,9 @@ import React, { Component } from 'react';
                     />
                     <TableCell>
                     <TextField
-                    sx={{width:45,left:15}}
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
                       fullWidth
                      id="standard-number"
                      label="Lec Units"
@@ -1032,12 +1032,13 @@ import React, { Component } from 'react';
                      variant="standard"
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell >
                     <TextField
                     sx={{ 
-                    width:43,
-                     left:3
+                    maxWidth:1,
+                     
                     }}
+            
                      id="standard-number"
                      label="Lab Units"
                      type="number"
@@ -1050,7 +1051,7 @@ import React, { Component } from 'react';
                       />
                     </TableCell>
                     <TextField
-                    sx={{width:70,left:10}}
+                     sx={{ width: 73, left:5 }}
                      id="standard-number"
                      label="Total Units"
                      type="number"
@@ -1061,7 +1062,10 @@ import React, { Component } from 'react';
                       />
                     <TableCell>
                     <TextField
-                    sx={{width:55,left:20}}
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
                      id="standard-number"
                      label="HPW"
                      type="number"
@@ -1072,26 +1076,22 @@ import React, { Component } from 'react';
                       />
                     </TableCell>
                     <TableCell>
-                    <TextField 
-                     sx={{ width: 50,left: 3 }}
+                    <TextField
+                    sx={{ minWidth: 15 }}
                      id="standard-multiline-static"
                      label="Pre-Req"
                      multiline
-                    
+                     
                      variant="standard"
                     />
                     </TableCell>
                     <TableCell>
-                    <TextField
-                    sx={{ width: 45}}
-                    id="standard-basic"
+                    <TextField id="standard-basic"
                      label="Co-Req"
                       variant="standard" />
                     </TableCell> 
-                    
-                    
-  
-                    </Table>
+                </Table>
+
                     <Table label =" Line2">
             <TableCell>
                    <TextField sx={{ minWidth: 95 }}
