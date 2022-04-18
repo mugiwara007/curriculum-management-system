@@ -14,8 +14,14 @@ import {
   Typography
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useAuth } from 'src/contexts/AuthContext';
+import { useState } from 'react';
+import { DashboardLayout } from '../components/dashboard-layout';
+import PageAuth from 'src/routes/PageAuth';
+
 
 const Register = () => {
+  const { register } = useAuth()
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -23,6 +29,7 @@ const Register = () => {
       firstName: '',
       lastName: '',
       password: '',
+      passConfirm: '',
       policy: false
     },
     validationSchema: Yup.object({
@@ -45,7 +52,14 @@ const Register = () => {
           'Last name is required'),
       password: Yup
         .string()
+        .min(6, 'Password must be atleast 6 characters')
         .max(255)
+        .required(
+          'Password is required'),
+      passConfirm: Yup
+        .string()
+        .oneOf([Yup.ref("password")],
+          'Password does not match')
         .required(
           'Password is required'),
       policy: Yup
@@ -56,7 +70,8 @@ const Register = () => {
         )
     }),
     onSubmit: () => {
-      router.push('/');
+      register(formik.values.email,formik.values.password)
+      router.push('/login')
     }
   });
 
@@ -64,7 +79,7 @@ const Register = () => {
     <>
       <Head>
         <title>
-          Register | Material Kit
+          CurrMa | Create A New User
         </title>
       </Head>
       <Box
@@ -77,24 +92,13 @@ const Register = () => {
         }}
       >
         <Container maxWidth="sm">
-          <NextLink
-            href="/"
-            passHref
-          >
-            <Button
-              component="a"
-              startIcon={<ArrowBackIcon fontSize="small" />}
-            >
-              Dashboard
-            </Button>
-          </NextLink>
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography
                 color="textPrimary"
                 variant="h4"
               >
-                Create a new account
+                Create A New User
               </Typography>
               <Typography
                 color="textSecondary"
@@ -154,6 +158,19 @@ const Register = () => {
               value={formik.values.password}
               variant="outlined"
             />
+            <TextField
+              error={Boolean(formik.touched.passConfirm && formik.errors.passConfirm)}
+              fullWidth
+              helperText={formik.touched.passConfirm && formik.errors.passConfirm}
+              label="Confirm Password"
+              margin="normal"
+              name="passConfirm"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="password"
+              value={formik.values.passConfirm}
+              variant="outlined"
+            />
             <Box
               sx={{
                 alignItems: 'center',
@@ -200,7 +217,7 @@ const Register = () => {
                 type="submit"
                 variant="contained"
               >
-                Sign Up Now
+                Create New User
               </Button>
             </Box>
             <Typography
@@ -227,5 +244,11 @@ const Register = () => {
     </>
   );
 };
+
+Register.getLayout = (page) => (
+  <DashboardLayout>
+    {page}
+  </DashboardLayout>
+);
 
 export default Register;

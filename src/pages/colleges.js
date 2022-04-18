@@ -29,9 +29,9 @@ const Colleges = () => (
   </>
 );
 Colleges.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
+    <DashboardLayout>
+      {page}
+    </DashboardLayout>
 );
 
 export default Colleges;
