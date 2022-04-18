@@ -268,7 +268,7 @@ import NativeSelect from '@mui/material/NativeSelect';
                     </TableCell> 
                     
             </Table>
-            <Table>
+            <Table label =" Line2">
             <TableCell>
                    <TextField sx={{ minWidth: 95 }}
                     id="standard-multiline-static"
@@ -278,7 +278,7 @@ import NativeSelect from '@mui/material/NativeSelect';
                     variant="standard"
                     />
                     </TableCell>
-                    <TextField sx={{ minWidth: 76 }}
+                    <TextField sx={{ minWidth: 105 }}
                     id="standard-multiline-static"
                     label="Descriptive Title"
                     multiline
@@ -287,6 +287,7 @@ import NativeSelect from '@mui/material/NativeSelect';
                     />
                     <TableCell>
                     <TextField
+                    sx={{ }}
                       fullWidth
                      id="standard-number"
                      label="Lec Units"
