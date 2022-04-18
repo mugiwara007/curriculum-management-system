@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -18,43 +18,55 @@ import {
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
+import { db } from 'src/firebase/firebase-auth'
+import { getDocs, collection } from 'firebase/firestore';
 
-
-export const SubjectListResults = ({ customers, ...rest }) => {
-  const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
+export const SubjectListResults = () => {
+  const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const subjectsCollectionRef = collection(db, "subjects");
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    const getSubjects = async () => {
+      const data = await getDocs(subjectsCollectionRef);
+      setSubjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+
+    getSubjects();
+  }, []);
 
   const handleSelectAll = (event) => {
-    let newSelectedCustomerIds;
+    let newSelectedSubjectIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
+      newSelectedSubjectIds = subjects.map((subject) => subject.id);
     } else {
-      newSelectedCustomerIds = [];
+      newSelectedSubjectIds = [];
     }
 
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    setSelectedSubjectIds(newSelectedSubjectIds);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomerIds.indexOf(id);
-    let newSelectedCustomerIds = [];
+    const selectedIndex = selectedSubjectIds.indexOf(id);
+    let newSelectedSubjectIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
+      newSelectedSubjectIds = newSelectedSubjectIds.concat(selectedSubjectIds, id);
     } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-    } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
+      newSelectedSubjectIds = newSelectedSubjectIds.concat(selectedSubjectIds.slice(1));
+    } else if (selectedIndex === selectedSubjectIds.length - 1) {
+      newSelectedSubjectIds = newSelectedSubjectIds.concat(selectedSubjectIds.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, selectedIndex),
-        selectedCustomerIds.slice(selectedIndex + 1)
+      newSelectedSubjectIds = newSelectedSubjectIds.concat(
+        selectedSubjectIds.slice(0, selectedIndex),
+        selectedSubjectIds.slice(selectedIndex + 1)
       );
     }
 
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    setSelectedSubjectIds(newSelectedSubjectIds);
   };
 
   const handleLimitChange = (event) => {
@@ -66,7 +78,7 @@ export const SubjectListResults = ({ customers, ...rest }) => {
   };
 
   return (
-    <Card {...rest}>
+    <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -74,11 +86,11 @@ export const SubjectListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
+                    checked={selectedSubjectIds.length === subjects.length}
                     color="primary"
                     indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
+                      selectedSubjectIds.length > 0
+                      && selectedSubjectIds.length < subjects.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -102,7 +114,7 @@ export const SubjectListResults = ({ customers, ...rest }) => {
                   Co-Requisite
                 </TableCell>
                 <TableCell>
-                  Username
+                  subjectname
                 </TableCell>
                 <TableCell>
                   KAC
@@ -114,16 +126,16 @@ export const SubjectListResults = ({ customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {subjects.slice(0, limit).map((subject) => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={subject.id}
+                  selected={selectedSubjectIds.indexOf(subject.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      checked={selectedSubjectIds.indexOf(subject.id) !== -1}
+                      onChange={(event) => handleSelectOne(event, user.id)}
                       value="true"
                     />
                   </TableCell>
@@ -135,42 +147,42 @@ export const SubjectListResults = ({ customers, ...rest }) => {
                       }}
                     >
                       {/* <Avatar
-                        src={customer.avatarUrl}
+                        src={user.avatarUrl}
                         sx={{ mr: 2 }}
                       >
-                        {getInitials(customer.name)}
+                        {getInitials(user.name)}
                       </Avatar> */}
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {subject.sub_code}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {subject.desc}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {subject.sub_lec}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {subject.sub_lab}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {subject.sub_preReq}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {subject.sub_coReq}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {subject.sub_user}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {subject.sub_kac}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {subject.sub_classCode}
                   </TableCell>
                   <TableCell>
                     <Button
@@ -189,7 +201,7 @@ export const SubjectListResults = ({ customers, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={customers.length}
+        count={subjects.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
@@ -198,8 +210,4 @@ export const SubjectListResults = ({ customers, ...rest }) => {
       />
     </Card>
   );
-};
-
-SubjectListResults.propTypes = {
-  customers: PropTypes.array.isRequired
 };

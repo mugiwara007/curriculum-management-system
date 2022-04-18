@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { db } from 'src/firebase/firebase-auth'
 import {
   collection,
-  getDocs,
   addDoc,
   updateDoc,
   deleteDoc,
@@ -27,11 +26,11 @@ export function SubjectProvider({ children }) {
   // const [newSubClassCode, setNewSubClassCode] = useState("");
 
   // const [subjects, setSubjects] = useState([]);
-  const usersCollectionRef = collection(db, "subjects");
+  const subjectsCollectionRef = collection(db, "subjects");
 
   function addSubject (newSubCode,newSubDesc,newSubLec,newSubLab,
     newSubPreReq,newSubCoReq,newSubUser,newSubKac,newSubClassCode) {
-    addDoc(usersCollectionRef, {
+    addDoc(subjectsCollectionRef, {
       sub_code: newSubCode,
       sub_desc: newSubDesc,
       sub_lec: newSubLec,
@@ -55,15 +54,6 @@ export function SubjectProvider({ children }) {
     const subjectDoc = doc(db, "subjects", id);
     await deleteDoc(subjectDoc);
   };
-
-  // useEffect(() => {
-  //   const getSubjects = async () => {
-  //     const data = await getDocs(usersCollectionRef);
-  //     setSubjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  //   };
-
-  //   getSubjects();
-  // }, []);
 
   const value={
     addSubject
