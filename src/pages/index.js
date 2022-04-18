@@ -34,7 +34,7 @@ const Login = () => {
     }),
     onSubmit: () => {
       login(formik.values.email, formik.values.password);
-      router.push('/');
+      router.push('/dashboard');
     }
   });
 

@@ -15,9 +15,7 @@ import {
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useAuth } from 'src/contexts/AuthContext';
-import { useState } from 'react';
 import { DashboardLayout } from '../components/dashboard-layout';
-import PageAuth from 'src/routes/PageAuth';
 
 
 const Register = () => {
@@ -27,6 +25,7 @@ const Register = () => {
     initialValues: {
       email: '',
       firstName: '',
+      middleInitial: '',
       lastName: '',
       password: '',
       passConfirm: '',
@@ -49,7 +48,7 @@ const Register = () => {
         .string()
         .max(255)
         .required(
-          'Last name is required'),
+          'Surname is required'),
       password: Yup
         .string()
         .min(6, 'Password must be atleast 6 characters')
@@ -70,8 +69,8 @@ const Register = () => {
         )
     }),
     onSubmit: () => {
-      register(formik.values.email,formik.values.password)
-      router.push('/login')
+      register(formik.values.firstName,formik.values.middleInitial,formik.values.lastName,formik.values.email,formik.values.password)
+      router.push('/dashboard')
     }
   });
 
@@ -118,6 +117,18 @@ const Register = () => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.firstName}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.middleInitial && formik.errors.middleInitial)}
+              fullWidth
+              helperText={formik.touched.middleInitial && formik.errors.middleInitial}
+              label="Middle Initial"
+              margin="normal"
+              name="middleInitial"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.middleInitial}
               variant="outlined"
             />
             <TextField

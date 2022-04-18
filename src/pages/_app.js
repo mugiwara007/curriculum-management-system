@@ -7,6 +7,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { createEmotionCache } from '../utils/create-emotion-cache';
 import { theme } from '../theme';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { SubjectProvider } from 'src/components/data-handling/subject-crud';
 import { AuthProvider } from 'src/contexts/AuthContext';
 // import Login from './login';
 // import Register from './register';
@@ -32,6 +33,7 @@ const App = (props) => {
 
   return (
       <AuthProvider>
+        <SubjectProvider>
         <CacheProvider value={emotionCache}>
           <Head>
             <title>
@@ -49,6 +51,7 @@ const App = (props) => {
             </ThemeProvider>
           </LocalizationProvider>
         </CacheProvider>
+        </SubjectProvider>
       </AuthProvider>
   );
 };

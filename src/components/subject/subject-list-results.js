@@ -19,6 +19,7 @@ import {
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
 
+
 export const SubjectListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
@@ -83,23 +84,33 @@ export const SubjectListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  Subject Code
                 </TableCell>
                 <TableCell>
-                  Email
+                  Description
                 </TableCell>
                 <TableCell>
-                  Location
+                  LEC Units
                 </TableCell>
                 <TableCell>
-                  Phone
+                  LAB Units
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  Pre-Requisite
                 </TableCell>
                 <TableCell>
-                  Action
+                  Co-Requisite
                 </TableCell>
+                <TableCell>
+                  Username
+                </TableCell>
+                <TableCell>
+                  KAC
+                </TableCell>
+                <TableCell>
+                  Class Code
+                </TableCell>
+                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -123,12 +134,12 @@ export const SubjectListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
+                      {/* <Avatar
                         src={customer.avatarUrl}
                         sx={{ mr: 2 }}
                       >
                         {getInitials(customer.name)}
-                      </Avatar>
+                      </Avatar> */}
                       <Typography
                         color="textPrimary"
                         variant="body1"
@@ -145,6 +156,18 @@ export const SubjectListResults = ({ customers, ...rest }) => {
                   </TableCell>
                   <TableCell>
                     {customer.phone}
+                  </TableCell>
+                  <TableCell>
+                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                  </TableCell>
+                  <TableCell>
+                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                  </TableCell>
+                  <TableCell>
+                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                  </TableCell>
+                  <TableCell>
+                    {format(customer.createdAt, 'dd/MM/yyyy')}
                   </TableCell>
                   <TableCell>
                     {format(customer.createdAt, 'dd/MM/yyyy')}
