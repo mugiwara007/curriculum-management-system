@@ -971,7 +971,7 @@ import React, { Component } from 'react';
             <TableCell sx={{width: 154}}>
               <p><b>Second Semester</b></p>
               </TableCell>
-             
+              
               <TableBody>
               <TableCell sx={{fontWeight: 'bold',}}>
                     COURSE CODE
