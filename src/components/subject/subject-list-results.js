@@ -49,7 +49,7 @@ export const SubjectListResults = () => {
     setSelectedSubjectIds(newSelectedSubjectIds);
   };
 
-  const handleSelectOne = (event, id) => {
+  const handleSelectOne = (id) => {
     const selectedIndex = selectedSubjectIds.indexOf(id);
     let newSelectedSubjectIds = [];
 
@@ -114,7 +114,7 @@ export const SubjectListResults = () => {
                   Co-Requisite
                 </TableCell>
                 <TableCell>
-                  subjectname
+                  Username
                 </TableCell>
                 <TableCell>
                   KAC
@@ -135,7 +135,7 @@ export const SubjectListResults = () => {
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={selectedSubjectIds.indexOf(subject.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, user.id)}
+                      onChange={(event) => handleSelectOne(event, subject.id)}
                       value="true"
                     />
                   </TableCell>
@@ -147,10 +147,10 @@ export const SubjectListResults = () => {
                       }}
                     >
                       {/* <Avatar
-                        src={user.avatarUrl}
+                        src={subject.avatarUrl}
                         sx={{ mr: 2 }}
                       >
-                        {getInitials(user.name)}
+                        {getInitials(subject.name)}
                       </Avatar> */}
                       <Typography
                         color="textPrimary"
@@ -161,7 +161,7 @@ export const SubjectListResults = () => {
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {subject.desc}
+                    {subject.sub_desc}
                   </TableCell>
                   <TableCell>
                     {subject.sub_lec}

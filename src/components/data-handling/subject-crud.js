@@ -25,7 +25,6 @@ export function SubjectProvider({ children }) {
   // const [newSubKac, setNewSubKac] = useState("");
   // const [newSubClassCode, setNewSubClassCode] = useState("");
 
-  // const [subjects, setSubjects] = useState([]);
   const subjectsCollectionRef = collection(db, "subjects");
 
   function addSubject (newSubCode,newSubDesc,newSubLec,newSubLab,

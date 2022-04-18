@@ -119,7 +119,7 @@ export default function FormDialog() {
           startIcon={(<AddIcon fontSize="small" />)}
           onClick={handleClickOpen}
         >
-          Add Suject
+          Add Subject
         </Button>
       <Dialog open={open}
       onClose={handleClose}>
