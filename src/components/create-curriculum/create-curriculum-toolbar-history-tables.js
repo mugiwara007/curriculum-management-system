@@ -46,6 +46,8 @@ import { TocTwoTone } from '@mui/icons-material';
     width: '100',
   }
 
+  
+
   function HistoryLog() {
     return (
       <List sx={style} 
@@ -102,6 +104,7 @@ import { TocTwoTone } from '@mui/icons-material';
   }
 
   function CreateTables(){
+    
     return (
       <Card>
         <PerfectScrollbar>
@@ -109,50 +112,87 @@ import { TocTwoTone } from '@mui/icons-material';
             <Table>
               <TableHead>
                 <TableRow>
-                 
                 <TableCell>
-                    COURSE CODE
-                  </TableCell>
-                  <TableCell>
-                    DESCRIPTIVE TITLE
-                  </TableCell>
-                  <TableCell>
-                    LEC UNITS
-                  </TableCell>
-                  <TableCell>
-                    LAB UNITS
-                  </TableCell>
-                  <TableCell>
-                    TOTAL UNITS
-                  </TableCell>
-                  <TableCell>
-                    HOURS PER WEEK
-                  </TableCell>
-                  <TableCell>
-                    PRE-REQ
-                  </TableCell>
-                  <TableCell>
-                    CO-REQ
-                  </TableCell>
+                <TextField
+                 id="year-level"
+                 label="Year Level"
+                 variant="standard"
+                 sx={{ minWidth: 100 }}
+                      />
+                      </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                  
+                    </TableCell>
+                    
                 </TableRow>
               </TableHead>
-              <TableBody >
-                    <TableCell>
+
+              <TableCell>
+              <TextField id="standard-basic"
+                     label="Semester"
+                      variant="standard" 
+                      />
+              </TableCell>
+        
+              <TableBody>
+              <TableCell sx={{fontWeight: 'bold',}}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+        
+              <TableCell>
                     <TextField id="standard-basic"
                      label="Standard"
-                      variant="standard" />
+                      variant="standard" 
+                      />
 
                     </TableCell>
                     <TextField id="standard-basic"
                      label="Standard"
-                      variant="standard" />
+                      variant="standard"
+                       />
                     <TableCell>
                     <TextField
+                      fullWidth
                      id="standard-number"
                      label="Number"
                      type="number"
                      InputLabelProps={{
                      shrink: true,
+                     
                      }}
                      variant="standard"
                       />
@@ -164,6 +204,8 @@ import { TocTwoTone } from '@mui/icons-material';
                      type="number"
                      InputLabelProps={{
                      shrink: true,
+                    
+                    disableUnderline: true, // <== added this
                      }}
                      variant="standard"
                       />
@@ -197,11 +239,7 @@ import { TocTwoTone } from '@mui/icons-material';
                     <TextField id="standard-basic"
                      label="Standard"
                       variant="standard" />
-                    </TableCell>
-               
-            
-                
-              </TableBody>
+                    </TableCell> 
             </Table>
           </Box>
         </PerfectScrollbar>
