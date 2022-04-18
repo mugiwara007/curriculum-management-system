@@ -112,11 +112,10 @@ import React, { Component } from 'react';
     return (
       <Card>
         <PerfectScrollbar>
-          <Box sx={{ minWidth: 730}}>
-            <Table>
+          <Box sx={{ minWidth: 720}}>
               <TableHead>
                 <TableRow>
-                <TableCell  sx={{ minWidth: 140}}>
+                <TableCell  sx={{ minWidth: 165}}>
                 <Box>
         <FormControl fullWidth>
         <InputLabel variant="standard" 
@@ -163,7 +162,7 @@ import React, { Component } from 'react';
               <p><b>First Semester</b></p>
               </TableCell>
 
- {/*First Semester */}
+ {/*First Semester Header*/}
               <TableBody>
               <TableCell sx={{fontWeight: 'bold',}}>
                     COURSE CODE
@@ -190,17 +189,22 @@ import React, { Component } from 'react';
                     CO-REQ
                   </TableCell>
                   </TableBody>
+
+  {/*First Semester TextFields*/}  
+
                   
-                   <TableCell>
-                   <TextField
+                   
+                   <Table label =" Line1">
+            <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
                     id="standard-multiline-static"
                     label="Course Code"
                     multiline
-                 
+                    
                     variant="standard"
                     />
                     </TableCell>
-                    <TextField
+                    <TextField sx={{ minWidth: 105 }}
                     id="standard-multiline-static"
                     label="Descriptive Title"
                     multiline
@@ -209,6 +213,9 @@ import React, { Component } from 'react';
                     />
                     <TableCell>
                     <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
                       fullWidth
                      id="standard-number"
                      label="Lec Units"
@@ -220,12 +227,13 @@ import React, { Component } from 'react';
                      variant="standard"
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell >
                     <TextField
                     sx={{ 
-                    width:50,
-                     left:2
+                    maxWidth:1,
+                     
                     }}
+            
                      id="standard-number"
                      label="Lab Units"
                      type="number"
@@ -238,6 +246,7 @@ import React, { Component } from 'react';
                       />
                     </TableCell>
                     <TextField
+                     sx={{ width: 73, left:5 }}
                      id="standard-number"
                      label="Total Units"
                      type="number"
@@ -248,6 +257,10 @@ import React, { Component } from 'react';
                       />
                     <TableCell>
                     <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
                      id="standard-number"
                      label="HPW"
                      type="number"
@@ -258,12 +271,12 @@ import React, { Component } from 'react';
                       />
                     </TableCell>
                     <TableCell>
-                    <TextField 
-                     sx={{ minWidth: 50 }}
+                    <TextField
+                    sx={{ minWidth: 15 }}
                      id="standard-multiline-static"
                      label="Pre-Req"
                      multiline
-                    
+                     
                      variant="standard"
                     />
                     </TableCell>
@@ -272,8 +285,7 @@ import React, { Component } from 'react';
                      label="Co-Req"
                       variant="standard" />
                     </TableCell> 
-                    
-            </Table>
+                </Table>
 
             <Table label =" Line2">
             <TableCell>
