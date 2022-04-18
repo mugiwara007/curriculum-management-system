@@ -114,15 +114,16 @@ import React, { Component } from 'react';
         <PerfectScrollbar>
           <Box sx={{ minWidth: 720}}>
               <TableHead>
-                <TableRow>
-                <TableCell  sx={{ minWidth: 165}}>
+                <TableCell>
                 <Box>
         <FormControl fullWidth>
         <InputLabel variant="standard" 
-        htmlFor="uncontrolled-native">
+        htmlFor="uncontrolled-native"
+        >
           Year Level
         </InputLabel>
         <NativeSelect
+        sx={{ width: 135}}
           defaultValue={30}
           inputProps={{
             name: 'year',
@@ -137,26 +138,26 @@ import React, { Component } from 'react';
       </FormControl>
       </Box>
                 </TableCell>
+               
                 
                 <TableCell>
-    
+               </TableCell>
+                <TableCell >
                 </TableCell>
+                <TableCell>
+                </TableCell>     
                 <TableCell>
                 </TableCell>
                 <TableCell>
                 </TableCell>
-                
                 <TableCell>
                 </TableCell>
-                <TableCell>
-                </TableCell>
-                <TableCell>
-                </TableCell>
-                <TableCell sx={{ minWidth: 76 }}>
+                <TableCell sx={{ minWidth: 76}}>
                 </TableCell>
                     
-                </TableRow>
+            
               </TableHead>
+              
 
               <TableCell>
               <p><b>First Semester</b></p>
@@ -164,22 +165,23 @@ import React, { Component } from 'react';
 
  {/*First Semester Header*/}
               <TableBody>
-              <TableCell sx={{fontWeight: 'bold',}}>
+              <TableCell sx={{fontWeight: 'bold'}}>
                     COURSE CODE
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold'}}>
                     DESCRIPTIVE TITLE
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  
+                  <TableCell sx={{fontWeight: 'bold'}}>
                     LEC UNITS
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold'}}>
                     LAB UNITS
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold'}}>
                     TOTAL UNITS
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold'}}>
                     HOURS PER WEEK
                   </TableCell>
                   <TableCell sx={{fontWeight: 'bold',}}>
