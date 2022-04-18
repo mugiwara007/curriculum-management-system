@@ -112,11 +112,11 @@ import React, { Component } from 'react';
     return (
       <Card>
         <PerfectScrollbar>
-          <Box sx={{ minWidth: 720}}>
+          <Box sx={{ minWidth: 730}}>
             <Table>
               <TableHead>
                 <TableRow>
-                <TableCell  sx={{ minWidth: 130}}>
+                <TableCell  sx={{ minWidth: 140}}>
                 <Box>
         <FormControl fullWidth>
         <InputLabel variant="standard" 
