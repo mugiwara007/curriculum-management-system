@@ -1,11 +1,19 @@
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Typography,
-    Grid
-  } from '@mui/material';
+  Avatar,
+  Box,
+  Card,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  Button,
+  CardContent,
+  
+} from '@mui/material';
+import PerfectScrollbar from 'react-perfect-scrollbar';
   import SaveIcon from '@mui/icons-material/Save';
   import ArrowBackIcon from '@mui/icons-material/ArrowBack';
   import List from '@mui/material/List';
@@ -95,61 +103,66 @@ import { TocTwoTone } from '@mui/icons-material';
 
   function CreateTables(){
     return (
-      <Box
-        component="form"
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <div>
-          <TextField
-            required
-            id="outlined-required"
-            label="Required"
-            defaultValue="Hello World"
-          />
-          <TextField
-            disabled
-            id="outlined-disabled"
-            label="Disabled"
-            defaultValue="Hello World"
-          />
-          <TextField
-            id="outlined-password-input"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-          />
-          <TextField
-            id="outlined-read-only-input"
-            label="Read Only"
-            defaultValue="Hello World"
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            id="outlined-number"
-            label="Number"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField id="outlined-search" 
-          label="Search field"
-           type="search" />
-          <TextField
-            id="outlined-helperText"
-            label="Helper text"
-            defaultValue="Default Value"
-            helperText="Some important text"
-          />
-        </div>
-  
-      </Box>
+      <Card>
+        <PerfectScrollbar>
+          <Box sx={{ minWidth: 710 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                 
+                <TableCell>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell>
+                    CO-REQ
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+      
+                    <TableCell>
+                  
+            
+                    </TableCell>
+                    <TableCell>
+                     
+                    </TableCell>
+                    <TableCell>
+                   
+                    </TableCell>
+                    <TableCell>
+                    
+                    </TableCell>
+                    <TableCell>
+                     
+                    </TableCell>
+               
+            
+                
+              </TableBody>
+            </Table>
+          </Box>
+        </PerfectScrollbar>
+       
+      </Card>
     );
   }
   export const CreateCurriculumListToolbar = (props) => (
