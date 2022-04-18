@@ -22,6 +22,9 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
   import Divider from '@mui/material/Divider';
   import TextField from '@mui/material/TextField';
 import { TocTwoTone } from '@mui/icons-material';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
 
   const style = {
     width: '100%',
@@ -112,40 +115,53 @@ import { TocTwoTone } from '@mui/icons-material';
             <Table>
               <TableHead>
                 <TableRow>
-                <TableCell>
-                <TextField
-                 id="year-level"
-                 label="Year Level"
-                 variant="standard"
-                 sx={{ minWidth: 100 }}
-                      />
-                      </TableCell>
-                <TableCell>
+                <TableCell  sx={{ minWidth: 150}}>
+                <Box>
+        <FormControl fullWidth>
+        <InputLabel variant="standard" 
+        htmlFor="uncontrolled-native">
+          Year Level
+        </InputLabel>
+        <NativeSelect
+          defaultValue={30}
+          inputProps={{
+            name: 'year',
+            id: 'uncontrolled-native',
+          }}
+        >
+          <option value={10}>First Year</option>
+          <option value={20}>Second Year</option>
+          <option value={30}>Third Year</option>
+          <option value={30}>Fourth Year</option>
+        </NativeSelect>
+      </FormControl>
+      </Box>
                 </TableCell>
                 <TableCell>
-                </TableCell>
-                <TableCell>
-                </TableCell>
-                <TableCell>
-                </TableCell>
-                <TableCell>
-                </TableCell>
-                <TableCell>
+    
                 </TableCell>
                 <TableCell>
                   
-                    </TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell sx={{ minWidth: 95 }}>
+                </TableCell>
+                <TableCell sx={{ minWidth: 85 }}>
+                </TableCell>
                     
                 </TableRow>
               </TableHead>
 
               <TableCell>
-              <TextField id="standard-basic"
-                     label="Semester"
-                      variant="standard" 
-                      />
+              <p><b>First Semester</b></p>
               </TableCell>
-        
+             
               <TableBody>
               <TableCell sx={{fontWeight: 'bold',}}>
                     COURSE CODE
@@ -172,26 +188,28 @@ import { TocTwoTone } from '@mui/icons-material';
                     CO-REQ
                   </TableCell>
                   </TableBody>
-        
-              <TableCell>
-                    <TextField id="standard-basic"
-                     label="Standard"
-                      variant="standard" 
-                      />
-
+                  
+                   <TableCell>
+                   <TextField
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    defaultValue="Course Code"
+                    variant="standard"
+                    />
                     </TableCell>
                     <TextField
-                     id="standard-textarea"
-                     label="Descriptive Title"
-                     placeholder="Placeholder"
-                     multiline
-                     variant="standard"
-        />
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    defaultValue="Description"
+                    variant="standard"
+                    />
                     <TableCell>
                     <TextField
                       fullWidth
                      id="standard-number"
-                     label="Number"
+                     label="Lec Units"
                      type="number"
                      InputLabelProps={{
                      shrink: true,
@@ -203,19 +221,19 @@ import { TocTwoTone } from '@mui/icons-material';
                     <TableCell>
                     <TextField
                      id="standard-number"
-                     label="Number"
+                     label="Lab Units"
                      type="number"
                      InputLabelProps={{
                      shrink: true,
                     
-                    disableUnderline: true, // <== added this
+                 
                      }}
                      variant="standard"
                       />
                     </TableCell>
                     <TextField
                      id="standard-number"
-                     label="Number"
+                     label="Total Units"
                      type="number"
                      InputLabelProps={{
                      shrink: true,
@@ -225,7 +243,7 @@ import { TocTwoTone } from '@mui/icons-material';
                     <TableCell>
                     <TextField
                      id="standard-number"
-                     label="Number"
+                     label="HPW"
                      type="number"
                      InputLabelProps={{
                      shrink: true,
@@ -234,16 +252,22 @@ import { TocTwoTone } from '@mui/icons-material';
                       />
                     </TableCell>
                     <TableCell>
-                    <TextField id="standard-basic"
-                     label="Standard"
-                      variant="standard" />
+                    <TextField
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     defaultValue="Pre-Req"
+                     variant="standard"
+                    />
                     </TableCell>
                     <TableCell>
                     <TextField id="standard-basic"
-                     label="Standard"
+                     label="Co-Req"
                       variant="standard" />
                     </TableCell> 
+                    
             </Table>
+            
           </Box>
         </PerfectScrollbar>
        
@@ -298,7 +322,7 @@ import { TocTwoTone } from '@mui/icons-material';
   
           <CardContent
           sx={{
-            width:'50%',
+            width:'100%',
           }}
           >
             <Box sx={{ 
@@ -321,6 +345,7 @@ import { TocTwoTone } from '@mui/icons-material';
               height: '100%',
               borderRadius: 1,
               border: '1px solid #D3D3D3',
+             
               }}>
             <CreateTables/> 
             </Box>
