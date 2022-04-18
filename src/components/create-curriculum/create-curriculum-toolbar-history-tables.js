@@ -268,6 +268,7 @@ import NativeSelect from '@mui/material/NativeSelect';
                     </TableCell> 
                     
             </Table>
+
             <Table label =" Line2">
             <TableCell>
                    <TextField sx={{ minWidth: 95 }}
@@ -287,7 +288,9 @@ import NativeSelect from '@mui/material/NativeSelect';
                     />
                     <TableCell>
                     <TextField
-                    sx={{ }}
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
                       fullWidth
                      id="standard-number"
                      label="Lec Units"
@@ -301,6 +304,10 @@ import NativeSelect from '@mui/material/NativeSelect';
                     </TableCell>
                     <TableCell>
                     <TextField
+                    sx={{ 
+                      left: 5,
+                     
+                      }}
                      id="standard-number"
                      label="Lab Units"
                      type="number"
@@ -313,6 +320,7 @@ import NativeSelect from '@mui/material/NativeSelect';
                       />
                     </TableCell>
                     <TextField
+                     sx={{ width: 73, left:5 }}
                      id="standard-number"
                      label="Total Units"
                      type="number"
@@ -323,6 +331,10 @@ import NativeSelect from '@mui/material/NativeSelect';
                       />
                     <TableCell>
                     <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
                      id="standard-number"
                      label="HPW"
                      type="number"
@@ -334,6 +346,7 @@ import NativeSelect from '@mui/material/NativeSelect';
                     </TableCell>
                     <TableCell>
                     <TextField
+                    sx={{ minWidth: 15 }}
                      id="standard-multiline-static"
                      label="Pre-Req"
                      multiline
