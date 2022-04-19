@@ -962,33 +962,34 @@ import React, { Component } from 'react';
 
  {/*Second Semester Headings*/}
 
-            <TableCell sx={{width: 154}}>
+            <TableCell>
               <p><b>Second Semester</b></p>
               </TableCell>
               
               <TableBody>
-              <TableCell sx={{fontWeight: 'bold',}}>
+              <TableCell sx={{fontWeight: 'bold' }}>
                     COURSE CODE
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold', pl: 7 }}>
                     DESCRIPTIVE TITLE
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  
+                  <TableCell sx={{fontWeight: 'bold', pl: 6 }}>
                     LEC UNITS
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold', pl: 5 }}>
                     LAB UNITS
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold', pl: 7}}>
                     TOTAL UNITS
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold', pr: 6 }}>
                     HOURS PER WEEK
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold', pr: 9 }}>
                     PRE-REQ
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold', pr: 7 }}>
                     CO-REQ
                   </TableCell>
                   </TableBody>
@@ -1827,7 +1828,7 @@ import React, { Component } from 'react';
           }}
           >
             <Box sx={{ 
-              width: '100%', 
+              width: '80%', 
               backgroundColor: 'light gray',
               border: 'black',
               height: '100%',
@@ -1845,8 +1846,7 @@ import React, { Component } from 'react';
               border: 'black',
               height: '100%',
               borderRadius: 1,
-              border: '1px solid #D3D3D3',
-              
+              border: '1px solid #D3D3D3'
              
               }}>
             <CreateTables/> 
