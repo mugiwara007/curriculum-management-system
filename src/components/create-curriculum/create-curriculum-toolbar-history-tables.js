@@ -115,36 +115,34 @@ import React, { Component } from 'react';
           <Box sx={{ minWidth: 720}}>
               <TableHead>
                 <TableCell>
-                <Box>
-        <FormControl fullWidth>
-        <InputLabel variant="standard" 
-        htmlFor="uncontrolled-native"
-        >
-          Year Level
-        </InputLabel>
-        <NativeSelect
-        sx={{ width: 135}}
-          defaultValue={30}
-          inputProps={{
-            name: 'year',
-            id: 'uncontrolled-native',
-          }}
-        >
-          <option value={10}>First Year</option>
-          <option value={20}>Second Year</option>
-          <option value={30}>Third Year</option>
-          <option value={30}>Fourth Year</option>
-        </NativeSelect>
-      </FormControl>
-      </Box>
                 </TableCell>
-               
-                
                 <TableCell>
                </TableCell>
                 <TableCell >
                 </TableCell>
                 <TableCell>
+                    <Box>
+                    <FormControl fullWidth>
+                    <InputLabel variant="standard" 
+                    htmlFor="uncontrolled-native"
+                    >
+                      Year Level
+                    </InputLabel>
+                    <NativeSelect
+                    sx={{ width: 135}}
+                      defaultValue={30}
+                      inputProps={{
+                        name: 'year',
+                        id: 'uncontrolled-native',
+                      }}
+                    >
+                      <option value={10}>First Year</option>
+                      <option value={20}>Second Year</option>
+                      <option value={30}>Third Year</option>
+                      <option value={30}>Fourth Year</option>
+                    </NativeSelect>
+                  </FormControl>
+                  </Box>
                 </TableCell>     
                 <TableCell>
                 </TableCell>
@@ -152,42 +150,38 @@ import React, { Component } from 'react';
                 </TableCell>
                 <TableCell>
                 </TableCell>
-                <TableCell sx={{ minWidth: 76}}>
+                <TableCell>
                 </TableCell>
-                    
-            
               </TableHead>
-              
-
               <TableCell>
               <p><b>First Semester</b></p>
               </TableCell>
 
  {/*First Semester Header*/}
               <TableBody>
-              <TableCell sx={{fontWeight: 'bold'}}>
+              <TableCell sx={{fontWeight: 'bold' }}>
                     COURSE CODE
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold'}}>
+                  <TableCell sx={{fontWeight: 'bold', pl: 7 }}>
                     DESCRIPTIVE TITLE
                   </TableCell>
                   
-                  <TableCell sx={{fontWeight: 'bold'}}>
+                  <TableCell sx={{fontWeight: 'bold', pl: 9 }}>
                     LEC UNITS
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold'}}>
+                  <TableCell sx={{fontWeight: 'bold', pl: 7 }}>
                     LAB UNITS
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold'}}>
+                  <TableCell sx={{fontWeight: 'bold', pr: 5}}>
                     TOTAL UNITS
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold'}}>
+                  <TableCell sx={{fontWeight: 'bold', pr: 8 }}>
                     HOURS PER WEEK
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold', pr: 9 }}>
                     PRE-REQ
                   </TableCell>
-                  <TableCell sx={{fontWeight: 'bold',}}>
+                  <TableCell sx={{fontWeight: 'bold', pr: 7 }}>
                     CO-REQ
                   </TableCell>
                   </TableBody>
