@@ -1,8 +1,12 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import React, { useContext, useState, useEffect } from 'react'
 import { auth } from 'src/firebase/firebase-auth'
+import { db } from 'src/firebase/firebase-auth'
+import { collection ,addDoc } from "firebase/firestore";
 
 const AuthContext = React.createContext()
+
+const usersCollectionRef = collection(db, "users");
 
 export function useAuth(){
     return useContext(AuthContext)
@@ -11,7 +15,16 @@ export function useAuth(){
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
 
-    function register(email, password){
+    function register(fname,mname,sname,email, password){
+        addDoc(usersCollectionRef, {
+            firstName: fname,
+            middleInitial: mname,
+            surname: sname,
+            email: email,
+            password: password,
+            userLevel: 1,
+          });
+
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
