@@ -27,14 +27,13 @@ export function UserProvider({ children }) {
 
   const usersCollectionRef = collection(db, "users");
 
-  function addUser (newFName, newMName, newLName, newEmail, newPassword) {
+  function addUser (newEmail, newName, newPass, newUserCode, newUserName) {
     addDoc(usersCollectionRef, {
-      firstName: newFName,
-      middleInitial: newMName,
-      surname: newLName,
       email: newEmail,
-      password: newPassword,
-      userLevel: 1
+      name: newName,
+      password: newPass,
+      usercode: newUserCode,
+      username: newUserName
     });
   };
 

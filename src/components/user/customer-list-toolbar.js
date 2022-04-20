@@ -13,7 +13,6 @@ import { Download as DownloadIcon } from '../../icons/download';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import ArchiveIcon from '@mui/icons-material/Archive';
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -22,68 +21,67 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useFormik } from 'formik';
 import { userAuth } from '../data-handling/user-crud';
 import * as React from 'react';
+import { useAuth } from 'src/contexts/AuthContext';
 import * as Yup from 'yup';
 
 export default function FormDialog() {
 
   const [open, setOpen] = React.useState(false);
-  //const { addUser } = userAuth()
+  const { addUser } = userAuth()
 
   const formik = useFormik({
     initialValues:
     {
-      FName: '',
-      MName: '',
-      LName: '',
       Email: '',
+      Name: '',
       Password: '',
+      Usercode: '',
+      Username: '',
     },
     validationSchema: Yup.object({
-      FName: Yup
-      .string()
-      .max(255)
-      .required
-      (
-        'This field is required'
-      ),
-      MName: Yup
-      .string()
-      .max(255)
-      .required
-      (
-        'This field is required'
-      ),
-      LName: Yup
-      .string()
-      .max(255)
-      .required
-      (
-        'This field is required'
-      ),
       Email: Yup
       .string()
-      .max(255)
+      .max(100)
       .required
       (
-        'This field is required'
+        'Email is required'
+      ),
+      Name: Yup
+      .string()
+      .max(100)
+      .required
+      (
+        'Name is required'
       ),
       Password: Yup
       .string()
-      .max(255)
+      .max(64)
       .required
       (
-        'This field is required'
+        'Password is required'
+      ),
+      Usercode: Yup
+      .string()
+      .max(11)
+      .required
+      (
+        'Usercode is required'
+      ),
+      Username: Yup
+      .string()
+      .max(32)
+      .required
+      (
+        'Username is required'
       )
     }),
-    onSubmit: () =>
-    {
-      addUser
-      (
-        formik.values.FName,
-        formik.values.MName,
-        formik.values.LName,
+    onSubmit: () => {
+      addUser(
         formik.values.Email,
+        formik.values.Name,
         formik.values.Password,
+        formik.values.Usercode,
+        formik.values.Username,
       )
     }
   });
@@ -115,46 +113,6 @@ export default function FormDialog() {
         <form onSubmit={formik.handleSubmit}>
         <DialogContent>
               <TextField
-              error={Boolean(formik.touched.FName && formik.errors.FName)}
-              fullWidth
-              helperText={formik.touched.FName && formik.errors.FName}
-              label="First Name"
-              margin="normal"
-              name="FName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.FName}
-              variant="outlined"
-              />
-
-              <TextField
-              error={Boolean(formik.touched.MName && formik.errors.MName)}
-              fullWidth
-              helperText={formik.touched.MName && formik.errors.MName}
-              label="Middle Initial"
-              margin="normal"
-              name="MName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.MName}
-              variant="outlined"
-              />
-
-              <TextField
-              error={Boolean(formik.touched.LName && formik.errors.LName)}
-              fullWidth
-              helperText={formik.touched.LName && formik.errors.LName}
-              label="Last Name"
-              margin="normal"
-              name="LName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.LName}
-              variant="outlined"
-              />
-
-
-              <TextField
               error={Boolean(formik.touched.Email && formik.errors.Email)}
               fullWidth
               helperText={formik.touched.Email && formik.errors.Email}
@@ -168,6 +126,19 @@ export default function FormDialog() {
               />
 
               <TextField
+              error={Boolean(formik.touched.Name && formik.errors.Name)}
+              fullWidth
+              helperText={formik.touched.Name && formik.errors.Name}
+              label="Name"
+              margin="normal"
+              name="Name"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Name}
+              variant="outlined"
+              />
+
+              <TextField
               error={Boolean(formik.touched.Password && formik.errors.Password)}
               fullWidth
               helperText={formik.touched.Password && formik.errors.Password}
@@ -177,6 +148,33 @@ export default function FormDialog() {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.Password}
+              variant="outlined"
+              />
+
+
+              <TextField
+              error={Boolean(formik.touched.Usercode && formik.errors.Usercode)}
+              fullWidth
+              helperText={formik.touched.Usercode && formik.errors.Usercode}
+              label="Usercode"
+              margin="normal"
+              name="Usercode"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Usercode}
+              variant="outlined"
+              />
+
+              <TextField
+              error={Boolean(formik.touched.Username && formik.errors.Username)}
+              fullWidth
+              helperText={formik.touched.Username && formik.errors.Username}
+              label="Username"
+              margin="normal"
+              name="Username"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Username}
               variant="outlined"
               />
 

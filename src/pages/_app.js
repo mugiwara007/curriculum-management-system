@@ -34,45 +34,27 @@ const App = (props) => {
 
   return (
       <AuthProvider>
-        <SubjectProvider>
-        <CacheProvider value={emotionCache}>
-          <Head>
-            <title>
-              Material Kit Pro
-            </title>
-            <meta
-              name="viewport"
-              content="initial-scale=1, width=device-width"
-            />
-          </Head>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              {getLayout(<Component {...pageProps} />)}
-            </ThemeProvider>
-          </LocalizationProvider>
-        </CacheProvider>
-        </SubjectProvider>
-
-        {/* <UserProvider>
-        <CacheProvider value={emotionCache}>
-          <Head>
-            <title>
-              Material Kit Pro
-            </title>
-            <meta
-              name="viewport"
-              content="initial-scale=1, width=device-width"
-            />
-          </Head>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              {getLayout(<Component {...pageProps} />)}
-            </ThemeProvider>
-          </LocalizationProvider>
-        </CacheProvider>
-        </UserProvider> */}
+          <SubjectProvider>
+            <UserProvider>
+              <CacheProvider value={emotionCache}>
+                <Head>
+                  <title>
+                    Material Kit Pro
+                  </title>
+                  <meta
+                    name="viewport"
+                    content="initial-scale=1, width=device-width"
+                  />
+                </Head>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    {getLayout(<Component {...pageProps} />)}
+                  </ThemeProvider>
+                </LocalizationProvider>
+              </CacheProvider>
+            </UserProvider>
+          </SubjectProvider>
       </AuthProvider>
   );
 };

@@ -68,7 +68,6 @@ export default function FormDialog() {
               variant="outlined"
               />
 
-
               <TextField
               required
               autoFocus
@@ -214,16 +213,16 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  First Name
-                </TableCell>
-                <TableCell>
-                  Middle Initial
-                </TableCell>
-                <TableCell>
-                  Last Name
+                  Username
                 </TableCell>
                 <TableCell>
                   Email
+                </TableCell>
+                <TableCell>
+                  Name
+                </TableCell>
+                <TableCell>
+                  User Code
                 </TableCell>
                 <TableCell>
                   Action
@@ -255,18 +254,18 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                         color="textPrimary"
                         variant="body1"
                       >
-                        {user.firstName}
+                        {user.username}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {user.middleInitial}
-                  </TableCell>
-                  <TableCell>
-                    {user.surname}
-                  </TableCell>
-                  <TableCell>
                     {user.email}
+                  </TableCell>
+                  <TableCell>
+                    {user.name}
+                  </TableCell>
+                  <TableCell>
+                    {user.usercode}
                   </TableCell>
                   <TableCell>
                     <FormDialog>
