@@ -7,7 +7,7 @@ const firebaseConfig = {
   authDomain: "curmasys.firebaseapp.com",
   projectId: "curmasys",
   storageBucket: "curmasys.appspot.com",
-  messagingSenderId: "759838636190",
+  messagingSenderId: "759838636190", 
   appId: "1:759838636190:web:c33250d9e4a9a03d3a238f"
 };
 

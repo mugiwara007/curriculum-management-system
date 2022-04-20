@@ -49,7 +49,7 @@ export const SubjectListResults = () => {
     setSelectedSubjectIds(newSelectedSubjectIds);
   };
 
-  const handleSelectOne = (id) => {
+  const handleSelectOne = (event, id) => {
     const selectedIndex = selectedSubjectIds.indexOf(id);
     let newSelectedSubjectIds = [];
 

@@ -19,11 +19,74 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { useFormik } from 'formik';
+import { userAuth } from '../data-handling/user-crud';
 import * as React from 'react';
+import * as Yup from 'yup';
 
 export default function FormDialog() {
+
   const [open, setOpen] = React.useState(false);
+  //const { addUser } = userAuth()
+
+  const formik = useFormik({
+    initialValues:
+    {
+      FName: '',
+      MName: '',
+      LName: '',
+      Email: '',
+      Password: '',
+    },
+    validationSchema: Yup.object({
+      FName: Yup
+      .string()
+      .max(255)
+      .required
+      (
+        'This field is required'
+      ),
+      MName: Yup
+      .string()
+      .max(255)
+      .required
+      (
+        'This field is required'
+      ),
+      LName: Yup
+      .string()
+      .max(255)
+      .required
+      (
+        'This field is required'
+      ),
+      Email: Yup
+      .string()
+      .max(255)
+      .required
+      (
+        'This field is required'
+      ),
+      Password: Yup
+      .string()
+      .max(255)
+      .required
+      (
+        'This field is required'
+      )
+    }),
+    onSubmit: () =>
+    {
+      addUser
+      (
+        formik.values.FName,
+        formik.values.MName,
+        formik.values.LName,
+        formik.values.Email,
+        formik.values.Password,
+      )
+    }
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -44,43 +107,81 @@ export default function FormDialog() {
           Add Users
         </Button>
       <Dialog open={open}
-      onClose={handleClose}
-      >
+      onClose={handleClose}>
         <DialogTitle
         display="flex"
-        justifyContent="center" >Add User</DialogTitle>
-
+        justifyContent="center" 
+        >Add User</DialogTitle>
+        <form onSubmit={formik.handleSubmit}>
         <DialogContent>
+              <TextField
+              error={Boolean(formik.touched.FName && formik.errors.FName)}
+              fullWidth
+              helperText={formik.touched.FName && formik.errors.FName}
+              label="First Name"
+              margin="normal"
+              name="FName"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.FName}
+              variant="outlined"
+              />
 
               <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="username"
-              label="Username"
-              type="text"
+              error={Boolean(formik.touched.MName && formik.errors.MName)}
               fullWidth
+              helperText={formik.touched.MName && formik.errors.MName}
+              label="Middle Initial"
+              margin="normal"
+              name="MName"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.MName}
               variant="outlined"
-              error
-              helperText="Please fill up this field"
+              />
+
+              <TextField
+              error={Boolean(formik.touched.LName && formik.errors.LName)}
+              fullWidth
+              helperText={formik.touched.LName && formik.errors.LName}
+              label="Last Name"
+              margin="normal"
+              name="LName"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.LName}
+              variant="outlined"
               />
 
 
               <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="email"
+              error={Boolean(formik.touched.Email && formik.errors.Email)}
+              fullWidth
+              helperText={formik.touched.Email && formik.errors.Email}
               label="Email"
-              type="email"
-              fullWidth
+              margin="normal"
+              name="Email"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Email}
               variant="outlined"
-              error
-              helperText="Please fill up this field"
+              />
+
+              <TextField
+              error={Boolean(formik.touched.Password && formik.errors.Password)}
+              fullWidth
+              helperText={formik.touched.Password && formik.errors.Password}
+              label="Password"
+              margin="normal"
+              name="Password"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Password}
+              variant="outlined"
               />
 
 
-              <TextField
+              {/* <TextField
               required
               autoFocus
               margin="dense"
@@ -93,35 +194,18 @@ export default function FormDialog() {
               helperText="Please fill up this field"
               />
 
-
               <TextField
               required
               autoFocus
               margin="dense"
-              id="name"
-              label="Name"
-              type="text"
+              id="Cpassword"
+              label="Confirm Password"
+              type="password"
               fullWidth
               variant="outlined"
               error
               helperText="Please fill up this field"
-              />
-
-
-              <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="userCode"
-              label="User Code"
-              type="number"
-              fullWidth
-              variant="outlined"
-              error
-              helperText="Please fill up this field"
-              />
-
-
+              /> */}
         </DialogContent>
 
         <DialogActions>
@@ -135,10 +219,14 @@ export default function FormDialog() {
             <Button
             color="primary"
             variant='contained'
-            onClick={handleClose}>Done
+            disabled={formik.isSubmitting}
+            type="submit"
+            onClick={handleClose}>
+              Done
             </Button>
           </Box>
         </DialogActions>
+        </form>
       </Dialog>
       </div>
   );
