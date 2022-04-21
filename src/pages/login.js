@@ -39,7 +39,14 @@ const Login = () => {
       <Head>
         <title>Login | Material Kit</title>
       </Head>
-      <Box
+      <body
+      style={{
+        backgroundImage: "url(" + "" + ")",
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat'
+      }}>
+           <Box
         component="main"
         sx={{
           alignItems: 'center',
@@ -189,6 +196,7 @@ const Login = () => {
           </form>
         </Container>
       </Box>
+     </body>
     </>
   );
 };
