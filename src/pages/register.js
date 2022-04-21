@@ -21,6 +21,7 @@ import { DashboardLayout } from '../components/dashboard-layout';
 const Register = () => {
   const { register } = useAuth()
   const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -69,7 +70,14 @@ const Register = () => {
         )
     }),
     onSubmit: () => {
-      register(formik.values.firstName,formik.values.middleInitial,formik.values.lastName,formik.values.email,formik.values.password)
+      register
+      (
+        formik.values.firstName,
+        formik.values.middleInitial,
+        formik.values.lastName,
+        formik.values.email,
+        formik.values.password
+      )
       router.push('/dashboard')
     }
   });

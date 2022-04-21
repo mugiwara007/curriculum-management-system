@@ -37,6 +37,7 @@ export default function FormDialog() {
       Password: '',
       Usercode: '',
       Username: '',
+      Userlevel: '',
     },
     validationSchema: Yup.object({
       Email: Yup
@@ -73,6 +74,13 @@ export default function FormDialog() {
       .required
       (
         'Username is required'
+      ),
+      Userlevel: Yup
+      .string()
+      .max(32)
+      .required
+      (
+        'User level is required'
       )
     }),
     onSubmit: () => {
@@ -82,6 +90,7 @@ export default function FormDialog() {
         formik.values.Password,
         formik.values.Usercode,
         formik.values.Username,
+        formik.values.Userlevel,
       )
     }
   });
@@ -178,32 +187,18 @@ export default function FormDialog() {
               variant="outlined"
               />
 
-
-              {/* <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="password"
-              label="Password"
-              type="password"
-              fullWidth
-              variant="outlined"
-              error
-              helperText="Please fill up this field"
-              />
-
               <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="Cpassword"
-              label="Confirm Password"
-              type="password"
+              error={Boolean(formik.touched.Userlevel && formik.errors.Userlevel)}
               fullWidth
+              helperText={formik.touched.Userlevel && formik.errors.Userlevel}
+              label="User level"
+              margin="normal"
+              name="Userlevel"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Userlevel}
               variant="outlined"
-              error
-              helperText="Please fill up this field"
-              /> */}
+              />
         </DialogContent>
 
         <DialogActions>

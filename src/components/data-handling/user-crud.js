@@ -7,6 +7,8 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { auth } from 'src/firebase/firebase-auth'
 
 const UserCrud = React.createContext()
 
@@ -27,15 +29,40 @@ export function UserProvider({ children }) {
 
   const usersCollectionRef = collection(db, "users");
 
-  function addUser (newEmail, newName, newPass, newUserCode, newUserName) {
+  function addUser (Email, Name, Pass, UserCode, UserName, UserLevel) {
     addDoc(usersCollectionRef, {
-      email: newEmail,
-      name: newName,
-      password: newPass,
-      usercode: newUserCode,
-      username: newUserName
+      email: Email,
+      name: Name,
+      password: Pass,
+      usercode: UserCode,
+      username: UserName,
+      userlevel: UserLevel
     });
+
+    createUserWithEmailAndPassword(auth, Email, Pass)
+        .then((userCredential) => {
+            const user = userCredential.user;
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
+
+      return
   };
+
+  function login(newEmail, newPass){
+    signInWithEmailAndPassword(auth, newEmail, newPass)
+    .then((userCredential) => {
+        const user = userCredential.user;
+    })
+    .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+    });
+
+    return
+}
 
   const updateUser = async (id, age) => {
     const userDoc = doc(db, "users", id);
@@ -49,7 +76,8 @@ export function UserProvider({ children }) {
   };
 
   const value={
-    addUser
+    addUser,
+    login,
   }
 
   return (

@@ -111,6 +111,17 @@ export default function FormDialog() {
               fullWidth
               variant="outlined"
               />
+
+              <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="userLevel"
+              label="User Level"
+              type="number"
+              fullWidth
+              variant="outlined"
+              />
         </DialogContent>
 
         <DialogActions>
@@ -225,6 +236,9 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   User Code
                 </TableCell>
                 <TableCell>
+                  User Level
+                </TableCell>
+                <TableCell>
                   Action
                 </TableCell>
               </TableRow>
@@ -266,6 +280,9 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   </TableCell>
                   <TableCell>
                     {user.usercode}
+                  </TableCell>
+                  <TableCell>
+                    {user.userlevel}
                   </TableCell>
                   <TableCell>
                     <FormDialog>
