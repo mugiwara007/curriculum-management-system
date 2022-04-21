@@ -1,11 +1,19 @@
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Typography,
-    Grid
-  } from '@mui/material';
+  Avatar,
+  Box,
+  Card,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  Button,
+  CardContent,
+  
+} from '@mui/material';
+import PerfectScrollbar from 'react-perfect-scrollbar';
   import SaveIcon from '@mui/icons-material/Save';
   import ArrowBackIcon from '@mui/icons-material/ArrowBack';
   import List from '@mui/material/List';
@@ -14,6 +22,10 @@ import {
   import Divider from '@mui/material/Divider';
   import TextField from '@mui/material/TextField';
 import { TocTwoTone } from '@mui/icons-material';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+import React, { Component } from 'react';
 
   const style = {
     width: '100%',
@@ -37,6 +49,8 @@ import { TocTwoTone } from '@mui/icons-material';
     fontSize: 13,
     width: '100',
   }
+
+  
 
   function HistoryLog() {
     return (
@@ -94,62 +108,1677 @@ import { TocTwoTone } from '@mui/icons-material';
   }
 
   function CreateTables(){
+    
     return (
-      <Box
-        component="form"
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <div>
-          <TextField
-            required
-            id="outlined-required"
-            label="Required"
-            defaultValue="Hello World"
-          />
-          <TextField
-            disabled
-            id="outlined-disabled"
-            label="Disabled"
-            defaultValue="Hello World"
-          />
-          <TextField
-            id="outlined-password-input"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-          />
-          <TextField
-            id="outlined-read-only-input"
-            label="Read Only"
-            defaultValue="Hello World"
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            id="outlined-number"
-            label="Number"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField id="outlined-search" 
-          label="Search field"
-           type="search" />
-          <TextField
-            id="outlined-helperText"
-            label="Helper text"
-            defaultValue="Default Value"
-            helperText="Some important text"
-          />
-        </div>
-  
+      <Card>
+        <PerfectScrollbar>
+          <Box sx={{ minWidth: 720}}>
+              <TableHead>
+                <TableCell>
+                <Box>
+        <FormControl fullWidth>
+        <InputLabel variant="standard" 
+        htmlFor="uncontrolled-native"
+        >
+          Year Level
+        </InputLabel>
+        <NativeSelect
+        sx={{ width: 135}}
+          defaultValue={30}
+          inputProps={{
+            name: 'year',
+            id: 'uncontrolled-native',
+          }}
+        >
+          <option value={10}>First Year</option>
+          <option value={20}>Second Year</option>
+          <option value={30}>Third Year</option>
+          <option value={30}>Fourth Year</option>
+        </NativeSelect>
+      </FormControl>
       </Box>
+                </TableCell>
+               
+                
+                <TableCell>
+               </TableCell>
+                <TableCell >
+                </TableCell>
+                <TableCell>
+                </TableCell>     
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell sx={{ minWidth: 76}}>
+                </TableCell>
+                    
+            
+              </TableHead>
+              
+
+              <TableCell>
+              <p><b>First Semester</b></p>
+              </TableCell>
+
+ {/*First Semester Header*/}
+              <TableBody>
+              <TableCell sx={{fontWeight: 'bold'}}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold'}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  
+                  <TableCell sx={{fontWeight: 'bold'}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold'}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold'}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold'}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+  {/*First Semester TextFields*/}  
+
+                  
+                   
+                   <Table label =" Line1">
+            <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell >
+                    <TextField
+                    sx={{ 
+                    maxWidth:1,
+                     
+                    }}
+            
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                 
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+                </Table>
+
+            <Table label =" Line2">
+            <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell >
+                    <TextField
+                    sx={{ 
+                    maxWidth:1,
+                     
+                    }}
+            
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                 
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+                </Table>
+
+                   <Table label =" Line3">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+              <Table label =" Line4">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+                        
+            <Table label =" Line5">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+            <Table label =" Line6">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+            <Table label =" Line7">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+            <Table label =" Line8">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+            <Table>
+              <TableCell>
+              </TableCell>
+              <TableCell>
+              </TableCell>
+              <TableCell>
+             
+              </TableCell>
+              <TableCell>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell id='TotalLecUnits'
+              sx={{textAlign:'left'}}
+              >
+              <b>0</b>
+              </TableCell>
+
+              <TableCell id='TotalLabUnits'
+              sx={{textAlign:'left'}}
+              >
+              <b>0</b>
+              </TableCell>
+              <TableCell id='TotalUnits'
+              sx={{textAlign:'left'}}
+              >
+              <b>0</b>
+              </TableCell>
+              <TableCell id='TotalHPW'
+              sx={{textAlign:'left',
+              
+            }}
+              >
+              <b>0</b>
+              </TableCell>
+              <TableCell>
+  
+              </TableCell>
+              <TableCell>
+  
+              </TableCell>
+              <TableCell>
+              </TableCell>
+            </Table>
+
+ {/*Second Semester Headings*/}
+
+            <TableCell sx={{width: 154}}>
+              <p><b>Second Semester</b></p>
+              </TableCell>
+              
+              <TableBody>
+              <TableCell sx={{fontWeight: 'bold',}}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold',}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+ {/*Second Semester TextField*/}
+
+                  <Table label =" Line1">
+                  <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell >
+                    <TextField
+                    sx={{ 
+                    maxWidth:1,
+                     
+                    }}
+            
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                 
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+                </Table>
+
+                    <Table label =" Line2">
+            <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell >
+                    <TextField
+                    sx={{ 
+                    maxWidth:1,
+                     
+                    }}
+            
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                 
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+                </Table>
+
+                   <Table label =" Line3">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+              <Table label =" Line4">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+                        
+            <Table label =" Line5">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+            <Table label =" Line6">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+            <Table label =" Line7">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+            <Table label =" Line8">
+                   <TableCell>
+                   <TextField sx={{ minWidth: 95 }}
+                    id="standard-multiline-static"
+                    label="Course Code"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    </TableCell>
+                    <TextField sx={{ minWidth: 105 }}
+                    id="standard-multiline-static"
+                    label="Descriptive Title"
+                    multiline
+                    
+                    variant="standard"
+                    />
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 5,
+                    left:8
+                    }}
+                      fullWidth
+                     id="standard-number"
+                     label="Lec Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ 
+  
+                      left: 3,
+                      }}
+                     id="standard-number"
+                     label="Lab Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                    
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TextField
+                     sx={{ width: 73, left:5 }}
+                     id="standard-number"
+                     label="Total Units"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    <TableCell>
+                    <TextField
+                     sx={{ 
+                       minWidth: 13,
+                       left:5
+                     }}
+                     id="standard-number"
+                     label="HPW"
+                     type="number"
+                     InputLabelProps={{
+                     shrink: true,
+                     }}
+                     variant="standard"
+                      />
+                    </TableCell>
+                    <TableCell>
+                    <TextField
+                    sx={{ minWidth: 15 }}
+                     id="standard-multiline-static"
+                     label="Pre-Req"
+                     multiline
+                     variant="standard"
+                    />
+                    </TableCell>
+                    <TableCell>
+                    <TextField id="standard-basic"
+                     label="Co-Req"
+                      variant="standard" />
+                    </TableCell> 
+            </Table>
+
+            <Table>
+              <TableCell>
+              </TableCell>
+              <TableCell>
+              </TableCell>
+              <TableCell>
+             
+              </TableCell>
+              <TableCell>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell id='TotalLecUnits'
+              sx={{textAlign:'left'}}
+              >
+              <b>0</b>
+              </TableCell>
+
+              <TableCell id='TotalLabUnits'
+              sx={{textAlign:'left'}}
+              >
+              <b>0</b>
+              </TableCell>
+              <TableCell id='TotalUnits'
+              sx={{textAlign:'left'}}
+              >
+              <b>0</b>
+              </TableCell>
+              <TableCell id='TotalHPW'
+              sx={{textAlign:'left',
+              
+            }}
+              >
+              <b>0</b>
+              </TableCell>
+              <TableCell>
+  
+              </TableCell>
+              <TableCell>
+  
+              </TableCell>
+              <TableCell>
+              </TableCell>
+            </Table>
+
+                    
+
+                  
+            
+          </Box>
+        </PerfectScrollbar>
+      </Card>
+      
     );
   }
   export const CreateCurriculumListToolbar = (props) => (
@@ -200,7 +1829,7 @@ import { TocTwoTone } from '@mui/icons-material';
   
           <CardContent
           sx={{
-            width:'50%',
+            width:'100%',
           }}
           >
             <Box sx={{ 
@@ -223,11 +1852,15 @@ import { TocTwoTone } from '@mui/icons-material';
               height: '100%',
               borderRadius: 1,
               border: '1px solid #D3D3D3',
+              
+             
               }}>
             <CreateTables/> 
             </Box>
+      
           </CardContent>
           
+        
         </Card>
       </Box>
     </Box>
