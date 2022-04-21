@@ -17,15 +17,6 @@ export function userAuth(){
 }
 
 export function UserProvider({ children }) {
-  // const [newSubCode, setNewSubCode] = useState("");
-  // const [newSubDesc, setNewSubDesc] = useState("");
-  // const [newSubLec, setNewSubLec] = useState(0);
-  // const [newSubLab, setNewSubLab] = useState(0);
-  // const [newSubPreReq, setNewSubPreReq] = useState("");
-  // const [newSubCoReq, setNewSubCoReq] = useState("");
-  // const [newSubUser, setNewSubUser] = useState("");
-  // const [newSubKac, setNewSubKac] = useState("");
-  // const [newSubClassCode, setNewSubClassCode] = useState("");
 
   const usersCollectionRef = collection(db, "users");
 
@@ -51,8 +42,8 @@ export function UserProvider({ children }) {
       return
   };
 
-  function login(newEmail, newPass){
-    signInWithEmailAndPassword(auth, newEmail, newPass)
+  function login(Email, Pass){
+    signInWithEmailAndPassword(auth, Email, Pass)
     .then((userCredential) => {
         const user = userCredential.user;
     })
