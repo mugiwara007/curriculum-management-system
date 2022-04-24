@@ -75,21 +75,6 @@ const items = [
     title: 'Settings'
   },
   {
-    href: '/login',
-    icon: (<LockIcon fontSize="small" />),
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: (<UserAddIcon fontSize="small" />),
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: (<XCircleIcon fontSize="small" />),
-    title: 'Error'
-  },
-  {
     href: '/',
     icon: (<LogoutIcon fontSize="small" />),
     title: 'Sign Out'
