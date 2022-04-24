@@ -13,7 +13,6 @@ import { Download as DownloadIcon } from '../../icons/download';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import ArchiveIcon from '@mui/icons-material/Archive';
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -54,12 +53,12 @@ export default function FormDialog() {
           'Subject description is required'),
       sLec: Yup
         .number()
-        .max(255)
+        .max(99999999999)
         .required(
           'LEC units is required'),
       sLab: Yup
         .number()
-        .max(255)
+        .max(99999999999)
         .required(
           'LAB units is required'),
       sPreReq: Yup
@@ -122,7 +121,7 @@ export default function FormDialog() {
           Add Subject
         </Button>
       <Dialog open={open}
-      onClose={handleClose}>
+        onClose={handleClose}>
         <DialogTitle
         display="flex"
         justifyContent="center"

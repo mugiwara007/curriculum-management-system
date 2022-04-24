@@ -9,32 +9,305 @@ import {
   Checkbox,
   Table,
   TableBody,
+  CardContent,
+  TextField,
   TableCell,
+  InputAdornment,
   TableHead,
   TablePagination,
   TableRow,
+  SvgIcon,
   Typography,
   Button,
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
 import { db } from 'src/firebase/firebase-auth'
-import { getDocs, collection } from 'firebase/firestore';
+import { getDocs, collection, doc, onSnapshot, query } from 'firebase/firestore';
+import * as Yup from 'yup';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import { useFormik } from 'formik';
+import DialogTitle from '@mui/material/DialogTitle';
+import { subAuth } from '../data-handling/subject-crud';
+
+
+
+export default function FormDialog(props) {
+  const [open, setOpen] = useState(false);
+  const { updateSubject } = subAuth()
+
+  const formik = useFormik({
+    initialValues: {
+      sCode: props.sub_code,
+      sDesc: props.sub_desc,
+      sLec: props.sub_lec,
+      sLab: props.sub_lab,
+      sPreReq: props.sub_preReq,
+      sCoReq: props.sub_coReq,
+      sUser: props.sub_user,
+      sKac: props.sub_kac,
+      sClassCode: props.sub_classCode
+    },
+    validationSchema: Yup.object({
+      sCode: Yup
+        .string()
+        .max(255)
+        .required(
+          'Subject code is required'),
+      sDesc: Yup
+        .string()
+        .max(255)
+        .required(
+          'Subject description is required'),
+      sLec: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'LEC units is required'),
+      sLab: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'LAB units is required'),
+      sPreReq: Yup
+        .string()
+        .max(255)
+        .required(
+          'Pre-requisite is required'),
+      sCoReq: Yup
+        .string()
+        .max(255)
+        .required(
+          'Co-requisite is required'),
+      sUser: Yup
+        .string()
+        .max(255)
+        .required(
+          'User is required'),
+      sKac: Yup
+        .string()
+        .max(255)
+        .required(
+          'KAC is required'),
+      sClassCode: Yup
+        .string()
+        .max(255)
+        .required(
+          'Class code is required')
+    }),
+    onSubmit: () => {
+      updateSubject(
+        props.sub_id,
+        formik.values.sCode,
+        formik.values.sDesc,
+        formik.values.sLec,
+        formik.values.sLab,
+        formik.values.sPreReq,
+        formik.values.sCoReq,
+        formik.values.sUser,
+        formik.values.sKac,
+        formik.values.sClassCode
+      )
+      formik.setSubmitting(false)
+    }
+  });
+  
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+        startIcon={(<EditIcon fontSize="small" />)}
+        variant="outlined"
+        sx={{ mr: 1 }}
+        onClick={handleClickOpen} >
+          Update
+      </Button>
+      <Dialog open={open}
+      onClose={handleClose}
+      >
+        <form onSubmit={formik.handleSubmit}>
+        <DialogTitle
+        display="flex"
+        justifyContent="center" >Update Subject</DialogTitle>
+
+          <DialogContent>
+                      
+              <TextField
+                error={Boolean(formik.touched.sCode && formik.errors.sCode)}
+                fullWidth
+                helperText={formik.touched.sCode && formik.errors.sCode}
+                label='Subject Code'
+                margin="normal"
+                name="sCode"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sCode}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sDesc && formik.errors.sDesc)}
+                fullWidth
+                helperText={formik.touched.sDesc && formik.errors.sDesc}
+                label='Subject Description'
+                margin="normal"
+                name="sDesc"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sDesc}
+                variant="outlined"
+              />
+
+
+              <TextField
+                error={Boolean(formik.touched.sLec && formik.errors.sLec)}
+                fullWidth
+                helperText={formik.touched.sLec && formik.errors.sLec}
+                label='LEC Units'
+                margin="normal"
+                name="sLec"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sLec}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sLab && formik.errors.sLab)}
+                fullWidth
+                helperText={formik.touched.sLab && formik.errors.sLab}
+                label='LAB Units'
+                margin="normal"
+                name="sLab"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sLab}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sPreReq && formik.errors.sPreReq)}
+                fullWidth
+                helperText={formik.touched.sPreReq && formik.errors.sPreReq}
+                label='Subject Pre-Requisite'
+                margin="normal"
+                name="sPreReq"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sPreReq}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sCoReq && formik.errors.sCoReq)}
+                fullWidth
+                helperText={formik.touched.sCoReq && formik.errors.sCoReq}
+                label='Subject Co-Requisite'
+                margin="normal"
+                name="sCoReq"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sCoReq}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sUser && formik.errors.sUser)}
+                fullWidth
+                helperText={formik.touched.sUser && formik.errors.sUser}
+                label='Username'
+                margin="normal"
+                name="sUser"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sUser}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sKac && formik.errors.sKac)}
+                fullWidth
+                helperText={formik.touched.sKac && formik.errors.sKac}
+                label='KAC'
+                margin="normal"
+                name="sKac"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sKac}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sClassCode && formik.errors.sClassCode)}
+                fullWidth
+                helperText={formik.touched.sClassCode && formik.errors.sClassCode}
+                label='Class Code'
+                margin="normal"
+                name="sClassCode"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sClassCode}
+                variant="outlined"
+              />
+                  
+            </DialogContent>
+
+          <DialogActions>
+          <Box>
+            <Button
+            color="primary"
+            onClick={handleClose}>Cancel
+            </Button>
+          </Box>
+          <Box p={2}>
+            <Button
+            color="primary"
+            variant='contained'
+            disabled={formik.isSubmitting}
+            type="submit"
+            onClick={handleClose}>
+              Done
+            </Button>
+          </Box>
+        </DialogActions>
+        </form>
+      </Dialog>
+      </div>
+  );
+}
+
 
 export const SubjectListResults = () => {
   const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(0);
   const subjectsCollectionRef = collection(db, "subjects");
   const [subjects, setSubjects] = useState([]);
+  const [indexValue, setIndexValue] = useState(0)
+  const [limitValue, setLimitValue] = useState(limit)
+
+  function allSub(){
+    const q = query(collection(db, "subjects"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const subs = [];
+    querySnapshot.forEach((doc) => {
+        subs.push({ ...doc.data(), id: doc.id });
+    });
+       setSubjects(subs)
+    });
+  }
 
   useEffect(() => {
-    const getSubjects = async () => {
-      const data = await getDocs(subjectsCollectionRef);
-      setSubjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-
-    getSubjects();
+    allSub()
   }, []);
 
   const handleSelectAll = (event) => {
@@ -49,7 +322,7 @@ export const SubjectListResults = () => {
     setSelectedSubjectIds(newSelectedSubjectIds);
   };
 
-  const handleSelectOne = (id) => {
+  const handleSelectOne = (event, id) => {
     const selectedIndex = selectedSubjectIds.indexOf(id);
     let newSelectedSubjectIds = [];
 
@@ -70,11 +343,23 @@ export const SubjectListResults = () => {
   };
 
   const handleLimitChange = (event) => {
+    
+    setLimitValue(event.target.value)
+    setIndexValue(0)
     setLimit(event.target.value);
   };
 
   const handlePageChange = (event, newPage) => {
+    if(page > newPage){
+      setIndexValue(indexValue- limit)
+      setLimitValue(limitValue- limit)
+    }else{
+      setIndexValue(indexValue+ limit)
+      setLimitValue(limitValue+ limit)
+    }
+    
     setPage(newPage);
+    console.log(page)
   };
 
   return (
@@ -126,7 +411,7 @@ export const SubjectListResults = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {subjects.slice(0, limit).map((subject) => (
+              {subjects.slice(indexValue, limitValue).map((subject) => (
                 <TableRow
                   hover
                   key={subject.id}
@@ -185,14 +470,19 @@ export const SubjectListResults = () => {
                     {subject.sub_classCode}
                   </TableCell>
                   <TableCell>
-                    <Button
-                    startIcon={(<EditIcon fontSize="small" />)}
-                    variant="outlined"
-                    sx={{ mr: 1 }}
-                  >
-                    Update
-                  </Button>
-                </TableCell>
+                    <FormDialog
+                      sub_id={subject.id}
+                      sub_code={subject.sub_code}
+                      sub_desc={subject.sub_desc}
+                      sub_lec={subject.sub_lec}
+                      sub_lab={subject.sub_lab}
+                      sub_preReq={subject.sub_preReq}
+                      sub_coReq={subject.sub_coReq}
+                      sub_user={subject.sub_user}
+                      sub_kac={subject.sub_kac}
+                      sub_classCode={subject.sub_classCode}>
+                    </FormDialog>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
