@@ -24,7 +24,7 @@ export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
   const [visibility,setVisibility] = useState('none');
 
-  const handleClick = () => {
+  const handleClick = (visibility) => {
     setVisibility('block');
     if(visibility == 'none'){
       setVisibility('block');
@@ -84,7 +84,8 @@ export const DashboardNavbar = (props) => {
                 color="primary"
                 variant="dot"
               >
-                <BellIcon onClick={handleClick} fontSize="small" />
+                <BellIcon onClick={handleClick} 
+                fontSize="small" />
                 
               </Badge>
             </IconButton>
