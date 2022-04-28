@@ -22,8 +22,9 @@ import {
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { db } from 'src/firebase/firebase-auth'
-import { getDocs, collection, doc, onSnapshot, query } from 'firebase/firestore';
+import { deleteDoc, getDocs, collection, doc, onSnapshot, query } from 'firebase/firestore';
 import * as Yup from 'yup';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -31,7 +32,6 @@ import DialogContent from '@mui/material/DialogContent';
 import { useFormik } from 'formik';
 import DialogTitle from '@mui/material/DialogTitle';
 import { subAuth } from '../data-handling/subject-crud';
-
 
 
 export default function FormDialog(props) {
@@ -285,6 +285,66 @@ export default function FormDialog(props) {
   );
 }
 
+export function DeleteFormDialog(props) {
+  const [open, setOpen] = useState(false);
+  const { updateSubject } = subAuth()
+  
+  const handleDeleteClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDeleteClose = () => {
+    setOpen(false);
+  };
+
+  function deleteSub(id){
+    const subjectDoc = doc(db, "subjects", id);
+    deleteDoc(subjectDoc);
+  }
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+        color="error"
+        startIcon={(<DeleteIcon fontSize="small" />)}
+        variant="outlined"
+        sx={{ mr: 1 }}
+        onClick={handleDeleteClickOpen} >
+          Delete
+      </Button>
+      <Dialog open={open}
+      onClose={handleDeleteClose}
+      >
+        <DialogTitle
+        display="flex"
+        justifyContent="center" >Confirm Delete</DialogTitle>
+
+          <DialogContent>
+           <p>Are you sure you want to delete this?</p>
+          </DialogContent>
+
+          <DialogActions>
+          <Box>
+            <Button
+              color="primary"
+              onClick={handleDeleteClose}>Cancel
+            </Button>
+          </Box>
+          <Box p={2}>
+            <Button
+              color="error"
+              variant='contained'
+              disabled={!open}
+              type="submit"
+              onClick={() => deleteSub(props.sub_id)}>
+              Confirm
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+      </div>
+  );
+}
 
 export const SubjectListResults = () => {
   const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
@@ -408,6 +468,7 @@ export const SubjectListResults = () => {
                   Class Code
                 </TableCell>
                 <TableCell />
+                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -482,6 +543,11 @@ export const SubjectListResults = () => {
                       sub_kac={subject.sub_kac}
                       sub_classCode={subject.sub_classCode}>
                     </FormDialog>
+                  </TableCell>
+                  <TableCell>
+                    <DeleteFormDialog
+                      sub_id={subject.id}>
+                    </DeleteFormDialog>
                   </TableCell>
                 </TableRow>
               ))}
