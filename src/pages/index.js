@@ -7,13 +7,16 @@ import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Facebook as FacebookIcon } from '../icons/facebook';
 import { Google as GoogleIcon } from '../icons/google';
+import { fetchSignInMethodsForEmail } from 'firebase/auth';
+import { useAuth } from 'src/contexts/AuthContext';
 
 const Login = () => {
+  const { login } = useAuth()
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123'
+      email: '',
+      password: ''
     },
     validationSchema: Yup.object({
       email: Yup
@@ -30,7 +33,8 @@ const Login = () => {
           'Password is required')
     }),
     onSubmit: () => {
-      router.push('/');
+      login(formik.values.email, formik.values.password);
+      router.push('/dashboard');
     }
   });
 
@@ -49,8 +53,8 @@ const Login = () => {
         }}
       >
         <Container maxWidth="sm">
-          <NextLink
-            href="/dashboard"
+          {/* <NextLink
+            href="/"
             passHref
           >
             <Button
@@ -59,7 +63,7 @@ const Login = () => {
             >
               Dashboard
             </Button>
-          </NextLink>
+          </NextLink> */}
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography

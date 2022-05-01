@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -26,8 +26,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
 import * as React from 'react';
+
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -57,7 +57,6 @@ export default function FormDialog() {
         justifyContent="center" >Update Data</DialogTitle>
 
         <DialogContent>
-
               <TextField
               required
               autoFocus
@@ -68,7 +67,6 @@ export default function FormDialog() {
               fullWidth
               variant="outlined"
               />
-
 
               <TextField
               required
@@ -81,7 +79,6 @@ export default function FormDialog() {
               variant="outlined"
               />
 
-
               <TextField
               required
               autoFocus
@@ -92,7 +89,6 @@ export default function FormDialog() {
               fullWidth
               variant="outlined"
               />
-
 
               <TextField
               required
@@ -105,7 +101,6 @@ export default function FormDialog() {
               variant="outlined"
               />
 
-
               <TextField
               required
               autoFocus
@@ -117,7 +112,16 @@ export default function FormDialog() {
               variant="outlined"
               />
 
-
+              <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="userLevel"
+              label="User Level"
+              type="number"
+              fullWidth
+              variant="outlined"
+              />
         </DialogContent>
 
         <DialogActions>
@@ -140,10 +144,26 @@ export default function FormDialog() {
   );
 }
 
+import { collection, getDocs} from '@firebase/firestore';
+import {db} from 'src/firebase/firebase-auth'
+import { User } from 'src/icons/user';
+
 export const CustomerListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const [users, setUsers] = useState([]);
+  const usersCollectionRef = collection(db, "users");
+
+  useEffect(() => 
+  {
+    const getUsers = async () => 
+    {
+      const data = await getDocs(usersCollectionRef);
+      setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id})))
+    };
+    getUsers();
+  }, []);
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -204,19 +224,19 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  Username
                 </TableCell>
                 <TableCell>
                   Email
                 </TableCell>
                 <TableCell>
-                  Location
+                  Name
                 </TableCell>
                 <TableCell>
-                  Phone
+                  User Code
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  User Level
                 </TableCell>
                 <TableCell>
                   Action
@@ -224,15 +244,15 @@ export const CustomerListResults = ({ customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {users.slice(0, limit).map((user) => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={user.id}
+                  selected={selectedCustomerIds.indexOf(user.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
+                      checked={selectedCustomerIds.indexOf(user.id) !== -1}
                       onChange={(event) => handleSelectOne(event, customer.id)}
                       value="true"
                     />
@@ -244,31 +264,25 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
-                        src={customer.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar>
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {user.username}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {user.email}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {user.name}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {user.usercode}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {user.userlevel}
                   </TableCell>
                   <TableCell>
                     <FormDialog>

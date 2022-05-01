@@ -29,9 +29,9 @@ const Subjects = () => (
   </>
 );
 Subjects.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
+    <DashboardLayout>
+      {page}
+    </DashboardLayout>
 );
 
 export default Subjects;

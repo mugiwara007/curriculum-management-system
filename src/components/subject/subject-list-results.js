@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -12,207 +12,61 @@ import {
   TableCell,
   TableHead,
   TablePagination,
-  TextField,
   TableRow,
   Typography,
   Button,
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
+import { db } from 'src/firebase/firebase-auth'
+import { getDocs, collection } from 'firebase/firestore';
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-
-import * as React from 'react';
-
-export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div style={{display : 'inline-block'}} >
-        <Button
-          startIcon={(<EditIcon fontSize="small" />)}
-          variant="outlined"
-          sx={{ mr: 1 }}
-          onClick={handleClickOpen}>
-          Update
-        </Button>
-      <Dialog open={open}
-      onClose={handleClose}>
-        <DialogTitle
-        display="flex"
-        justifyContent="center"
-        >Update Data</DialogTitle>
-        <DialogContent>
-
-             <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="subjectCode"
-                label="Subject Code"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="description"
-                label="Description"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="lecUnits"
-                label="LEC Units"
-                type="number"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="labUnits"
-                label="LAB units"
-                type="number"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="preRequisite"
-                label="Pre-Requisite"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="coRequisite"
-                label="Co-Requisite"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="kac"
-                label="KAC"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="classCode"
-                label="Class Code"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="userName"
-                label="Username"
-                type="text"
-                fullWidth
-                variant="outlined"
-              />
-
-        </DialogContent>
-        <DialogActions>
-          <Box>
-              <Button
-              color="primary"
-              onClick={handleClose}>Cancel
-              </Button>
-            </Box>
-            <Box p={2}>
-              <Button
-              color="primary"
-              variant='contained'
-              onClick={handleClose}>Done
-              </Button>
-            </Box>
-        </DialogActions>
-      </Dialog>
-      </div>
-  );
-}
-
-
-export const SubjectListResults = ({ customers, ...rest }) => {
-  const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
+export const SubjectListResults = () => {
+  const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const subjectsCollectionRef = collection(db, "subjects");
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    const getSubjects = async () => {
+      const data = await getDocs(subjectsCollectionRef);
+      setSubjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+
+    getSubjects();
+  }, []);
 
   const handleSelectAll = (event) => {
-    let newSelectedCustomerIds;
+    let newSelectedSubjectIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
+      newSelectedSubjectIds = subjects.map((subject) => subject.id);
     } else {
-      newSelectedCustomerIds = [];
+      newSelectedSubjectIds = [];
     }
 
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    setSelectedSubjectIds(newSelectedSubjectIds);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomerIds.indexOf(id);
-    let newSelectedCustomerIds = [];
+    const selectedIndex = selectedSubjectIds.indexOf(id);
+    let newSelectedSubjectIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
+      newSelectedSubjectIds = newSelectedSubjectIds.concat(selectedSubjectIds, id);
     } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-    } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
+      newSelectedSubjectIds = newSelectedSubjectIds.concat(selectedSubjectIds.slice(1));
+    } else if (selectedIndex === selectedSubjectIds.length - 1) {
+      newSelectedSubjectIds = newSelectedSubjectIds.concat(selectedSubjectIds.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, selectedIndex),
-        selectedCustomerIds.slice(selectedIndex + 1)
+      newSelectedSubjectIds = newSelectedSubjectIds.concat(
+        selectedSubjectIds.slice(0, selectedIndex),
+        selectedSubjectIds.slice(selectedIndex + 1)
       );
     }
 
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    setSelectedSubjectIds(newSelectedSubjectIds);
   };
 
   const handleLimitChange = (event) => {
@@ -224,7 +78,7 @@ export const SubjectListResults = ({ customers, ...rest }) => {
   };
 
   return (
-    <Card {...rest}>
+    <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -232,46 +86,56 @@ export const SubjectListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
+                    checked={selectedSubjectIds.length === subjects.length}
                     color="primary"
                     indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
+                      selectedSubjectIds.length > 0
+                      && selectedSubjectIds.length < subjects.length
                     }
                     onChange={handleSelectAll}
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  Subject Code
                 </TableCell>
                 <TableCell>
-                  Email
+                  Description
                 </TableCell>
                 <TableCell>
-                  Location
+                  LEC Units
                 </TableCell>
                 <TableCell>
-                  Phone
+                  LAB Units
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  Pre-Requisite
                 </TableCell>
                 <TableCell>
-                  Action
+                  Co-Requisite
                 </TableCell>
+                <TableCell>
+                  Username
+                </TableCell>
+                <TableCell>
+                  KAC
+                </TableCell>
+                <TableCell>
+                  Class Code
+                </TableCell>
+                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {subjects.slice(0, limit).map((subject) => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={subject.id}
+                  selected={selectedSubjectIds.indexOf(subject.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      checked={selectedSubjectIds.indexOf(subject.id) !== -1}
+                      onChange={(event) => handleSelectOne(event, subject.id)}
                       value="true"
                     />
                   </TableCell>
@@ -282,35 +146,52 @@ export const SubjectListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
-                        src={customer.avatarUrl}
+                      {/* <Avatar
+                        src={subject.avatarUrl}
                         sx={{ mr: 2 }}
                       >
-                        {getInitials(customer.name)}
-                      </Avatar>
+                        {getInitials(subject.name)}
+                      </Avatar> */}
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {subject.sub_code}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {subject.sub_desc}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {subject.sub_lec}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {subject.sub_lab}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {subject.sub_preReq}
                   </TableCell>
                   <TableCell>
-                    <FormDialog>
-                    </FormDialog>
+                    {subject.sub_coReq}
+                  </TableCell>
+                  <TableCell>
+                    {subject.sub_user}
+                  </TableCell>
+                  <TableCell>
+                    {subject.sub_kac}
+                  </TableCell>
+                  <TableCell>
+                    {subject.sub_classCode}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                    startIcon={(<EditIcon fontSize="small" />)}
+                    variant="outlined"
+                    sx={{ mr: 1 }}
+                  >
+                    Update
+                  </Button>
                 </TableCell>
                 </TableRow>
               ))}
@@ -320,7 +201,7 @@ export const SubjectListResults = ({ customers, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={customers.length}
+        count={subjects.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
@@ -329,8 +210,4 @@ export const SubjectListResults = ({ customers, ...rest }) => {
       />
     </Card>
   );
-};
-
-SubjectListResults.propTypes = {
-  customers: PropTypes.array.isRequired
 };
