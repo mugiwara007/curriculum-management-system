@@ -32,9 +32,11 @@ import DialogContent from '@mui/material/DialogContent';
 import { useFormik } from 'formik';
 import DialogTitle from '@mui/material/DialogTitle';
 import { subAuth } from '../data-handling/subject-crud';
+import { useAuth } from 'src/contexts/AuthContext';
 
 
 export default function FormDialog(props) {
+  const { currentUser } = useAuth()
   const [open, setOpen] = useState(false);
   const { updateSubject } = subAuth()
 
@@ -98,6 +100,7 @@ export default function FormDialog(props) {
           'Class code is required')
     }),
     onSubmit: () => {
+      if (currentUser){
       updateSubject(
         props.sub_id,
         formik.values.sCode,
@@ -110,6 +113,7 @@ export default function FormDialog(props) {
         formik.values.sKac,
         formik.values.sClassCode
       )
+      }
       formik.setSubmitting(false)
     }
   });
@@ -347,6 +351,7 @@ export function DeleteFormDialog(props) {
 }
 
 export const SubjectListResults = () => {
+  const { currentUser } = useAuth()
   const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(0);
@@ -472,7 +477,7 @@ export const SubjectListResults = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {subjects.slice(indexValue, limitValue).map((subject) => (
+              {currentUser && subjects.slice(indexValue, limitValue).map((subject) => (
                 <TableRow
                   hover
                   key={subject.id}
@@ -557,7 +562,7 @@ export const SubjectListResults = () => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={subjects.length}
+        count={currentUser && subjects.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}

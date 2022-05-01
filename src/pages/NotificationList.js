@@ -31,7 +31,7 @@ function NotificationDiv(props){
     return <List
     sx={{
     zIndex:'modal',
-    position: 'fixed',
+    //position: 'fixed',
     top:70,
     right:20,
     color:'black',
@@ -40,8 +40,8 @@ function NotificationDiv(props){
     bgcolor: 'background.paper',
     borderRadius: 1,
     border: '1px solid #D3D3D3', 
-    //display: 'hidden',
-    display: 'visible',
+    display: 'hidden',
+    //display: 'visible',
 
   }}
   >

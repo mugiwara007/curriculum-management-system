@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { auth } from 'src/firebase/firebase-auth'
 import { db } from 'src/firebase/firebase-auth'
 import { collection ,addDoc } from "firebase/firestore";
+import { useRouter } from 'next/router';
 
 const AuthContext = React.createContext()
 
@@ -14,6 +15,13 @@ export function useAuth(){
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
+    const [userID, setUserID] = useState()
+    const [userEmailPassID, setUserEmailPassID] = useState()
+    const [userLevel, setUserLevel] = useState()
+    const [userName, setUserName] = useState()
+    const [userEmail, setUserEmail] = useState()
+    const [userPass, setUserPass] = useState()
+    const router = useRouter();
 
     function register(fname,mname,sname,email, password){
         addDoc(usersCollectionRef, {
@@ -22,7 +30,7 @@ export function AuthProvider({ children }) {
             surname: sname,
             email: email,
             password: password,
-            userLevel: 1,
+            userlevel: 1,
           });
 
         createUserWithEmailAndPassword(auth, email, password)
@@ -45,6 +53,8 @@ export function AuthProvider({ children }) {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            
+            return false
         });
 
         return
@@ -53,6 +63,8 @@ export function AuthProvider({ children }) {
     function signout(){
         signOut(auth).then(() => {
             // Sign-out successful.
+            setCurrentUser("")
+            router.push("/")
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
@@ -63,13 +75,22 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
-          setCurrentUser(user)
+            if (user){
+                setCurrentUser(user)
+                setUserLevel(user.userlevel)
+            } 
+            else{
+                setCurrentUser("")
+                setUserLevel("")
+            }
+          
         })
         return unsubscribe
     }, [])
 
     const value = {
         currentUser,
+        userLevel,
         register,
         login,
         signout

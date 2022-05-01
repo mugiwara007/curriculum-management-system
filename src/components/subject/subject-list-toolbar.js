@@ -22,9 +22,10 @@ import { useFormik } from 'formik';
 import { subAuth } from '../data-handling/subject-crud';
 import * as Yup from 'yup';
 import * as React from 'react';
+import { useAuth } from 'src/contexts/AuthContext'
 
 export default function FormDialog() {
-
+  const { currentUser } = useAuth()
   const [open, setOpen] = React.useState(false);
   const { addSubject } = subAuth()
 
@@ -88,17 +89,21 @@ export default function FormDialog() {
           'Pre-requisite is required')
     }),
     onSubmit: () => {
-      addSubject(
-        formik.values.sCode,
-        formik.values.sDesc,
-        formik.values.sLec,
-        formik.values.sLab,
-        formik.values.sPreReq,
-        formik.values.sCoReq,
-        formik.values.sUser,
-        formik.values.sKac,
-        formik.values.sClassCode
-      )
+      if (currentUser){
+        addSubject(
+          formik.values.sCode,
+          formik.values.sDesc,
+          formik.values.sLec,
+          formik.values.sLab,
+          formik.values.sPreReq,
+          formik.values.sCoReq,
+          formik.values.sUser,
+          formik.values.sKac,
+          formik.values.sClassCode
+        )
+
+        formik.setSubmitting(false)
+      }
     }
   });
 

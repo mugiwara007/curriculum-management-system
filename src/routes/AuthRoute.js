@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { useRouter } from 'next/router';
 import { useAuth } from "src/contexts/AuthContext"
 
-const AuthRoute = ({ children }) => {
+const AuthRoute = () => {
   const { currentUser } = useAuth()
   const router = useRouter()
 
@@ -11,7 +11,7 @@ useEffect(() => {
         return 
     }
     else {
-        router.push('/login')
+        router.push('/')
         return
     }
 }, []);
