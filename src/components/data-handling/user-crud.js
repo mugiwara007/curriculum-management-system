@@ -7,7 +7,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, getAuth, updatePassword} from 'firebase/auth'
 import { auth } from 'src/firebase/firebase-auth'
 
 const UserCrud = React.createContext()
@@ -42,7 +42,39 @@ export function UserProvider({ children }) {
       return
   };
 
-  function login(Email, Pass){
+  function updateUser(id, Email, Name, Pass, UserCode, UserName, UserLevel) 
+  {
+    const userDoc = doc(db, "users", id);
+    //const user = auth.currentUser;
+    const newFields = 
+    {
+      email: Email,
+      name: Name,
+      password: Pass,
+      usercode: UserCode,
+      username: UserName,
+      userlevel: UserLevel
+    };
+    updateDoc(userDoc, newFields);
+
+    const auth = getAuth();
+    updateEmail(auth.currentUser, Email).then(() => {
+      // Email updated!
+      // ...
+    }).catch((error) => {
+      // An error occurred
+      // ...
+    });
+    updatePassword(user, Pass).then(() => {
+      // Update successful.
+    }).catch((error) => {
+      // An error ocurred
+      // ...
+    });
+  };
+
+  function login(Email, Pass)
+  {
     signInWithEmailAndPassword(auth, Email, Pass)
     .then((userCredential) => {
         const user = userCredential.user;
@@ -53,13 +85,7 @@ export function UserProvider({ children }) {
     });
 
     return
-}
-
-  const updateUser = async (id, age) => {
-    const userDoc = doc(db, "users", id);
-    const newFields = { age: age + 1 };
-    await updateDoc(userDoc, newFields);
-  };
+  }
 
   const deleteUser = async (id) => {
     const userDoc = doc(db, "users", id);
@@ -68,7 +94,8 @@ export function UserProvider({ children }) {
 
   const value={
     addUser,
-    login,
+    updateUser,
+    login
   }
 
   return (

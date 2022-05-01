@@ -19,25 +19,88 @@ import {
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
-import { collection, Firestore, getDocs} from '@firebase/firestore';
-import {db} from 'src/firebase/firebase-auth'
-import { User } from 'src/icons/user';
-import { doc, getDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
-import { firestore } from 'firebase/firestore'; 
+import { collection, Firestore, getDocs, onSnapshot, query, doc} from '@firebase/firestore';
+import {db} from 'src/firebase/firebase-auth' 
+import { useFormik } from 'formik';
+import { userAuth } from '../data-handling/user-crud';
+import * as Yup from 'yup';
 
 
-export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
-  // const usersCollectionRef = doc(db, "users");
-  
+export default function FormDialog(props) {
+  const [open, setOpen] = useState(false);
+  const { updateUser } = userAuth()
+
+  const formik = useFormik({
+    initialValues: {
+      Email: props.email,
+      Name: props.name,
+      Password: props.pass,
+      Usercode: props.usercode,
+      Username: props.username,
+      Userlevel: props.userlevel
+    },
+    validationSchema: Yup.object({
+      Email: Yup
+      .string()
+      .max(100)
+      .required
+      (
+        'Email is required'
+      ),
+      Name: Yup
+      .string()
+      .max(100)
+      .required
+      (
+        'Name is required'
+      ),
+      Password: Yup
+      .string()
+      .max(64)
+      .required
+      (
+        'Password is required'
+      ),
+      Usercode: Yup
+      .string()
+      .max(11)
+      .required
+      (
+        'Usercode is required'
+      ),
+      Username: Yup
+      .string()
+      .max(32)
+      .required
+      (
+        'Username is required'
+      ),
+      Userlevel: Yup
+      .string()
+      .max(50)
+      .required
+      (
+        'User level is required'
+      )
+    }),
+    onSubmit: () => {
+      updateUser(
+        props.user_id,
+        formik.values.Email,
+        formik.values.Name,
+        formik.values.Password,
+        formik.values.Usercode,
+        formik.values.Username,
+        formik.values.Userlevel
+      )
+      formik.setSubmitting(false)
+    }
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,74 +123,87 @@ export default function FormDialog() {
       <Dialog open={open}
       onClose={handleClose}
       >
+        <form onSubmit={formik.handleSubmit}>
         <DialogTitle
         display="flex"
         justifyContent="center" >Update Data</DialogTitle>
 
         <DialogContent>
               <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="username"
-              label="Username"
-              type="text"
+              error={Boolean(formik.touched.Email && formik.errors.Email)}
               fullWidth
+              helperText={formik.touched.Email && formik.errors.Email}
+              label='Email'
+              margin="normal"
+              name="Email"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Email}
               variant="outlined"
               />
 
               <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="email"
-              label="Email"
-              type="email"
+              error={Boolean(formik.touched.Name && formik.errors.Name)}
               fullWidth
+              helperText={formik.touched.Name && formik.errors.Name}
+              label='Name'
+              margin="normal"
+              name="Name"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Name}
               variant="outlined"
               />
 
               <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="password"
-              label="Password"
-              type="password"
+              error={Boolean(formik.touched.Password && formik.errors.Password)}
               fullWidth
+              helperText={formik.touched.Password && formik.errors.Password}
+              label='Password'
+              margin="normal"
+              name="Password"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Password}
               variant="outlined"
               />
 
               <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Name"
-              type="text"
+              error={Boolean(formik.touched.Usercode && formik.errors.Usercode)}
               fullWidth
+              helperText={formik.touched.Usercode && formik.errors.Usercode}
+              label='Usercode'
+              margin="normal"
+              name="Usercode"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Usercode}
               variant="outlined"
               />
 
               <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="userCode"
-              label="User Code"
-              type="string"
+              error={Boolean(formik.touched.Username && formik.errors.Username)}
               fullWidth
+              helperText={formik.touched.Username && formik.errors.Username}
+              label='Username'
+              margin="normal"
+              name="Username"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Username}
               variant="outlined"
               />
 
               <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="userLevel"
-              label="User Level"
-              type="string"
+              error={Boolean(formik.touched.Userlevel && formik.errors.Userlevel)}
               fullWidth
+              helperText={formik.touched.Userlevel && formik.errors.Userlevel}
+              label='Userlevel'
+              margin="normal"
+              name="Userlevel"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.Userlevel}
               variant="outlined"
               />
         </DialogContent>
@@ -143,38 +219,42 @@ export default function FormDialog() {
             <Button
             color="primary"
             variant='contained'
-            onClick={() => 
-            updateUser("9lMZFb4sffoUP0JayGvY",
-            {
-              email: "update@gmail.com",
-              name: "nameUpdate",
-              usercode: "updatecode",
-              userlevel: "updatelevel",
-              username: "updatename",
-            })}>Done
+            disabled={formik.isSubmitting}
+            type="submit"
+            onClick={handleClose}>Done
             </Button>
           </Box>
         </DialogActions>
+        </form>
       </Dialog>
       </div>
   );
 }
 
-export const CustomerListResults = ({ customers, ...rest }) => {
+export const CustomerListResults = () => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const [users, setUsers] = useState([]);
   const usersCollectionRef = collection(db, "users");
+  const [indexValue, setIndexValue] = useState(0)
+  const [limitValue, setLimitValue] = useState(limit)
+
+  function allUsers()
+  {
+    const q = query(collection(db, "users"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const userr = [];
+      querySnapshot.forEach((doc) => {
+        userr.push({ ...doc.data(), id: doc.id });
+      });
+         setUsers(userr)
+      });
+  }
 
   useEffect(() => 
   {
-    const getUsers = async () => 
-    {
-      const data = await getDocs(usersCollectionRef);
-      setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id})))
-    };
-    getUsers();
+    allUsers()
   }, []);
 
   const handleSelectAll = (event) => {
@@ -211,15 +291,25 @@ export const CustomerListResults = ({ customers, ...rest }) => {
   };
 
   const handleLimitChange = (event) => {
+    setLimitValue(event.target.value)
+    setIndexValue(0)
     setLimit(event.target.value);
   };
 
   const handlePageChange = (event, newPage) => {
+    if(page > newPage){
+      setIndexValue(indexValue- limit)
+      setLimitValue(limitValue- limit)
+    }else{
+      setIndexValue(indexValue+ limit)
+      setLimitValue(limitValue+ limit)
+    }
+
     setPage(newPage);
   };
 
   return (
-    <Card {...rest}>
+    <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -257,7 +347,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.slice(0, limit).map((user) => (
+              {users.slice(indexValue, limitValue).map((user) => (
                 <TableRow
                   hover
                   key={user.id}
@@ -298,7 +388,14 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     {user.userlevel}
                   </TableCell>
                   <TableCell>
-                     <FormDialog>
+                     <FormDialog
+                       user_id={user.id}
+                       email={user.email}
+                       name={user.name}
+                       password={user.password}
+                       usercode={user.usercode}
+                       username={user.username}
+                       userlevel={user.userlevel}>
                      </FormDialog>
                   </TableCell>
                 </TableRow>
@@ -309,7 +406,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={customers.length}
+        count={users.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
@@ -318,23 +415,4 @@ export const CustomerListResults = ({ customers, ...rest }) => {
       />
     </Card>
   );
-};
-
-CustomerListResults.propTypes = {
-  customers: PropTypes.array.isRequired
-};
-
-const updateUser = async (id, updates) => 
-{
-  await firestore.collection("users").doc(id).update(updates);
-  const doc = await firestore.collection("users").doc(id).get();
-  
-  const user = 
-  {
-    id: doc.id,
-    ...doc.data(),
-  };
-
-  console.log(user);
-  return user;
 };
