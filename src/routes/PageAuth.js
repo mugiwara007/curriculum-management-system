@@ -4,17 +4,22 @@ import { useRouter } from 'next/router';
 
 function PageAuth() {
     const router = useRouter() 
-    
+
     useEffect(() => {
-        auth.onAuthStateChanged(currentUser => {
-            if(currentUser){
+        auth.onAuthStateChanged(user => {
+            if(user){
                 return
             } else {
-                router.push("/login")
+                router.push("/")
                 return
             }
         });
     }, []);
+
+    return(
+        <h1></h1>
+    );
 }
+
 
 export default PageAuth

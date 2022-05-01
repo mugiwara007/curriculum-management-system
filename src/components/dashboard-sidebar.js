@@ -22,6 +22,7 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
+import { useAuth } from 'src/contexts/AuthContext';
 
 const items = [
   {
@@ -73,17 +74,13 @@ const items = [
     href: '/settings',
     icon: (<CogIcon fontSize="small" />),
     title: 'Settings'
-  },
-  {
-    href: '/',
-    icon: (<LogoutIcon fontSize="small" />),
-    title: 'Sign Out'
   }
 ];
 
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
   const router = useRouter();
+  const { signout } = useAuth()
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
     defaultMatches: true,
     noSsr: false
@@ -183,6 +180,13 @@ export const DashboardSidebar = (props) => {
               title={item.title}
             />
           ))}
+           <NavItem
+              key="Sign Out"
+              icon={(<LogoutIcon fontSize="small" />)}
+              href="/"
+              title="Sign Out"
+              onClick={() => signout()}
+            />
         </Box>
         <Divider sx={{ borderColor: '#2D3748' }} />
       </Box>
