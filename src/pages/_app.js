@@ -10,6 +10,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Switch } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import { SubjectProvider } from 'src/components/data-handling/subject-crud';
+import { UserProvider } from 'src/components/data-handling/user-crud';
 import { AuthProvider } from 'src/contexts/AuthContext';
 // import Login from './index';
 // import Account from './account';
@@ -33,28 +34,28 @@ const App = (props) => {
   
   return (
       <AuthProvider>
-        <SubjectProvider>
-        <CacheProvider value={emotionCache}>
-          <Head>
-            <title>
-              Material Kit Pro
-            </title>
-            <meta
-              name="viewport"
-              content="initial-scale=1, width=device-width"
-            />
-          </Head>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              {getLayout(<Component {...pageProps} />)}
-              <PageAuth />
-            </ThemeProvider>
-          </LocalizationProvider>
-        </CacheProvider>
-        </SubjectProvider>
+          <SubjectProvider>
+            <UserProvider>
+              <CacheProvider value={emotionCache}>
+                <Head>
+                  <title>
+                    Material Kit Pro
+                  </title>
+                  <meta
+                    name="viewport"
+                    content="initial-scale=1, width=device-width"
+                  />
+                </Head>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    {getLayout(<Component {...pageProps} />)}
+                  </ThemeProvider>
+                </LocalizationProvider>
+              </CacheProvider>
+            </UserProvider>
+          </SubjectProvider>
       </AuthProvider>
   );
 };
-
 export default App;
