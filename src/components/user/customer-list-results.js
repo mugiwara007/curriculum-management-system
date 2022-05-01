@@ -20,20 +20,26 @@ import {
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
+import { collection, getDocs} from '@firebase/firestore';
+import {db} from 'src/firebase/firebase-auth'
+import { User } from 'src/icons/user';
+import { doc, getDoc } from "firebase/firestore";
 
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
+  // const usersCollectionRef = doc(db, "users");
+  
 
   const handleClickOpen = () => {
     setOpen(true);
+    // const docSnap = await getDoc(usersCollectionRef);
   };
 
   const handleClose = () => {
@@ -107,7 +113,7 @@ export default function FormDialog() {
               margin="dense"
               id="userCode"
               label="User Code"
-              type="number"
+              type="string"
               fullWidth
               variant="outlined"
               />
@@ -118,7 +124,7 @@ export default function FormDialog() {
               margin="dense"
               id="userLevel"
               label="User Level"
-              type="number"
+              type="string"
               fullWidth
               variant="outlined"
               />
@@ -144,10 +150,6 @@ export default function FormDialog() {
   );
 }
 
-import { collection, getDocs} from '@firebase/firestore';
-import {db} from 'src/firebase/firebase-auth'
-import { User } from 'src/icons/user';
-
 export const CustomerListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
@@ -169,7 +171,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
     let newSelectedCustomerIds;
 
     if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
+      newSelectedCustomerIds = users.map((user) => user.id);
     } else {
       newSelectedCustomerIds = [];
     }
@@ -183,8 +185,10 @@ export const CustomerListResults = ({ customers, ...rest }) => {
 
     if (selectedIndex === -1) {
       newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
+      console.log("select one")
     } else if (selectedIndex === 0) {
       newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
+      console.log("unselect one")
     } else if (selectedIndex === selectedCustomerIds.length - 1) {
       newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
     } else if (selectedIndex > 0) {
@@ -193,7 +197,6 @@ export const CustomerListResults = ({ customers, ...rest }) => {
         selectedCustomerIds.slice(selectedIndex + 1)
       );
     }
-
     setSelectedCustomerIds(newSelectedCustomerIds);
   };
 
@@ -214,11 +217,11 @@ export const CustomerListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
+                    checked={selectedCustomerIds.length === users.length}
                     color="primary"
                     indeterminate={
                       selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
+                      && selectedCustomerIds.length < users.length
                     }
                     onChange={handleSelectAll}
                   />
@@ -253,7 +256,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={selectedCustomerIds.indexOf(user.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      onChange={(event) => handleSelectOne(event, user.id)}
                       value="true"
                     />
                   </TableCell>
@@ -285,8 +288,8 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     {user.userlevel}
                   </TableCell>
                   <TableCell>
-                    <FormDialog>
-                    </FormDialog>
+                     <FormDialog>
+                     </FormDialog>
                   </TableCell>
                 </TableRow>
               ))}
