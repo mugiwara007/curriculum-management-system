@@ -42,8 +42,7 @@ function NotificationDiv(props){
     bgcolor: 'background.paper',
     borderRadius: 1,
     border: '1px solid #D3D3D3', 
-    display: listVisibility,
-
+    display: props.visibility,
   }}
   >
     <ListItem>

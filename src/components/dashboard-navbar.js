@@ -8,6 +8,7 @@ import { UserCircle as UserCircleIcon } from '../icons/user-circle';
 import { Users as UsersIcon } from '../icons/users';
 import { NotificationDiv } from 'src/pages/NotificationList';
 import { useState } from 'react';
+import { display } from '@mui/system';
 
 const style = {
   width: '100%',
