@@ -61,6 +61,7 @@ export function UserProvider({ children }) {
     updateEmail(auth.currentUser, Email).then(() => {
       // Email updated!
       // ...
+      // error go BRRRRRRRRTTTTT
     }).catch((error) => {
       // An error occurred
       // ...
