@@ -26,10 +26,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
-import { collection, getDocs} from '@firebase/firestore';
+import { collection, Firestore, getDocs} from '@firebase/firestore';
 import {db} from 'src/firebase/firebase-auth'
 import { User } from 'src/icons/user';
 import { doc, getDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { firestore } from 'firebase/firestore'; 
 
 
 export default function FormDialog() {
@@ -52,7 +54,7 @@ export default function FormDialog() {
         startIcon={(<EditIcon fontSize="small" />)}
         variant="outlined"
         sx={{ mr: 1 }}
-        onClick={handleClickOpen} >
+        onClick={handleClickOpen}>
           Update
       </Button>
       <Dialog open={open}
@@ -141,7 +143,15 @@ export default function FormDialog() {
             <Button
             color="primary"
             variant='contained'
-            onClick={handleClose}>Done
+            onClick={() => 
+            updateUser("9lMZFb4sffoUP0JayGvY",
+            {
+              email: "update@gmail.com",
+              name: "nameUpdate",
+              usercode: "updatecode",
+              userlevel: "updatelevel",
+              username: "updatename",
+            })}>Done
             </Button>
           </Box>
         </DialogActions>
@@ -312,4 +322,19 @@ export const CustomerListResults = ({ customers, ...rest }) => {
 
 CustomerListResults.propTypes = {
   customers: PropTypes.array.isRequired
+};
+
+const updateUser = async (id, updates) => 
+{
+  await firestore.collection("users").doc(id).update(updates);
+  const doc = await firestore.collection("users").doc(id).get();
+  
+  const user = 
+  {
+    id: doc.id,
+    ...doc.data(),
+  };
+
+  console.log(user);
+  return user;
 };
