@@ -23,6 +23,7 @@ import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
 import { useAuth } from 'src/contexts/AuthContext';
+import NavItemRender from './nav-side-map';
 
 const items = [
   {
@@ -80,6 +81,7 @@ const items = [
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
   const router = useRouter();
+  const { userLevel } = useAuth()
   const { signout } = useAuth()
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
     defaultMatches: true,
@@ -174,12 +176,14 @@ export const DashboardSidebar = (props) => {
         <Box sx={{ flexGrow: 1 }}>
           {items.map((item) => (
             <NavItem
-              key={item.title}
-              icon={item.icon}
-              href={item.href}
-              title={item.title}
-            />
+            key={item.title}
+            icon={item.icon}
+            href={item.href}
+            title={item.title}
+          />
+          
           ))}
+            {/* <NavItemRender items={items} /> */}
            <NavItem
               key="Sign Out"
               icon={(<LogoutIcon fontSize="small" />)}

@@ -58,7 +58,8 @@ export function SubjectProvider({ children }) {
 
   const value={
     addSubject,
-    updateSubject
+    updateSubject,
+    deleteSubject
   }
 
   return (
