@@ -11,6 +11,7 @@ import { Switch } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import { SubjectProvider } from 'src/components/data-handling/subject-crud';
 import { UserProvider } from 'src/components/data-handling/user-crud';
+import { CollegeProvider } from 'src/components/data-handling/college-crud';
 import { AuthProvider } from 'src/contexts/AuthContext';
 // import Login from './index';
 // import Account from './account';
@@ -36,24 +37,26 @@ const App = (props) => {
       <AuthProvider>
           <SubjectProvider>
             <UserProvider>
-              <CacheProvider value={emotionCache}>
-                <Head>
-                  <title>
-                    Material Kit Pro
-                  </title>
-                  <meta
-                    name="viewport"
-                    content="initial-scale=1, width=device-width"
-                  />
-                </Head>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    {getLayout(<Component {...pageProps} />)}
-                    <PageAuth />
-                  </ThemeProvider>
-                </LocalizationProvider>
-              </CacheProvider>
+              <CollegeProvider>
+                <CacheProvider value={emotionCache}>
+                  <Head>
+                    <title>
+                      Material Kit Pro
+                    </title>
+                    <meta
+                      name="viewport"
+                      content="initial-scale=1, width=device-width"
+                    />
+                  </Head>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <ThemeProvider theme={theme}>
+                      <CssBaseline />
+                      {getLayout(<Component {...pageProps} />)}
+                      <PageAuth />
+                    </ThemeProvider>
+                  </LocalizationProvider>
+                </CacheProvider>
+              </CollegeProvider>
             </UserProvider>
           </SubjectProvider>
       </AuthProvider>

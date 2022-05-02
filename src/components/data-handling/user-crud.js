@@ -16,12 +16,15 @@ export function userAuth(){
     return useContext(UserCrud)
 }
 
-export function UserProvider({ children }) {
+export function UserProvider({ children }) 
+{
 
   const usersCollectionRef = collection(db, "users");
 
-  function addUser (Email, Name, Pass, UserCode, UserName, UserLevel) {
-    addDoc(usersCollectionRef, {
+  function addUser (Email, Name, Pass, UserCode, UserName, UserLevel) 
+  {
+    addDoc(usersCollectionRef, 
+    {
       email: Email,
       name: Name,
       password: Pass,
@@ -31,10 +34,12 @@ export function UserProvider({ children }) {
     });
 
     createUserWithEmailAndPassword(auth, Email, Pass)
-        .then((userCredential) => {
+        .then((userCredential) => 
+        {
             const user = userCredential.user;
         })
-        .catch((error) => {
+        .catch((error) => 
+        {
             const errorCode = error.code;
             const errorMessage = error.message;
         });
@@ -42,13 +47,13 @@ export function UserProvider({ children }) {
       return
   };
 
-  function updateUser(id, Email, Name, Pass, UserCode, UserName, UserLevel) 
+  function updateUser(id, newEmail, Name, Pass, UserCode, UserName, UserLevel) 
   {
     const userDoc = doc(db, "users", id);
     //const user = auth.currentUser;
     const newFields = 
     {
-      email: Email,
+      email: newEmail,
       name: Name,
       password: Pass,
       usercode: UserCode,
@@ -60,21 +65,24 @@ export function UserProvider({ children }) {
     const auth = getAuth();
     // const Pass = getASecureRandomPassword();
 
-    updateEmail(auth.currentUser, Email).then(() => {
+    updateEmail(auth.currentUser, newEmail).then(() => {
       // Email updated!
       // ...
-      // error go BRRRRRRRRTTTTT
+      // alert(Email)
     }).catch((error) => {
       // An error occurred
       // ...
     });
     
+    
     updatePassword(user, Pass).then(() => {
       // Update successful.
+      alert(Pass)
     }).catch((error) => {
       // An error ocurred
       // ...
     });
+    // return
   };
 
   function login(Email, Pass)

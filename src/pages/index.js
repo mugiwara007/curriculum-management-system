@@ -37,6 +37,7 @@ const Login = () => {
       login(formik.values.email, formik.values.password);
       if (currentUser){
         router.push('/dashboard');
+        alert(formik.values.password)
       } else {
         alert("User not found.")
         formik.setSubmitting(false)

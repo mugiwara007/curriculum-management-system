@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
+import { 
+  ref, 
+  uploadBytes, 
+  getStorage, 
+  listAll, 
+  getDownloadURL 
+} from 'firebase/storage'
 import {
   Avatar,
   Box,
@@ -20,14 +27,18 @@ import {
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
-
+import { collAuth } from '../data-handling/college-crud';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { useAuth } from 'src/contexts/AuthContext'
+import { useFormik } from 'formik';
 import * as React from 'react';
+import { db } from 'src/firebase/firebase-auth'
+import { storage } from 'src/firebase/firebase-auth';
+import { deleteDoc, getDocs, collection, doc, onSnapshot, query } from '@firebase/firestore';
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -113,9 +124,29 @@ export default function FormDialog() {
 }
 
 export const CollegeListResults = ({ customers, ...rest }) => {
-  const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
+  const [selectedCollegeIds, setSelectedCollegeIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const [colleges, setColleges] = useState([]);
+  const [indexValue, setIndexValue] = useState(0)
+  const [limitValue, setLimitValue] = useState(limit)
+  const [imageList, setimageList] = React.useState([]);
+
+  function allColl()
+  {
+    const q = query(collection(db, "colleges"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const subs = [];
+      querySnapshot.forEach((doc) => {
+          subs.push({ ...doc.data(), id: doc.id });
+      });
+         setColleges(subs)
+      });
+  }
+
+  useEffect(() => {
+    allColl()
+  }, []);
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -150,10 +181,20 @@ export const CollegeListResults = ({ customers, ...rest }) => {
   };
 
   const handleLimitChange = (event) => {
+    setLimitValue(event.target.value)
+    setIndexValue(0)
     setLimit(event.target.value);
   };
 
   const handlePageChange = (event, newPage) => {
+    if(page > newPage){
+      setIndexValue(indexValue- limit)
+      setLimitValue(limitValue- limit)
+    }else{
+      setIndexValue(indexValue+ limit)
+      setLimitValue(limitValue+ limit)
+    }
+    
     setPage(newPage);
   };
 
@@ -166,29 +207,23 @@ export const CollegeListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
+                    checked={selectedCollegeIds.length === customers.length}
                     color="primary"
                     indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
+                      selectedCollegeIds.length > 0
+                      && selectedCollegeIds.length < customers.length
                     }
                     onChange={handleSelectAll}
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  College Code
                 </TableCell>
                 <TableCell>
-                  Email
+                  Description
                 </TableCell>
                 <TableCell>
-                  Location
-                </TableCell>
-                <TableCell>
-                  Phone
-                </TableCell>
-                <TableCell>
-                  Registration date
+                  Logo
                 </TableCell>
                 <TableCell>
                   Action
@@ -196,16 +231,16 @@ export const CollegeListResults = ({ customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {colleges.slice(indexValue, limitValue).map((college) => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={college.id}
+                  selected={selectedCollegeIds.indexOf(college.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      checked={selectedCollegeIds.indexOf(college.id) !== -1}
+                      onChange={(event) => handleSelectOne(event, college.id)}
                       value="true"
                     />
                   </TableCell>
@@ -216,31 +251,30 @@ export const CollegeListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
+                      {/* <Avatar
                         src={customer.avatarUrl}
                         sx={{ mr: 2 }}
                       >
                         {getInitials(customer.name)}
-                      </Avatar>
+                      </Avatar> */}
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {college.coll_code}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {college.coll_desc}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell>
-                  <TableCell>
-                    {customer.phone}
-                  </TableCell>
-                  <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {college.coll_logo}
+                    {/* <img src="https://placekitten.com/200/300" width="90" height="90"/> */}
+                    {/* <img src={url}/> */}
+                    {imageList.map((url) => {
+                      return <img src="url"/>;
+                    })}
                   </TableCell>
                   <TableCell>
                    <FormDialog>
@@ -263,8 +297,4 @@ export const CollegeListResults = ({ customers, ...rest }) => {
       />
     </Card>
   );
-};
-
-CollegeListResults.propTypes = {
-  customers: PropTypes.array.isRequired
 };
