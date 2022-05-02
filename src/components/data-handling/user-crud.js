@@ -58,6 +58,8 @@ export function UserProvider({ children }) {
     updateDoc(userDoc, newFields);
 
     const auth = getAuth();
+    // const Pass = getASecureRandomPassword();
+
     updateEmail(auth.currentUser, Email).then(() => {
       // Email updated!
       // ...
@@ -66,6 +68,7 @@ export function UserProvider({ children }) {
       // An error occurred
       // ...
     });
+    
     updatePassword(user, Pass).then(() => {
       // Update successful.
     }).catch((error) => {
