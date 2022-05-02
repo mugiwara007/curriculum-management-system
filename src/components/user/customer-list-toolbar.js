@@ -125,7 +125,7 @@ export default function FormDialog() {
               error={Boolean(formik.touched.Email && formik.errors.Email)}
               fullWidth
               helperText={formik.touched.Email && formik.errors.Email}
-              label="Email"
+              label="Email Address"
               margin="normal"
               name="Email"
               onBlur={formik.handleBlur}
