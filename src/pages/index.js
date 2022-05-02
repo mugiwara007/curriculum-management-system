@@ -40,7 +40,6 @@ const Login = () => {
         alert("User not found.")
         formik.setSubmitting(false)
       }
-      
     }
   });
 
