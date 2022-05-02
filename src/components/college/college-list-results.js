@@ -38,10 +38,13 @@ import { useFormik } from 'formik';
 import * as React from 'react';
 import { db } from 'src/firebase/firebase-auth'
 import { storage } from 'src/firebase/firebase-auth';
+// import { FormDialog } from 'src/components/college/college-list-toolbar';
 import { deleteDoc, getDocs, collection, doc, onSnapshot, query } from '@firebase/firestore';
+import imageFunc from 'src/components/college/college-list-toolbar';
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -130,7 +133,21 @@ export const CollegeListResults = ({ customers, ...rest }) => {
   const [colleges, setColleges] = useState([]);
   const [indexValue, setIndexValue] = useState(0)
   const [limitValue, setLimitValue] = useState(limit)
-  const [imageList, setimageList] = React.useState([]);
+
+  const [imagesList, setimageList] = React.useState([]);
+  const imageListRef = ref(storage, "CollegeLogos/")
+
+  React.useEffect(() => 
+  {
+    listAll(imageListRef).then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((url) => {
+          setimageList((prev) => [...prev, url]);
+        });
+      });
+      console.log(response)
+    });
+  }, []);
 
   function allColl()
   {
@@ -269,12 +286,14 @@ export const CollegeListResults = ({ customers, ...rest }) => {
                     {college.coll_desc}
                   </TableCell>
                   <TableCell>
-                    {college.coll_logo}
+                    {/* {college.coll_logo} */}
                     {/* <img src="https://placekitten.com/200/300" width="90" height="90"/> */}
                     {/* <img src={url}/> */}
-                    {imageList.map((url) => {
+                    {/* {imageList.map((url) => {
                       return <img src="url"/>;
-                    })}
+                    })} */}
+
+                    {imagesList.map((url) => {return <img src={url} width="90" height="90"/>;})}
                   </TableCell>
                   <TableCell>
                    <FormDialog>

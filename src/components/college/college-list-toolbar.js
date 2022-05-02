@@ -32,10 +32,9 @@ import { storage } from 'src/firebase/firebase-auth';
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
   const [imageUpload, setImageUpload] = React.useState(null);
-  const [imageList, setimageList] = React.useState([]);
+  const [imagesList, setimageList] = React.useState([]);
   const { currentUser } = useAuth()
   const { addCollege } = collAuth()
-
   const imageListRef = ref(storage, "CollegeLogos/")
 
   const uploadImage = () => 
@@ -112,6 +111,13 @@ export default function FormDialog() {
     setOpen(false);
   };
 
+  function showLogo()
+  {
+    imagesList.map((url) => {
+      return <img src={url}/>;
+    })
+  };
+
   return (
     <div style={{display : 'inline-block'}} >
       <Button
@@ -171,6 +177,8 @@ export default function FormDialog() {
                 onChange={(event) => {setImageUpload(event.target.files[0])}
                 }
               />
+                {/* {imagesList.map((url) => {return <img src={url}/>;})} */}
+                {/* {showLogo()} */}
           </DialogContent>
 
           <DialogActions>
@@ -193,8 +201,18 @@ export default function FormDialog() {
         </form>
       </Dialog>
     </div>
-  );
+  ); 
+  // export {imagesList, setimageList};
 }
+
+// export function showLogo()
+// {
+//   imagesList.map((url) => {
+//     return <img src={url}/>;
+//   })
+// }
+
+// export { imageFunction };
 
 
 function SimpleDialog() {
@@ -308,4 +326,8 @@ export const CollegeListToolbar = (props) => (
     </Box>
   </Box>
 );
+
+
+
+
 
