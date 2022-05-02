@@ -15,15 +15,6 @@ export function subAuth(){
 }
 
 export function SubjectProvider({ children }) {
-  // const [newSubCode, setNewSubCode] = useState("");
-  // const [newSubDesc, setNewSubDesc] = useState("");
-  // const [newSubLec, setNewSubLec] = useState(0);
-  // const [newSubLab, setNewSubLab] = useState(0);
-  // const [newSubPreReq, setNewSubPreReq] = useState("");
-  // const [newSubCoReq, setNewSubCoReq] = useState("");
-  // const [newSubUser, setNewSubUser] = useState("");
-  // const [newSubKac, setNewSubKac] = useState("");
-  // const [newSubClassCode, setNewSubClassCode] = useState("");
 
   const subjectsCollectionRef = collection(db, "subjects");
 
@@ -43,10 +34,21 @@ export function SubjectProvider({ children }) {
     });
   };
 
-  const updateSubject = async (id, age) => {
+  function updateSubject(id, newSubCode,newSubDesc,newSubLec,newSubLab,
+    newSubPreReq,newSubCoReq,newSubUser,newSubKac,newSubClassCode) {
     const subjectDoc = doc(db, "subjects", id);
-    const newFields = { age: age + 1 };
-    await updateDoc(subjectDoc, newFields);
+    const newFields = { 
+      sub_code: newSubCode,
+      sub_desc: newSubDesc,
+      sub_lec: newSubLec,
+      sub_lab: newSubLab,
+      sub_preReq: newSubPreReq,
+      sub_coReq: newSubCoReq,
+      sub_user: newSubUser,
+      sub_kac: newSubKac,
+      sub_classCode: newSubClassCode,
+     };
+    updateDoc(subjectDoc, newFields);
   };
 
   const deleteSubject = async (id) => {
@@ -55,7 +57,9 @@ export function SubjectProvider({ children }) {
   };
 
   const value={
-    addSubject
+    addSubject,
+    updateSubject,
+    deleteSubject
   }
 
   return (
