@@ -54,10 +54,9 @@ export function AuthProvider({ children }) {
             const errorCode = error.code;
             const errorMessage = error.message;
             
-            return false
         });
 
-        return
+        return 
     }
 
     function signout(){

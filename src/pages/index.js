@@ -11,6 +11,7 @@ import { fetchSignInMethodsForEmail } from 'firebase/auth';
 import { useAuth } from 'src/contexts/AuthContext';
 
 const Login = () => {
+  const { currentUser } = useAuth()
   const { login } = useAuth()
   const router = useRouter();
   const formik = useFormik({
@@ -34,7 +35,7 @@ const Login = () => {
     }),
     onSubmit: () => {
       login(formik.values.email, formik.values.password);
-      if (login == false){
+      if (currentUser){
         router.push('/dashboard');
       } else {
         alert("User not found.")
