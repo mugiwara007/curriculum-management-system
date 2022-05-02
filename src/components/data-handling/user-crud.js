@@ -21,39 +21,27 @@ export function UserProvider({ children }) {
   const usersCollectionRef = collection(db, "users");
 
   function addUser (Email, Name, Pass, UserCode, UserName, UserLevel) {
-    addDoc(usersCollectionRef, {
-      email: Email,
-      name: Name,
-      password: Pass,
-      usercode: UserCode,
-      username: UserName,
-      userlevel: UserLevel
-    });
-
     createUserWithEmailAndPassword(auth, Email, Pass)
-        .then((userCredential) => {
-            const user = userCredential.user;
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-        });
+    .then((userCredential) => {
+      const user = userCredential.user;
+
+      addDoc(usersCollectionRef, {
+        uid: user.uid,
+        email: Email,
+        name: Name,
+        password: Pass,
+        usercode: UserCode,
+        username: UserName,
+        userlevel:  Number(UserLevel)
+      });
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
 
       return
   };
-
-  function login(Email, Pass){
-    signInWithEmailAndPassword(auth, Email, Pass)
-    .then((userCredential) => {
-        const user = userCredential.user;
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-    });
-
-    return
-}
 
   const updateUser = async (id, age) => {
     const userDoc = doc(db, "users", id);
@@ -67,8 +55,7 @@ export function UserProvider({ children }) {
   };
 
   const value={
-    addUser,
-    login,
+    addUser
   }
 
   return (

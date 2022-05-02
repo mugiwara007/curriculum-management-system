@@ -50,7 +50,7 @@ const App = (props) => {
                   <ThemeProvider theme={theme}>
                     <CssBaseline />
                     {getLayout(<Component {...pageProps} />)}
-                    <PageAuth />
+                    {/* <PageAuth /> */}
                   </ThemeProvider>
                 </LocalizationProvider>
               </CacheProvider>
