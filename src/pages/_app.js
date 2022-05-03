@@ -12,6 +12,7 @@ import { Route } from 'react-router-dom';
 import { SubjectProvider } from 'src/components/data-handling/subject-crud';
 import { UserProvider } from 'src/components/data-handling/user-crud';
 import { CollegeProvider } from 'src/components/data-handling/college-crud';
+import { DeptProvider } from 'src/components/data-handling/department-crud';
 import { AuthProvider } from 'src/contexts/AuthContext';
 // import Login from './index';
 // import Account from './account';
@@ -38,24 +39,26 @@ const App = (props) => {
           <SubjectProvider>
             <UserProvider>
               <CollegeProvider>
-                <CacheProvider value={emotionCache}>
-                  <Head>
-                    <title>
-                      Material Kit Pro
-                    </title>
-                    <meta
-                      name="viewport"
-                      content="initial-scale=1, width=device-width"
-                    />
-                  </Head>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <ThemeProvider theme={theme}>
-                      <CssBaseline />
-                      {getLayout(<Component {...pageProps} />)}
-                      <PageAuth />
-                    </ThemeProvider>
-                  </LocalizationProvider>
-                </CacheProvider>
+                <DeptProvider>
+                  <CacheProvider value={emotionCache}>
+                    <Head>
+                      <title>
+                        Material Kit Pro
+                      </title>
+                      <meta
+                        name="viewport"
+                        content="initial-scale=1, width=device-width"
+                      />
+                    </Head>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        {getLayout(<Component {...pageProps} />)}
+                        <PageAuth />
+                      </ThemeProvider>
+                    </LocalizationProvider>
+                  </CacheProvider>
+                </DeptProvider>
               </CollegeProvider>
             </UserProvider>
           </SubjectProvider>

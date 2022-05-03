@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -17,16 +17,18 @@ import {
   Typography,
   Button,
 } from '@mui/material';
+import { collection, Firestore, getDocs, onSnapshot, query, doc} from '@firebase/firestore';
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
-
+import { useFormik } from 'formik';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { deptAuth } from '../data-handling/department-crud';
+import {db} from 'src/firebase/firebase-auth' 
 import * as React from 'react';
 
 export default function FormDialog() {
@@ -112,9 +114,43 @@ export default function FormDialog() {
 
 
 export const DepartmentListResults = ({ customers, ...rest }) => {
-  const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
+  const [selectedDeptIds, setSelectedDeptIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const [depts, setDepts] = useState([]);
+  const [colleges, setColleges] = useState([]);
+  const deptCollectionRef = collection(db, "departments");
+  const [indexValue, setIndexValue] = useState(0)
+  const [limitValue, setLimitValue] = useState(limit)
+
+  function allDept()
+  {
+    const q = query(collection(db, "departments"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const deps = [];
+      querySnapshot.forEach((doc) => {
+        deps.push({ ...doc.data(), id: doc.id });
+      });
+      setDepts(deps)
+      });
+  }
+
+  function allColl()
+  {
+    const q = query(collection(db, "colleges"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const subs = [];
+      querySnapshot.forEach((doc) => {
+          subs.push({ ...doc.data(), id: doc.id });
+      });
+         setColleges(subs)
+      });
+  }
+
+  useEffect(() => {
+    allDept()
+    allColl()
+  }, []);
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -165,29 +201,23 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
+                    checked={selectedDeptIds.length === customers.length}
                     color="primary"
                     indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
+                      selectedDeptIds.length > 0
+                      && selectedDeptIds.length < customers.length
                     }
                     onChange={handleSelectAll}
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  Department Code
                 </TableCell>
                 <TableCell>
-                  Email
+                  Department Description
                 </TableCell>
                 <TableCell>
-                  Location
-                </TableCell>
-                <TableCell>
-                  Phone
-                </TableCell>
-                <TableCell>
-                  Registration date
+                  College Code
                 </TableCell>
                 <TableCell>
                   Action
@@ -195,16 +225,16 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {depts.slice(0, limit).map((dept) => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={dept.id}
+                  selected={selectedDeptIds.indexOf(dept.id) !== -1}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      checked={selectedDeptIds.indexOf(dept.id) !== -1}
+                      onChange={(event) => handleSelectOne(event, dept.id)}
                       value="true"
                     />
                   </TableCell>
@@ -215,31 +245,19 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
-                        src={customer.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar>
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {dept.dept_code}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {dept.dept_desc}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell>
-                  <TableCell>
-                    {customer.phone}
-                  </TableCell>
-                  <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {dept.colld_code}
                   </TableCell>
                   <TableCell>
                     <FormDialog>
