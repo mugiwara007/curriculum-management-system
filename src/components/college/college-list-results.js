@@ -176,19 +176,13 @@ export const CollegeListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  College Code
                 </TableCell>
                 <TableCell>
-                  Email
+                  Description
                 </TableCell>
                 <TableCell>
-                  Location
-                </TableCell>
-                <TableCell>
-                  Phone
-                </TableCell>
-                <TableCell>
-                  Registration date
+                  Logo
                 </TableCell>
                 <TableCell>
                   Action
@@ -216,31 +210,24 @@ export const CollegeListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
+                      <Typography
+                        color="textPrimary"
+                        variant="body1"
+                      >
+                        College Code
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    Sample Description
+                  </TableCell>
+                  <TableCell>
+                  <Avatar
                         src={customer.avatarUrl}
                         sx={{ mr: 2 }}
                       >
                         {getInitials(customer.name)}
                       </Avatar>
-                      <Typography
-                        color="textPrimary"
-                        variant="body1"
-                      >
-                        {customer.name}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    {customer.email}
-                  </TableCell>
-                  <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
-                  </TableCell>
-                  <TableCell>
-                    {customer.phone}
-                  </TableCell>
-                  <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
                   </TableCell>
                   <TableCell>
                    <FormDialog>
