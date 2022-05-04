@@ -23,7 +23,7 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
-  let [visibility,setVisibility] = useState('visible');
+  let [visibility,setVisibility] = useState('none');
 
   const handleClick = () => {
     if(visibility == 'none'){
@@ -31,6 +31,7 @@ export const DashboardNavbar = (props) => {
     }else{
       setVisibility(visibility = 'none')
     }
+
   }
 
   return (
