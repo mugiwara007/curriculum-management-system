@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { NavItem } from './nav-item';
-import { useAuth } from 'src/contexts/AuthContext';
 
 export default function NavItemRender(props){
-    const { userLevel } = useAuth()
-    const [admin, setAdmin] = useState(false);
-    const [dean, setDean] = useState(false);
-    const [chairPerson, setChairPerson] = useState(false);
+
+  const [userLevel,setUserLevel] = useState()
+  const [admin, setAdmin] = useState(false);
+  const [dean, setDean] = useState(false);
+  const [chairPerson, setChairPerson] = useState(false);
+  
 
     if (userLevel == 1){
         setAdmin(true)
@@ -66,4 +67,5 @@ export default function NavItemRender(props){
       />
       
       ))}
+
   }

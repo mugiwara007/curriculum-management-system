@@ -54,12 +54,14 @@ export default function FormDialog() {
           'Subject description is required'),
       sLec: Yup
         .number()
-        .max(99999999999)
+        .typeError("Input must be a number")
+        .max(99999999999, "LEC Units must be below 12 digits.")
         .required(
           'LEC units is required'),
       sLab: Yup
-        .number()
-        .max(99999999999)
+        .number("Input must be a number")
+        .typeError("Input must be a number")
+        .max(99999999999, "LAB Units must be below 12 digits")
         .required(
           'LAB units is required'),
       sPreReq: Yup
