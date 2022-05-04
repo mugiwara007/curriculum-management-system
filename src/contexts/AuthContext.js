@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
     const [userEmail, setUserEmail] = useState()
     const [userPass, setUserPass] = useState()
     const router = useRouter();
-    let level
+    const ulevel = 0
     
     function register(fname,mname,sname,email, password){
         const res = createUserWithEmailAndPassword(auth, email, password);
@@ -47,6 +47,7 @@ export function AuthProvider({ children }) {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
+            // addDocID(user.uid)
             router.push('/dashboard');
         })
         .catch((error) => {
@@ -58,27 +59,21 @@ export function AuthProvider({ children }) {
 
         return 
     }
+        // const addDocID = async (email_id) => {
+        //     const userData = query(usersCollectionRef, where("uid", "==", email_id));
+        //     const querySnapshot = await getDocs(userData)
+        //     const users =[]
+        //     await querySnapshot.forEach((doc) => {
+        //         setDocID(doc.id)
+        //         users.push({ ...doc.data(), id: doc.id });
+        //         // level = doc.data().userlevel
+        //     });
 
-    // useEffect(async () => {
-    //     const email_id = userID
-    //     const addDocID = async (email_id) => {
-    //         let ulevel
-    //         const userData = query(usersCollectionRef, where("uid", "==", email_id));
-    //         const querySnapshot = await getDocs(userData)
-    //         await querySnapshot.forEach((doc) => {
-    //             setDocID(doc.id)
-    //             //users.push({ ...doc.data(), id: doc.id });
-    //             ulevel = doc.data().userlevel
-    //         });
-    //         alert(ulevel)
-    //         setUserLevel(ulevel)
-    //         alert(userLevel)
-    //     }
-    //     if(email_id){
-    //         addDocID(email_id)
-    //     }
+        //     users.map((user) => (
+        //         alert(user.userlevel)
+        //     ))
+        // }
         
-    // }, [setUserID])
 
     function signout(){
         signOut(auth).then(() => {
@@ -97,7 +92,7 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user)
-            setUserLevel(level)
+            setUserLevel(ulevel)
         })
 
         return unsubscribe
