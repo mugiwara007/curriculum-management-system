@@ -26,7 +26,7 @@ const Notifications = () => (
             container
             spacing={3}
           >
-            {products.map((product) => (
+            {/* {products.map((product) => (
               <Grid
                 item
                 key={product.id}
@@ -36,7 +36,15 @@ const Notifications = () => (
               >
                 <ProductCard product={product} />
               </Grid>
-            ))}
+            ))} */}
+            <Grid
+                item
+                lg={12}
+                md={12}
+                xs={12}
+              >
+                <ProductCard />
+              </Grid>
           </Grid>
         </Box>
         <Box

@@ -13,17 +13,99 @@ import { Download as DownloadIcon } from '../../icons/download';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import ArchiveIcon from '@mui/icons-material/Archive';
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { useFormik } from 'formik';
+import { subAuth } from '../data-handling/subject-crud';
+import * as Yup from 'yup';
 import * as React from 'react';
+import { useAuth } from 'src/contexts/AuthContext'
 
 export default function FormDialog() {
+  const { currentUser } = useAuth()
   const [open, setOpen] = React.useState(false);
+  const { addSubject } = subAuth()
+
+  const formik = useFormik({
+    initialValues: {
+      sCode: '',
+      sDesc: '',
+      sLec: '',
+      sLab: '',
+      sPreReq: '',
+      sCoReq: '',
+      sUser: '',
+      sKac: '',
+      sClassCode: ''
+    },
+    validationSchema: Yup.object({
+      sCode: Yup
+        .string()
+        .max(255)
+        .required(
+          'Subject code is required'),
+      sDesc: Yup
+        .string()
+        .max(255)
+        .required(
+          'Subject description is required'),
+      sLec: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'LEC units is required'),
+      sLab: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'LAB units is required'),
+      sPreReq: Yup
+        .string()
+        .max(255)
+        .required(
+          'Pre-requisite is required'),
+      sCoReq: Yup
+        .string()
+        .max(255)
+        .required(
+          'Pre-requisite is required'),
+      sUser: Yup
+        .string()
+        .max(255)
+        .required(
+          'Pre-requisite is required'),
+      sKac: Yup
+        .string()
+        .max(255)
+        .required(
+          'Pre-requisite is required'),
+      sClassCode: Yup
+        .string()
+        .max(255)
+        .required(
+          'Pre-requisite is required')
+    }),
+    onSubmit: () => {
+      if (currentUser){
+        addSubject(
+          formik.values.sCode,
+          formik.values.sDesc,
+          formik.values.sLec,
+          formik.values.sLab,
+          formik.values.sPreReq,
+          formik.values.sCoReq,
+          formik.values.sUser,
+          formik.values.sKac,
+          formik.values.sClassCode
+        )
+
+        formik.setSubmitting(false)
+      }
+    }
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -41,134 +123,135 @@ export default function FormDialog() {
           startIcon={(<AddIcon fontSize="small" />)}
           onClick={handleClickOpen}
         >
-          Add Suject
+          Add Subject
         </Button>
       <Dialog open={open}
-      onClose={handleClose}>
+        onClose={handleClose}>
         <DialogTitle
         display="flex"
         justifyContent="center"
         >Add Subject</DialogTitle>
+        <form onSubmit={formik.handleSubmit}>
         <DialogContent>
-
+          
              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="subjectCode"
+                error={Boolean(formik.touched.sCode && formik.errors.sCode)}
+                fullWidth
+                helperText={formik.touched.sCode && formik.errors.sCode}
                 label="Subject Code"
-                type="text"
-                fullWidth
+                margin="normal"
+                name="sCode"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sCode}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="description"
-                label="Description"
-                type="text"
+                error={Boolean(formik.touched.sDesc && formik.errors.sDesc)}
                 fullWidth
+                helperText={formik.touched.sDesc && formik.errors.sDesc}
+                label="Subject Description"
+                margin="normal"
+                name="sDesc"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sDesc}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="lecUnits"
+                error={Boolean(formik.touched.sLec && formik.errors.sLec)}
+                fullWidth
+                helperText={formik.touched.sLec && formik.errors.sLec}
                 label="LEC Units"
-                type="number"
-                fullWidth
+                margin="normal"
+                name="sLec"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sLec}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="labUnits"
-                label="LAB units"
-                type="number"
+                error={Boolean(formik.touched.sLab && formik.errors.sLab)}
                 fullWidth
+                helperText={formik.touched.sLab && formik.errors.sLab}
+                label="LAB Units"
+                margin="normal"
+                name="sLab"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sLab}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="preRequisite"
+                error={Boolean(formik.touched.sPreReq && formik.errors.sPreReq)}
+                fullWidth
+                helperText={formik.touched.sPreReq && formik.errors.sPreReq}
                 label="Pre-Requisite"
-                type="text"
-                fullWidth
+                margin="normal"
+                name="sPreReq"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sPreReq}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="coRequisite"
+                error={Boolean(formik.touched.sCoReq && formik.errors.sCoReq)}
+                fullWidth
+                helperText={formik.touched.sCoReq && formik.errors.sCoReq}
                 label="Co-Requisite"
-                type="text"
-                fullWidth
+                margin="normal"
+                name="sCoReq"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sCoReq}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="kac"
-                label="KAC"
-                type="text"
+                error={Boolean(formik.touched.sUser && formik.errors.sUser)}
                 fullWidth
-                variant="outlined"
-                error
-                helperText="Please fill up this field"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="classCode"
-                label="Class Code"
-                type="text"
-                fullWidth
-                variant="outlined"
-                error
-                helperText="Please fill up this field"
-              />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="userName"
+                helperText={formik.touched.sUser && formik.errors.sUser}
                 label="Username"
-                type="text"
-                fullWidth
+                margin="normal"
+                name="sUser"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sUser}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
+              <TextField
+                error={Boolean(formik.touched.sKac && formik.errors.sKac)}
+                fullWidth
+                helperText={formik.touched.sKac && formik.errors.sKac}
+                label="KAC"
+                margin="normal"
+                name="sKac"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sKac}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sClassCode && formik.errors.sClassCode)}
+                fullWidth
+                helperText={formik.touched.sClassCode && formik.errors.sClassCode}
+                label="Class Code"
+                margin="normal"
+                name="sClassCode"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sClassCode}
+                variant="outlined"
+              />
+          
         </DialogContent>
         <DialogActions>
           <Box>
@@ -181,75 +264,18 @@ export default function FormDialog() {
               <Button
               color="primary"
               variant='contained'
-              onClick={handleClose}>Done
+              disabled={formik.isSubmitting}
+              type="submit"
+              onClick={handleClose}>
+                Done
               </Button>
             </Box>
         </DialogActions>
+        </form>
       </Dialog>
       </div>
   );
 }
-
-
-function SimpleDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div style={{display : 'inline-block'}} >
-        <Button
-          startIcon={(<ArchiveIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-          onClick={handleClickOpen}
-        >
-          Archive
-        </Button>
-      <Dialog open={open}
-      onClose={handleClose}
-      >
-        <DialogTitle
-        display="flex"
-        justifyContent="center" >Archive Data</DialogTitle>
-
-        <DialogContent>
-          <Box>
-            Are you sure you want to Archive this data?
-          </Box>
-        </DialogContent>
-
-        <DialogActions>
-          <Box>
-            <Button
-            color="primary"
-            onClick={handleClose}>Cancel
-            </Button>
-          </Box>
-          <Box pr={1}>
-            <Button
-             style={{
-              borderRadius: 10,
-              backgroundColor: "#FF0000",
-              padding: "5px 10px",
-              fontSize: "13px"
-              }}
-            color="primary"
-            variant='contained'
-            onClick={handleClose}>Comfirm
-            </Button>
-          </Box>
-        </DialogActions>
-      </Dialog>
-      </div>
-  );
-}
-
 
 export const SubjectListToolbar = (props) => (
   <Box {...props}>
@@ -269,8 +295,12 @@ export const SubjectListToolbar = (props) => (
         Subject
       </Typography>
       <Box sx={{ m: 1 }}>
-        <SimpleDialog>
-        </SimpleDialog>
+        <Button
+          startIcon={(<ArchiveIcon fontSize="small" />)}
+          sx={{ mr: 1 }}
+        >
+          Archive
+        </Button>
         <FormDialog>
         </FormDialog>
       </Box>
@@ -293,7 +323,7 @@ export const SubjectListToolbar = (props) => (
                   </InputAdornment>
                 )
               }}
-              placeholder="Search customer"
+              placeholder="Search"
               variant="outlined"
             />
           </Box>

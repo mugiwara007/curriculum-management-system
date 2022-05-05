@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import NextLink from 'next/link';
 
 const style = {
     zIndex:'modal',
@@ -27,12 +28,8 @@ const style = {
 
   };
 function NotificationDiv(props){
-    const router = useRouter();
-    const  [listVisibility, setlistVisibility] = useState(props.visibility)
-    const ButtonClick = () =>{
-        setlistVisibility('none')
-        router.push('/notifications')
-    }
+  const router = useRouter();
+  const  [listVisibility, setlistVisibility] = useState(props.visibility)
     return <List
     sx={{
     zIndex:'modal',
@@ -45,7 +42,7 @@ function NotificationDiv(props){
     bgcolor: 'background.paper',
     borderRadius: 1,
     border: '1px solid #D3D3D3', 
-    display: listVisibility,
+    display: props.visibility,
 
   }}
   >
@@ -81,10 +78,15 @@ function NotificationDiv(props){
       secondary="July 20, 2014" />
     </ListItem>
     <ListItem>
-    <Button onClick={ButtonClick}
+    <NextLink
+      href="/notifications"
+      passHref
+    >
+    <Button
     style={{width:'100%',height:'100%', backgroundColor: '#2196FD', color:'white'}}>
         View All Notification
       </Button>
+    </NextLink>
       </ListItem>
   </List>
 

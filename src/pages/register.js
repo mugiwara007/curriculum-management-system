@@ -14,15 +14,22 @@ import {
   Typography
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useAuth } from 'src/contexts/AuthContext';
+import { DashboardLayout } from '../components/dashboard-layout';
+
 
 const Register = () => {
+  const { register } = useAuth()
   const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       email: '',
       firstName: '',
+      middleInitial: '',
       lastName: '',
       password: '',
+      passConfirm: '',
       policy: false
     },
     validationSchema: Yup.object({
@@ -42,10 +49,17 @@ const Register = () => {
         .string()
         .max(255)
         .required(
-          'Last name is required'),
+          'Surname is required'),
       password: Yup
         .string()
+        .min(6, 'Password must be atleast 6 characters')
         .max(255)
+        .required(
+          'Password is required'),
+      passConfirm: Yup
+        .string()
+        .oneOf([Yup.ref("password")],
+          'Password does not match')
         .required(
           'Password is required'),
       policy: Yup
@@ -56,7 +70,15 @@ const Register = () => {
         )
     }),
     onSubmit: () => {
-      router.push('/');
+      register
+      (
+        formik.values.firstName,
+        formik.values.middleInitial,
+        formik.values.lastName,
+        formik.values.email,
+        formik.values.password
+      )
+      router.push('/dashboard')
     }
   });
 
@@ -64,7 +86,7 @@ const Register = () => {
     <>
       <Head>
         <title>
-          Register | Material Kit
+          CurrMa | Create A New User
         </title>
       </Head>
       <Box
@@ -77,24 +99,13 @@ const Register = () => {
         }}
       >
         <Container maxWidth="sm">
-          <NextLink
-            href="/"
-            passHref
-          >
-            <Button
-              component="a"
-              startIcon={<ArrowBackIcon fontSize="small" />}
-            >
-              Dashboard
-            </Button>
-          </NextLink>
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography
                 color="textPrimary"
                 variant="h4"
               >
-                Create a new account
+                Create A New User
               </Typography>
               <Typography
                 color="textSecondary"
@@ -114,6 +125,18 @@ const Register = () => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.firstName}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.middleInitial && formik.errors.middleInitial)}
+              fullWidth
+              helperText={formik.touched.middleInitial && formik.errors.middleInitial}
+              label="Middle Initial"
+              margin="normal"
+              name="middleInitial"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.middleInitial}
               variant="outlined"
             />
             <TextField
@@ -152,6 +175,19 @@ const Register = () => {
               onChange={formik.handleChange}
               type="password"
               value={formik.values.password}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(formik.touched.passConfirm && formik.errors.passConfirm)}
+              fullWidth
+              helperText={formik.touched.passConfirm && formik.errors.passConfirm}
+              label="Confirm Password"
+              margin="normal"
+              name="passConfirm"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="password"
+              value={formik.values.passConfirm}
               variant="outlined"
             />
             <Box
@@ -200,7 +236,7 @@ const Register = () => {
                 type="submit"
                 variant="contained"
               >
-                Sign Up Now
+                Create New User
               </Button>
             </Box>
             <Typography
@@ -227,5 +263,11 @@ const Register = () => {
     </>
   );
 };
+
+Register.getLayout = (page) => (
+  <DashboardLayout>
+    {page}
+  </DashboardLayout>
+);
 
 export default Register;

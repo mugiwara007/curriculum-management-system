@@ -8,6 +8,7 @@ import { UserCircle as UserCircleIcon } from '../icons/user-circle';
 import { Users as UsersIcon } from '../icons/users';
 import { NotificationDiv } from 'src/pages/NotificationList';
 import { useState } from 'react';
+import { display } from '@mui/system';
 
 const style = {
   width: '100%',
@@ -22,15 +23,15 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
-  const [visibility,setVisibility] = useState('none');
+  let [visibility,setVisibility] = useState('none');
 
   const handleClick = () => {
-    setVisibility('block');
     if(visibility == 'none'){
-      setVisibility('block');
+      setVisibility(visibility = 'visible');
     }else{
-      setVisibility('none')
+      setVisibility(visibility = 'none')
     }
+
   }
 
   return (
@@ -84,7 +85,8 @@ export const DashboardNavbar = (props) => {
                 color="primary"
                 variant="dot"
               >
-                <BellIcon onClick={handleClick} fontSize="small" />
+                <BellIcon onClick={handleClick} 
+                fontSize="small" />
                 
               </Badge>
             </IconButton>

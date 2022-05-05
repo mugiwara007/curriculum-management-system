@@ -7,13 +7,17 @@ import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Facebook as FacebookIcon } from '../icons/facebook';
 import { Google as GoogleIcon } from '../icons/google';
+import { fetchSignInMethodsForEmail } from 'firebase/auth';
+import { useAuth } from 'src/contexts/AuthContext';
 
 const Login = () => {
+  const { currentUser } = useAuth()
+  const { login } = useAuth()
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123'
+      email: '',
+      password: ''
     },
     validationSchema: Yup.object({
       email: Yup
@@ -30,7 +34,10 @@ const Login = () => {
           'Password is required')
     }),
     onSubmit: () => {
-      router.push('/');
+      login(formik.values.email, formik.values.password);
+      
+      formik.setSubmitting(false)
+      
     }
   });
 
@@ -49,8 +56,8 @@ const Login = () => {
         }}
       >
         <Container maxWidth="sm">
-          <NextLink
-            href="/dashboard"
+          {/* <NextLink
+            href="/"
             passHref
           >
             <Button
@@ -59,7 +66,7 @@ const Login = () => {
             >
               Dashboard
             </Button>
-          </NextLink>
+          </NextLink> */}
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography
@@ -76,7 +83,7 @@ const Login = () => {
                 Sign in on the internal platform
               </Typography>
             </Box>
-            <Grid
+            {/* <Grid
               container
               spacing={3}
             >
@@ -112,8 +119,8 @@ const Login = () => {
                   Login with Google
                 </Button>
               </Grid>
-            </Grid>
-            <Box
+            </Grid> */}
+            {/* <Box
               sx={{
                 pb: 1,
                 pt: 3
@@ -126,7 +133,7 @@ const Login = () => {
               >
                 or login with email address
               </Typography>
-            </Box>
+            </Box> */}
             <TextField
               error={Boolean(formik.touched.email && formik.errors.email)}
               fullWidth
@@ -169,7 +176,7 @@ const Login = () => {
               color="textSecondary"
               variant="body2"
             >
-              Don&apos;t have an account?
+             Forgot Password?
               {' '}
               <NextLink
                 href="/register"
@@ -182,7 +189,7 @@ const Login = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  Sign Up
+                  Click Here
                 </Link>
               </NextLink>
             </Typography>
