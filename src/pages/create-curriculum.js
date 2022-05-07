@@ -7,6 +7,7 @@ import { DashboardLayout } from '../components/dashboard-layout';
 import SaveIcon from '@mui/icons-material/Save';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {  withAuth } from '../routes/withAuth'
+import NextLink from 'next/link';
 
 const Dashboard = () => (
   <>
@@ -33,12 +34,17 @@ const Dashboard = () => (
          Create Curriculum
         </Typography>
         <Box sx={{ m: 1 }}>
+            <NextLink
+          href="/curriculum"
+          passHref
+          >
           <Button
             startIcon={(<ArrowBackIcon fontSize="small" />)}
             sx={{ mr: 1 }}
           >
             Cancel
           </Button>
+          </NextLink>
           <Button
             color="primary"
             variant="contained"
