@@ -873,10 +873,11 @@ export const CreateTables = (props) => (
 
  {/*Second Semester Headings*/}
 
+ <Divider />
             <TableCell>
               <p><b>Second Semester</b></p>
               </TableCell>
-              
+              <Divider />
               <TableBody>
               <TableCell sx={{fontWeight: 'bold' }}>
                     COURSE CODE
