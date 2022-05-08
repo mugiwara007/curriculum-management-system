@@ -174,15 +174,14 @@ export const DashboardSidebar = (props) => {
           }}
         /> */}
         <Box sx={{ flexGrow: 1 }}>
-          {items.map((item) => (
-          <NavItem
-          key={item.title}
-          icon={item.icon}
-          href={item.href}
-          title={item.title}
-        />
-      
-      ))}
+            {items.map((item) => (
+            <NavItem
+            key={item.title}
+            icon={item.icon}
+            href={item.href}
+            title={item.title}
+          />
+          ))}
             {/* <NavItemRender items={items} /> */}
            <NavItem
               key="Sign Out"

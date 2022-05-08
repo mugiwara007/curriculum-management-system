@@ -37,7 +37,6 @@ export default function FormDialog() {
       sLab: '',
       sPreReq: '',
       sCoReq: '',
-      sUser: '',
       sKac: '',
       sClassCode: ''
     },
@@ -74,11 +73,6 @@ export default function FormDialog() {
         .max(255)
         .required(
           'Pre-requisite is required'),
-      sUser: Yup
-        .string()
-        .max(255)
-        .required(
-          'Pre-requisite is required'),
       sKac: Yup
         .string()
         .max(255)
@@ -99,7 +93,6 @@ export default function FormDialog() {
           formik.values.sLab,
           formik.values.sPreReq,
           formik.values.sCoReq,
-          formik.values.sUser,
           formik.values.sKac,
           formik.values.sClassCode
         )
@@ -216,19 +209,6 @@ export default function FormDialog() {
               />
 
               <TextField
-                error={Boolean(formik.touched.sUser && formik.errors.sUser)}
-                fullWidth
-                helperText={formik.touched.sUser && formik.errors.sUser}
-                label="Username"
-                margin="normal"
-                name="sUser"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.sUser}
-                variant="outlined"
-              />
-
-              <TextField
                 error={Boolean(formik.touched.sKac && formik.errors.sKac)}
                 fullWidth
                 helperText={formik.touched.sKac && formik.errors.sKac}
@@ -297,12 +277,6 @@ export const SubjectListToolbar = (props) => (
         Subject
       </Typography>
       <Box sx={{ m: 1 }}>
-        <Button
-          startIcon={(<ArchiveIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Archive
-        </Button>
         <FormDialog>
         </FormDialog>
       </Box>

@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
     const [docID, setDocID] = useState()
     const [userID, setUserID] = useState()
     const [userEmailPassID, setUserEmailPassID] = useState()
-    const [userLevel, setUserLevel] = useState()
+    let userLevel = 0
     const [name, setName] = useState()
     const [userName, setUserName] = useState()
     const [userCode, setUserCode] = useState()
@@ -47,7 +47,6 @@ export function AuthProvider({ children }) {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
-            // addDocID(user.uid)
             router.push('/dashboard');
         })
         .catch((error) => {
@@ -59,21 +58,17 @@ export function AuthProvider({ children }) {
 
         return 
     }
-        // const addDocID = async (email_id) => {
-        //     const userData = query(usersCollectionRef, where("uid", "==", email_id));
-        //     const querySnapshot = await getDocs(userData)
-        //     const users =[]
-        //     await querySnapshot.forEach((doc) => {
-        //         setDocID(doc.id)
-        //         users.push({ ...doc.data(), id: doc.id });
-        //         // level = doc.data().userlevel
-        //     });
-
-        //     users.map((user) => (
-        //         alert(user.userlevel)
-        //     ))
-        // }
-        
+        const addDocID = async (email_id) => {
+            const userData = query(usersCollectionRef, where("uid", "==", email_id));
+            const querySnapshot = await getDocs(userData)
+            const users =[]
+            await querySnapshot.forEach((doc) => {
+                setDocID(doc.id)
+                const data = doc.data()
+                userLevel=data.userlevel
+                //users.push({ ...doc.data(), id: doc.id });
+            });
+        }
 
     function signout(){
         signOut(auth).then(() => {
@@ -92,7 +87,10 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user)
-            setUserLevel(ulevel)
+            alert(user)
+            if (user){
+                addDocID(user.uid)
+            }
         })
 
         return unsubscribe
