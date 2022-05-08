@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '@mui/material';
 
-export const SettingsEmail = (props) => {
+export const SettingsUsername = (props) => {
   const [values, setValues] = useState({
-    email: '',
-    newemail: '',
+    username: '',
   });
-  
+
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -17,32 +16,20 @@ export const SettingsEmail = (props) => {
   return (
     <form {...props}>
       <Card>
-        <CardHeader
-          title="Change email"
+      <CardHeader
+          subheader="Choose a unique username"
+          title="Username"
         />
         <Divider />
         <CardContent>
-          <h3>Current</h3>
           <TextField
             fullWidth
-            label="Current Email"
+            label="@username"
             margin="normal"
-            name="currentemail"
+            name="username"
             onChange={handleChange}
-            type="email"
+            type="text"
             value={values.current}
-            variant="outlined"
-          />
-          
-          <h3>New</h3>
-          <TextField
-            fullWidth
-            label="New Email"
-            margin="normal"
-            name="newemail"
-            onChange={handleChange}
-            type="email"
-            value={values.new}
             variant="outlined"
           />
         </CardContent>
@@ -58,7 +45,7 @@ export const SettingsEmail = (props) => {
             color="primary"
             variant="contained"
           >
-            Update Email
+            Save
           </Button>
         </Box>
       </Card>

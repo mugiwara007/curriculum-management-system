@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '@mui/material';
 
-export const SettingsEmail = (props) => {
+export const SettingsPersonal = (props) => {
   const [values, setValues] = useState({
-    email: '',
-    newemail: '',
+    name: '',
+    lname: '',
+    mname: '',
+    gender:'',
   });
-  
+
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -17,32 +19,39 @@ export const SettingsEmail = (props) => {
   return (
     <form {...props}>
       <Card>
-        <CardHeader
-          title="Change email"
-        />
         <Divider />
         <CardContent>
-          <h3>Current</h3>
+          <h3>Personal Information</h3>
+          <div>
           <TextField
             fullWidth
-            label="Current Email"
+            label="First name"
             margin="normal"
-            name="currentemail"
+            name="name"
             onChange={handleChange}
-            type="email"
+            type="text"
             value={values.current}
             variant="outlined"
           />
-          
-          <h3>New</h3>
+         <TextField
+            fullWidth
+            label="Last name"
+            margin="normal"
+            name="lname"
+            onChange={handleChange}
+            type="text"
+            value={values.current}
+            variant="outlined"
+          />
+          </div>
           <TextField
             fullWidth
-            label="New Email"
+            label="Middle name"
             margin="normal"
-            name="newemail"
+            name="mname"
             onChange={handleChange}
-            type="email"
-            value={values.new}
+            type="text"
+            value={values.current}
             variant="outlined"
           />
         </CardContent>
@@ -58,7 +67,7 @@ export const SettingsEmail = (props) => {
             color="primary"
             variant="contained"
           >
-            Update Email
+            Save
           </Button>
         </Box>
       </Card>

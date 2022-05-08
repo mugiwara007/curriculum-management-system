@@ -2,7 +2,11 @@ import Head from 'next/head';
 import { Box, Container, Typography } from '@mui/material';
 import { DashboardLayout } from '../components/dashboard-layout';
 import { SettingsNotifications } from '../components/settings/settings-notifications';
+import { SettingsPersonal } from '../components/settings/settings-personal';
+import { SettingsUsername } from '../components/settings/settings-username';
 import { SettingsPassword } from '../components/settings/settings-password';
+import { SettingsEmail } from '../components/settings/settings-change-email';
+
 
 const Settings = () => (
   <>
@@ -26,9 +30,7 @@ const Settings = () => (
           Settings
         </Typography>
         <SettingsNotifications />
-        <Box sx={{ pt: 3 }}>
-          <SettingsPassword />
-        </Box>
+        
       </Container>
     </Box>
   </>

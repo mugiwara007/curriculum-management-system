@@ -28,11 +28,14 @@ const states = [
 export const AccountProfileDetails = (props) => {
   const [values, setValues] = useState({
     firstName: 'Katarina',
+    middleName: 'S.',
     lastName: 'Smith',
     email: 'demo@devias.io',
+    currentEmail: 'demo@devias.io',
     phone: '',
     state: 'Alabama',
-    country: 'USA'
+    country: 'USA',
+    username: '@'
   });
 
   const handleChange = (event) => {
@@ -82,11 +85,11 @@ export const AccountProfileDetails = (props) => {
             >
               <TextField
                 fullWidth
-                label="Last name"
-                name="lastName"
+                label="Middle name"
+                name="middleName"
                 onChange={handleChange}
                 required
-                value={values.lastName}
+                value={values.middleName}
                 variant="outlined"
               />
             </Grid>
@@ -97,11 +100,11 @@ export const AccountProfileDetails = (props) => {
             >
               <TextField
                 fullWidth
-                label="Email Address"
-                name="email"
+                label="Last name"
+                name="lastName"
                 onChange={handleChange}
                 required
-                value={values.email}
+                value={values.lastName}
                 variant="outlined"
               />
             </Grid>
@@ -120,6 +123,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               />
             </Grid>
+            
             <Grid
               item
               md={6}
@@ -160,6 +164,21 @@ export const AccountProfileDetails = (props) => {
                   </option>
                 ))}
               </TextField>
+            </Grid>
+            <Grid
+              item
+              md={6}
+              xs={12}
+            >
+              <TextField
+                fullWidth
+                label="Username"
+                name="username"
+                onChange={handleChange}
+                required
+                value={values.username}
+                variant="outlined"
+              />
             </Grid>
           </Grid>
         </CardContent>
