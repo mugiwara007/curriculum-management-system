@@ -11,7 +11,7 @@ import { fetchSignInMethodsForEmail } from 'firebase/auth';
 import { useAuth } from 'src/contexts/AuthContext';
 
 const bgImagePath =
-'"/static/images/soar_bulsu_2019.jpg"'
+"/static/images/soar_bulsu_2019.jpg"
 
 const Login = () => {
   const { currentUser } = useAuth()
