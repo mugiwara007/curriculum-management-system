@@ -51,14 +51,6 @@ export const ArchivesListToolbar = (props) => (
       >
         Archives
       </Typography>
-      <Box sx={{ m: 1 }}>
-        <Button
-          color="primary"
-          variant="contained"
-        >
-          Retrieve
-        </Button>
-      </Box>
     </Box>
     <Box sx={{ mt: 3 }}>
       <Card>
@@ -87,3 +79,6 @@ export const ArchivesListToolbar = (props) => (
     </Box>
   </Box>
 );
+
+
+

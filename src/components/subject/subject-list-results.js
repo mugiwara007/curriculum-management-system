@@ -271,7 +271,7 @@ export default function FormDialog(props) {
 
 export function ArchiveFormDialog(props) {
   const [open, setOpen] = useState(false);
-  const { updateSubject } = subAuth()
+  const { archivedSub } = subAuth()
   
   const handleDeleteClickOpen = () => {
     setOpen(true);
@@ -280,11 +280,6 @@ export function ArchiveFormDialog(props) {
   const handleDeleteClose = () => {
     setOpen(false);
   };
-
-  function ArchiveSub(id){
-    const subjectDoc = doc(db, "subjects", id);
-    archiveDoc(subjectDoc);
-  }
 
   return (
     <div style={{display : 'inline-block'}} >
@@ -313,7 +308,7 @@ export function ArchiveFormDialog(props) {
             <Button
               color="primary"
               onClick={handleDeleteClose}>Cancel
-            </Button>
+            </Button> 
           </Box>
           <Box p={2}>
             <Button
@@ -321,7 +316,18 @@ export function ArchiveFormDialog(props) {
               variant='contained'
               disabled={!open}
               type="submit"
-              onClick={() => archiveSub(props.sub_id)}>
+              onClick={() => archivedSub(
+                props.sub_id,
+                props.sub_code,
+                props.sub_desc,
+                props.sub_lec,
+                props.sub_lab,
+                props.sub_preReq,
+                props.sub_coReq,
+                props.sub_user,
+                props.sub_kac,
+                props.sub_classCode
+                )}>
               Confirm
             </Button>
           </Box>
@@ -538,6 +544,7 @@ export const SubjectListResults = () => {
                       sub_lab={subject.sub_lab}
                       sub_preReq={subject.sub_preReq}
                       sub_coReq={subject.sub_coReq}
+                      sub_user={subject.sub_user}
                       sub_kac={subject.sub_kac}
                       sub_classCode={subject.sub_classCode}>
                     </ArchiveFormDialog>

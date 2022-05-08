@@ -81,7 +81,6 @@ const items = [
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
   const router = useRouter();
-  const { userLevel } = useAuth()
   const { signout } = useAuth()
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
     defaultMatches: true,

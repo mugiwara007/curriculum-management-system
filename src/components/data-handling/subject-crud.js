@@ -22,6 +22,7 @@ export function subAuth(){
 export function SubjectProvider({ children }) {
   const usersCollectionRef = collection(db, "users");
   const subjectsCollectionRef = collection(db, "subjects");
+  const archiveCollectionRef = collection(db, "archived_subjects");
 
   const addSubject = async (newSubCode,newSubDesc,newSubLec,newSubLab,
     newSubPreReq,newSubCoReq,newSubKac,newSubClassCode) =>{
@@ -90,9 +91,21 @@ export function SubjectProvider({ children }) {
   //   await deleteDoc(subjectDoc);
   // };
 
-  function archivedSub(newSubCode,newSubDesc,newSubLec,newSubLab,
-    newSubPreReq,newSubCoReq,newSubKac,newSubClassCode){
-
+  const archivedSub = async (id, newSubCode,newSubDesc,newSubLec,newSubLab,
+    newSubPreReq,newSubCoReq,newSubUser,newSubKac,newSubClassCode) =>{
+      const subjectDoc = doc(db, "subjects", id);
+      addDoc(archiveCollectionRef, {
+        sub_code: newSubCode,
+        sub_desc: newSubDesc,
+        sub_lec: newSubLec,
+        sub_lab: newSubLab,
+        sub_preReq: newSubPreReq,
+        sub_coReq: newSubCoReq,
+        sub_user: newSubUser,
+        sub_kac: newSubKac,
+        sub_classCode: newSubClassCode
+      });
+      await deleteDoc(subjectDoc);
   }
 
   const value={

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -6,6 +6,7 @@ import {
   Avatar,
   Box,
   Card,
+  Button,
   Checkbox,
   Table,
   TableBody,
@@ -16,11 +17,112 @@ import {
   Typography
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
+import { useAuth } from 'src/contexts/AuthContext';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { collection, onSnapshot, query, deleteDoc, addDoc, doc } from 'firebase/firestore';
+import { db } from 'src/firebase/firebase-auth';
+
+export function RetrieveFormDialog(props) {
+  const [open, setOpen] = useState(false);
+  
+  
+  const handleDeleteClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDeleteClose = () => {
+    setOpen(false);
+  };
+
+  const retrieveSub = async () => {
+    const subjectDoc = collection(db, "subjects");
+    const archiveCollectionRef = doc(db, "archived_subjects", props.sub_id);
+    alert(props.sub_code)
+      addDoc(subjectDoc, {
+        sub_code: props.sub_code,
+        sub_desc: props.sub_desc,
+        sub_lec: props.sub_lec,
+        sub_lab: props.sub_lab,
+        sub_preReq: props.sub_preReq,
+        sub_coReq: props.sub_coReq,
+        sub_user: props.sub_user,
+        sub_kac: props.sub_kac,
+        sub_classCode: props.sub_classCode
+      });
+      await deleteDoc(archiveCollectionRef);
+  }
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+        color="info"
+        variant="outlined"
+        sx={{ mr: 1 }}
+        onClick={handleDeleteClickOpen} >
+          Retrieve
+      </Button>
+      <Dialog open={open}
+      onClose={handleDeleteClose}
+      >
+
+        <DialogTitle
+        display="flex"
+        justifyContent="center" >Confirm Archive</DialogTitle>
+
+          <DialogContent>
+           <p>Are you sure you want to archive this?</p>
+          </DialogContent>
+
+          <DialogActions>
+          <Box>
+            <Button
+              color="primary"
+              onClick={handleDeleteClose}>Cancel
+            </Button> 
+          </Box>
+          <Box p={2}>
+            <Button
+              color="info"
+              variant='contained'
+              disabled={!open}
+              type="submit"
+              onClick={() => retrieveSub()}>
+              Confirm
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+      </div>
+  );
+}
 
 export const ArchivesListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const { currentUser } = useAuth();
+  const [archivedSubs, setArchivedSubs] = useState([]);
+  const [indexValue, setIndexValue] = useState(0)
+  const [limitValue, setLimitValue] = useState(limit)
+
+  function allArchSub(){
+    const q = query(collection(db, "archived_subjects"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const arch_subs = [];
+    querySnapshot.forEach((doc) => {
+        arch_subs.push({ ...doc.data(), id: doc.id });
+    });
+       setArchivedSubs(arch_subs)
+    });
+  }
+
+  useEffect(() => {
+    allArchSub()
+  }, []);
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -55,11 +157,23 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
   };
 
   const handleLimitChange = (event) => {
+    
+    setLimitValue(event.target.value)
+    setIndexValue(0)
     setLimit(event.target.value);
   };
 
   const handlePageChange = (event, newPage) => {
+    if(page > newPage){
+      setIndexValue(indexValue- limit)
+      setLimitValue(limitValue- limit)
+    }else{
+      setIndexValue(indexValue+ limit)
+      setLimitValue(limitValue+ limit)
+    }
+    
     setPage(newPage);
+    console.log(page)
   };
 
   return (
@@ -69,7 +183,7 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                   <Checkbox
                     checked={selectedCustomerIds.length === customers.length}
                     color="primary"
@@ -79,38 +193,51 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
                     }
                     onChange={handleSelectAll}
                   />
+                </TableCell> */}
+                <TableCell>
+                  Subject Code
                 </TableCell>
                 <TableCell>
-                  Name
+                  Description
                 </TableCell>
                 <TableCell>
-                  Email
+                  LEC Units
                 </TableCell>
                 <TableCell>
-                  Location
+                  LAB Units
                 </TableCell>
                 <TableCell>
-                  Phone
+                  Pre-Requisite
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  Co-Requisite
                 </TableCell>
+                <TableCell>
+                  Username
+                </TableCell>
+                <TableCell>
+                  KAC
+                </TableCell>
+                <TableCell>
+                  Class Code
+                </TableCell>
+                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {currentUser && archivedSubs.slice(indexValue, limitValue).map((archSub) => (
                 <TableRow
                   hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  key={archSub.id}
+                   //selected={selectedArchSubIds.indexOf(archSub.id) !== -1}
                 >
-                  <TableCell padding="checkbox">
+                  {/* <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      checked={selectedSubjectIds.indexOf(subject.id) !== -1}
+                      onChange={(event) => handleSelectOne(event, subject.id)}
                       value="true"
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Box
                       sx={{
@@ -118,31 +245,57 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
-                        src={customer.avatarUrl}
+                      {/* <Avatar
+                        src={subject.avatarUrl}
                         sx={{ mr: 2 }}
                       >
-                        {getInitials(customer.name)}
-                      </Avatar>
+                        {getInitials(subject.name)}
+                      </Avatar> */}
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.name}
+                        {archSub.sub_code}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                    {archSub.sub_desc}
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    {archSub.sub_lec}
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    {archSub.sub_lab}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                    {archSub.sub_preReq}
+                  </TableCell>
+                  <TableCell>
+                    {archSub.sub_coReq}
+                  </TableCell>
+                  <TableCell>
+                    {archSub.sub_user}
+                  </TableCell>
+                  <TableCell>
+                    {archSub.sub_kac}
+                  </TableCell>
+                  <TableCell>
+                    {archSub.sub_classCode}
+                  </TableCell>
+                  <TableCell>
+                    <RetrieveFormDialog
+                      sub_id={archSub.id}
+                      sub_code={archSub.sub_code}
+                      sub_desc={archSub.sub_desc}
+                      sub_lec={archSub.sub_lec}
+                      sub_lab={archSub.sub_lab}
+                      sub_preReq={archSub.sub_preReq}
+                      sub_coReq={archSub.sub_coReq}
+                      sub_user={archSub.sub_user}
+                      sub_kac={archSub.sub_kac}
+                      sub_classCode={archSub.sub_classCode}>
+                    </RetrieveFormDialog>
                   </TableCell>
                 </TableRow>
               ))}
@@ -152,7 +305,7 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={customers.length}
+        count={currentUser && archivedSubs.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
@@ -161,8 +314,4 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
       />
     </Card>
   );
-};
-
-ArchivesListResults.propTypes = {
-  customers: PropTypes.array.isRequired
 };
