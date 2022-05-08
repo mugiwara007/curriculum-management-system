@@ -10,6 +10,9 @@ import { Google as GoogleIcon } from '../icons/google';
 import { fetchSignInMethodsForEmail } from 'firebase/auth';
 import { useAuth } from 'src/contexts/AuthContext';
 
+const bgImagePath =
+'"/static/images/soar_bulsu_2019.jpg"'
+
 const Login = () => {
   const { currentUser } = useAuth()
   const { login } = useAuth()
@@ -44,7 +47,7 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>Login | Material Kit</title>
+        <title>CurMaSys</title>
       </Head>
       <Box
         component="main"
@@ -52,10 +55,31 @@ const Login = () => {
           alignItems: 'center',
           display: 'flex',
           flexGrow: 1,
-          minHeight: '100%'
+          minHeight: '100%',
         }}
       >
-        <Container maxWidth="sm">
+        <Container
+         sx = {{ 
+          mr: '10px',
+          }}
+        >
+             <img
+              alt="Bulsu Bg Image"
+              src="/static/images/bulsu_main_gate.jpg"
+              loading="lazy"
+              width="174%"
+              height="950"
+            />
+        </Container>
+        <Container maxWidth="xs"
+        sx = {{ 
+          border: 0, 
+          borderRadius: '5%', 
+          padding: '2%',
+          ml: '31%',
+          mr: '1%',
+          backgroundColor: '#FFFFFF',
+          }}>
           {/* <NextLink
             href="/"
             passHref
@@ -179,10 +203,10 @@ const Login = () => {
              Forgot Password?
               {' '}
               <NextLink
-                href="/register"
+                href="/"
               >
                 <Link
-                  to="/register"
+                  to="/"
                   variant="subtitle2"
                   underline="hover"
                   sx={{
