@@ -1,9 +1,13 @@
-import { Avatar, Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Grid, LinearProgress, Typography } from '@mui/material';
+import InsertChartIcon from '@mui/icons-material/InsertChartOutlined';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import PeopleIcon from '@mui/icons-material/PeopleOutlined';
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
 
-export const TotalCustomers = (props) => (
-  <Card {...props}>
+export const TotalDepartments = (props) => (
+  <Card
+    sx={{ height: '100%' }}
+    {...props}
+  >
     <CardContent>
       <Grid
         container
@@ -16,24 +20,24 @@ export const TotalCustomers = (props) => (
             gutterBottom
             variant="overline"
           >
-            TOTAL CUSTOMERS
+            TOTAL DEPARTMENTS
           </Typography>
           <Typography
             color="textPrimary"
             variant="h4"
           >
-            1,6k
+            0
           </Typography>
         </Grid>
         <Grid item>
           <Avatar
             sx={{
-              backgroundColor: 'success.main',
+              backgroundColor: 'warning.main',
               height: 56,
               width: 56
             }}
           >
-            <PeopleIcon />
+            <HomeWorkIcon fontSize="small" />
           </Avatar>
         </Grid>
       </Grid>
@@ -60,6 +64,12 @@ export const TotalCustomers = (props) => (
           Since last month
         </Typography>
       </Box>
+      {/* <Box sx={{ pt: 3 }}>
+        <LinearProgress
+          value={75.5}
+          variant="determinate"
+        />
+      </Box> */}
     </CardContent>
   </Card>
 );

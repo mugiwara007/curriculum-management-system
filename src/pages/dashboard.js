@@ -1,13 +1,13 @@
 import Head from 'next/head';
 import { Box, Container, Grid } from '@mui/material';
-import { Budget } from '../components/dashboard/budget';
+import { TotalUsers } from '../components/dashboard/total-users';
 import { LatestOrders } from '../components/dashboard/latest-orders';
-import { LatestProducts } from '../components/dashboard/latest-products';
+import { LatestCurriculumGenerated } from '../components/dashboard/latest-curriculum-generated';
 import { Sales } from '../components/dashboard/sales';
-import { TasksProgress } from '../components/dashboard/tasks-progress';
-import { TotalCustomers } from '../components/dashboard/total-customers';
-import { TotalProfit } from '../components/dashboard/total-profit';
-import { TrafficByDevice } from '../components/dashboard/traffic-by-device';
+import { TotalDepartments } from '../components/dashboard/total-departments';
+import { TotalSubjects } from '../components/dashboard/total-subjects';
+import { TotalColleges } from '../components/dashboard/total-colleges';
+import { TotalCurriculumsGenerated } from '../components/dashboard/total-curriculums-generated';
 import { DashboardLayout } from '../components/dashboard-layout';
 import {  withAuth } from '../routes/withAuth'
 
@@ -37,7 +37,7 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
-            <Budget />
+            <TotalUsers />
           </Grid>
           <Grid
             item
@@ -46,7 +46,7 @@ const Dashboard = () => (
             sm={6}
             xs={12}
           >
-            <TotalCustomers />
+            <TotalSubjects />
           </Grid>
           <Grid
             item
@@ -55,7 +55,7 @@ const Dashboard = () => (
             sm={6}
             xs={12}
           >
-            <TasksProgress />
+            <TotalDepartments />
           </Grid>
           <Grid
             item
@@ -64,36 +64,36 @@ const Dashboard = () => (
             sm={6}
             xs={12}
           >
-            <TotalProfit sx={{ height: '100%' }} />
+            <TotalColleges sx={{ height: '100%' }} />
           </Grid>
-          <Grid
+          {/* <Grid
             item
-            lg={8}
+            lg={12}
             md={12}
-            xl={9}
+            xl={12}
             xs={12}
           >
             <Sales />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             item
             lg={4}
             md={6}
-            xl={3}
+            xl={12}
             xs={12}
           >
-            <TrafficByDevice sx={{ height: '100%' }} />
-          </Grid>
+            <TotalCurriculumsGenerated sx={{ height: '100%' }} />
+          </Grid> */}
           <Grid
             item
-            lg={4}
-            md={6}
-            xl={3}
+            lg={12}
+            md={12}
+            xl={12}
             xs={12}
           >
-            <LatestProducts sx={{ height: '100%' }} />
+            <LatestCurriculumGenerated sx={{ height: '100%' }} />
           </Grid>
-          <Grid
+          {/* <Grid
             item
             lg={8}
             md={12}
@@ -101,7 +101,7 @@ const Dashboard = () => (
             xs={12}
           >
             <LatestOrders />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Box>
