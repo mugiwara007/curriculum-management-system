@@ -99,13 +99,6 @@ const Login = () => {
               >
                 Sign in
               </Typography>
-              <Typography
-                color="textSecondary"
-                gutterBottom
-                variant="body2"
-              >
-                Sign in on the internal platform
-              </Typography>
             </Box>
             {/* <Grid
               container
