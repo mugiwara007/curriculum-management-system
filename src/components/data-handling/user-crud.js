@@ -7,7 +7,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, getAuth, updatePassword} from 'firebase/auth'
 import { auth } from 'src/firebase/firebase-auth'
 
 const UserCrud = React.createContext()
@@ -16,38 +16,88 @@ export function userAuth(){
     return useContext(UserCrud)
 }
 
-export function UserProvider({ children }) {
+export function UserProvider({ children }) 
+{
 
   const usersCollectionRef = collection(db, "users");
 
-  function addUser (Email, Name, Pass, UserCode, UserName, UserLevel) {
-    createUserWithEmailAndPassword(auth, Email, Pass)
-    .then((userCredential) => {
-      const user = userCredential.user;
-
-      addDoc(usersCollectionRef, {
-        uid: user.uid,
-        email: Email,
-        name: Name,
-        password: Pass,
-        usercode: UserCode,
-        username: UserName,
-        userlevel:  Number(UserLevel)
-      });
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+  function addUser (Email, Name, Pass, UserCode, UserName, UserLevel) 
+  {
+    addDoc(usersCollectionRef, 
+    {
+      email: Email,
+      name: Name,
+      password: Pass,
+      usercode: UserCode,
+      username: UserName,
+      userlevel: UserLevel
     });
+
+    createUserWithEmailAndPassword(auth, Email, Pass)
+        .then((userCredential) => 
+        {
+            const user = userCredential.user;
+        })
+        .catch((error) => 
+        {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
 
       return
   };
 
-  const updateUser = async (id, age) => {
+  function updateUser(id, newEmail, Name, Pass, UserCode, UserName, UserLevel) 
+  {
     const userDoc = doc(db, "users", id);
-    const newFields = { age: age + 1 };
-    await updateDoc(userDoc, newFields);
+    //const user = auth.currentUser;
+    const newFields = 
+    {
+      email: newEmail,
+      name: Name,
+      password: Pass,
+      usercode: UserCode,
+      username: UserName,
+      userlevel: UserLevel
+    };
+    updateDoc(userDoc, newFields);
+
+    const auth = getAuth();
+    // const Pass = getASecureRandomPassword();
+
+    updateEmail(auth.currentUser, newEmail).then(() => {
+      // Email updated!
+      // ...
+      // alert(Email)
+    }).catch((error) => {
+      // An error occurred
+      // ...
+    });
+    
+    
+    updatePassword(user, Pass).then(() => {
+      // Update successful.
+      alert(Pass)
+    }).catch((error) => {
+      // An error ocurred
+      // ...
+    });
+    // return
   };
+
+  function login(Email, Pass)
+  {
+    signInWithEmailAndPassword(auth, Email, Pass)
+    .then((userCredential) => {
+        const user = userCredential.user;
+    })
+    .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+    });
+
+    return
+  }
 
   const deleteUser = async (id) => {
     const userDoc = doc(db, "users", id);
@@ -55,7 +105,9 @@ export function UserProvider({ children }) {
   };
 
   const value={
-    addUser
+    addUser,
+    updateUser,
+    login
   }
 
   return (

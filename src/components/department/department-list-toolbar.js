@@ -12,17 +12,53 @@ import { Upload as UploadIcon } from '../../icons/upload';
 import { Download as DownloadIcon } from '../../icons/download';
 import AddIcon from '@mui/icons-material/Add';
 import ArchiveIcon from '@mui/icons-material/Archive';
-
+import { useAuth } from 'src/contexts/AuthContext'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { deptAuth } from '../data-handling/department-crud';
 import * as React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
+  const { addDept } = deptAuth();
+
+  const formik = useFormik ({
+    initialValues:
+    {
+      dCode: '',
+      dDesc: '',
+      cdCode: ''
+    },
+    validationSchema: Yup.object({
+      dCode: Yup
+        .string()
+        .max(11)
+        .required(
+          'Department code is required'),
+      dDesc: Yup
+        .string()
+        .max(255)
+        .required(
+          'Department description is required'),
+      cdCode: Yup
+        .string()
+        .max(11)
+        .required(
+          'College code is required')
+    }),
+    onSubmit: () => {
+      addDept(
+        formik.values.dCode,
+        formik.values.dDesc,
+        formik.values.cdCode
+      )
+    } 
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,45 +83,46 @@ export default function FormDialog() {
         <DialogTitle
         display="flex"
         justifyContent="center">Add Department</DialogTitle>
+        <form onSubmit={formik.handleSubmit}>
         <DialogContent>
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="depCode"
+                error={Boolean(formik.touched.dCode && formik.errors.dCode)}
+                fullWidth
+                helperText={formik.touched.dCode && formik.errors.dCode}
                 label="Department Code"
-                type="text"
-                fullWidth
+                margin="normal"
+                name="dCode"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.dCode}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="description"
-                label="Description"
-                type="text"
+                error={Boolean(formik.touched.dDesc && formik.errors.dDesc)}
                 fullWidth
+                helperText={formik.touched.dDesc && formik.errors.dDesc}
+                label="Department Description"
+                margin="normal"
+                name="dDesc"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.dDesc}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="colCode"
+                error={Boolean(formik.touched.cdCode && formik.errors.cdCode)}
+                fullWidth
+                helperText={formik.touched.cdCode && formik.errors.cdCode}
                 label="College Code"
-                type="text"
-                fullWidth
+                margin="normal"
+                name="cdCode"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.cdCode}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
         </DialogContent>
@@ -100,10 +137,14 @@ export default function FormDialog() {
               <Button
               color="primary"
               variant='contained'
-              onClick={handleClose}>Done
+              onClick={handleClose}
+              disabled={formik.isSubmitting}
+              type="submit">
+                Done
               </Button>
             </Box>
         </DialogActions>
+        </form>
       </Dialog>
       </div>
   );

@@ -77,7 +77,7 @@ export default function FormDialog() {
       ),
       Userlevel: Yup
       .string()
-      .max(32)
+      .max(50)
       .required
       (
         'User level is required'
@@ -125,7 +125,7 @@ export default function FormDialog() {
               error={Boolean(formik.touched.Email && formik.errors.Email)}
               fullWidth
               helperText={formik.touched.Email && formik.errors.Email}
-              label="Email"
+              label="Email Address"
               margin="normal"
               name="Email"
               onBlur={formik.handleBlur}

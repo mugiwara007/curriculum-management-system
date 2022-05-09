@@ -13,17 +13,95 @@ import { Download as DownloadIcon } from '../../icons/download';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import ArchiveIcon from '@mui/icons-material/Archive';
-
+import { useAuth } from 'src/contexts/AuthContext'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { collAuth } from '../data-handling/college-crud';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import * as React from 'react';
+import { ref, uploadBytes, getStorage, listAll, getDownloadURL } from 'firebase/storage'
+import {v4} from 'uuid'
+import { AltRoute } from '@mui/icons-material';
+import { storage } from 'src/firebase/firebase-auth';
+
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
+  const [imageUpload, setImageUpload] = React.useState(null);
+  const [imagesList, setimageList] = React.useState([]);
+  const { currentUser } = useAuth()
+  const { addCollege } = collAuth()
+  const imageListRef = ref(storage, "CollegeLogos/")
+
+  const uploadImage = () => 
+  {
+    if (imageUpload == null)
+    {
+      return;
+    };
+    const imageRef = ref(storage, "CollegeLogos/" +  imageUpload.name + v4());
+
+    uploadBytes(imageRef, imageUpload).then(() => 
+    {
+      alert("image uploaded");
+    })
+  };
+
+  React.useEffect(() => 
+  {
+    listAll(imageListRef).then((response) => {
+      response.items.forEach((item) => {
+        getDownloadURL(item).then((url) => {
+          setimageList((prev) => [...prev, url]);
+        });
+      });
+      console.log(response)
+    });
+  }, []);
+
+  const formik = useFormik({
+    initialValues:
+    {
+      cCode: '',
+      cDesc: '',
+      cLogo: ''
+    },
+    validationSchema: Yup.object({
+      cCode: Yup
+        .string()
+        .max(11)
+        .required(
+          'College Code is required'),
+      cDesc: Yup
+        .string()
+        .max(255)
+        .required(
+          'College Description is required'),
+      cLogo: Yup
+        .string()
+        .max(11)
+        .required(
+          'College Logo is required')
+    }),
+
+    onSubmit: () => 
+    {
+      if (currentUser)
+      {
+        addCollege(
+          formik.values.cCode,
+          formik.values.cDesc,
+          formik.values.cLogo
+        )
+
+        formik.setSubmitting(false)
+      }
+    }
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -31,6 +109,13 @@ export default function FormDialog() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  function showLogo()
+  {
+    imagesList.map((url) => {
+      return <img src={url}/>;
+    })
   };
 
   return (
@@ -49,68 +134,85 @@ export default function FormDialog() {
         display="flex"
         justifyContent="center"
         >Add College</DialogTitle>
-        <DialogContent>
-
-             <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="colCode"
+        <form onSubmit={formik.handleSubmit}>
+          <DialogContent>
+            <TextField
+                error={Boolean(formik.touched.cCode && formik.errors.cCode)}
+                fullWidth
+                helperText={formik.touched.cCode && formik.errors.cCode}
                 label="College Code"
-                type="text"
-                fullWidth
+                margin="normal"
+                name="cCode"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.cCode}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="description"
-                label="Description"
-                type="text"
+                error={Boolean(formik.touched.cDesc && formik.errors.cDesc)}
                 fullWidth
+                helperText={formik.touched.cDesc && formik.errors.cDesc}
+                label="College Description"
+                margin="normal"
+                name="cDesc"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.cDesc}
                 variant="outlined"
-                error
-                helperText="Please fill up this field"
               />
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="logo"
-                label="Logo"
-                type="blob"
+                // error={Boolean(formik.touched.cLogo && formik.errors.cLogo)}
+                // helperText={formik.touched.cLogo && formik.errors.cLogo}
+                // margin="normal"
+                // name="cLogo"
+                // accept=".jpg, .png, .jpeg"
+                // onBlur={formik.handleBlur}
+                // onChange={formik.handleChange}
+                // value={formik.values.cLogo}
+                // variant="outlined"
                 fullWidth
-                variant="outlined"
-                error
-                helperText="Please fill up this field"
+                type="file"
+                onChange={(event) => {setImageUpload(event.target.files[0])}
+                }
               />
+                {/* {imagesList.map((url) => {return <img src={url}/>;})} */}
+                {/* {showLogo()} */}
+          </DialogContent>
 
-
-        </DialogContent>
-        <DialogActions>
-          <Box>
-              <Button
-                color="primary"
-                onClick={handleClose}>Cancel
-              </Button>
-          </Box>
-          <Box p={2}>
-              <Button
-                color="primary"
-                variant='contained'
-                onClick={handleClose}>Done
-              </Button>
-          </Box>
-        </DialogActions>
+          <DialogActions>
+              <Box>
+                  <Button
+                    color="primary"
+                    onClick={handleClose}>Cancel
+                  </Button>
+              </Box>
+              <Box p={2}>
+                  <Button
+                    color="primary"
+                    variant='contained'
+                    disabled={formik.isSubmitting}
+                    type="submit"
+                    onClick={uploadImage}>Done
+                  </Button>
+              </Box>
+          </DialogActions>
+        </form>
       </Dialog>
-      </div>
-  );
+    </div>
+  ); 
+  // export {imagesList, setimageList};
 }
+
+// export function showLogo()
+// {
+//   imagesList.map((url) => {
+//     return <img src={url}/>;
+//   })
+// }
+
+// export { imageFunction };
 
 
 function SimpleDialog() {
@@ -224,4 +326,8 @@ export const CollegeListToolbar = (props) => (
     </Box>
   </Box>
 );
+
+
+
+
 
