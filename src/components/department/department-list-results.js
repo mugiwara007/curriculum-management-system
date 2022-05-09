@@ -163,7 +163,7 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                   <Checkbox
                     checked={selectedCustomerIds.length === customers.length}
                     color="primary"
@@ -173,7 +173,7 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
                     }
                     onChange={handleSelectAll}
                   />
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   Department Code
                 </TableCell>
@@ -195,13 +195,13 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
                   key={customer.id}
                   selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                 >
-                  <TableCell padding="checkbox">
+                  {/* <TableCell padding="checkbox">
                     <Checkbox
                       checked={selectedCustomerIds.indexOf(customer.id) !== -1}
                       onChange={(event) => handleSelectOne(event, customer.id)}
                       value="true"
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Box
                       sx={{
