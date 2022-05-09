@@ -65,10 +65,10 @@ const Login = () => {
         >
              <img
               alt="Bulsu Bg Image"
-              src="/static/images/bulsu_main_gate.jpg"
+              src="/static/images/curmasysFinal.jpg"
               loading="lazy"
               width="174%"
-              height="950"
+              height="950px"
             />
         </Container>
         <Container maxWidth="xs"
