@@ -15,7 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import PrintIcon from '@mui/icons-material/Print';
-
+import NextLink from 'next/link';
 
 export const CurriculumListToolbar = (props) => (
   <Box {...props}>
@@ -35,6 +35,10 @@ export const CurriculumListToolbar = (props) => (
         Curriculum
       </Typography>
       <Box sx={{ m: 1 }}>
+      <NextLink
+      href="/create-curriculum"
+      passHref
+       >
         <Button
           color="primary"
           variant="contained"
@@ -42,6 +46,7 @@ export const CurriculumListToolbar = (props) => (
         >
           Add curriculum
         </Button>
+        </NextLink>
       </Box>
     </Box>
     <Box sx={{ mt: 3 }}>

@@ -4,8 +4,10 @@ import { ArchivesListResults } from '../components/archives/archives-list-result
 import { ArchivesListToolbar } from '../components/archives/archives-list-toolbar';
 import { DashboardLayout } from '../components/dashboard-layout';
 import { customers } from '../__mocks__/customers';
+import { ArchiveProvider } from '../components/archives/archives-list-toolbar';
 
 const Archives = () => (
+  
   <>
     <Head>
       <title>

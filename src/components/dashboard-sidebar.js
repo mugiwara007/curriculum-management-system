@@ -81,7 +81,6 @@ const items = [
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
   const router = useRouter();
-  const { userLevel } = useAuth()
   const { signout } = useAuth()
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
     defaultMatches: true,
@@ -174,14 +173,13 @@ export const DashboardSidebar = (props) => {
           }}
         /> */}
         <Box sx={{ flexGrow: 1 }}>
-          {items.map((item) => (
+            {items.map((item) => (
             <NavItem
             key={item.title}
             icon={item.icon}
             href={item.href}
             title={item.title}
           />
-          
           ))}
             {/* <NavItemRender items={items} /> */}
            <NavItem

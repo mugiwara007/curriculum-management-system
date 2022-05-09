@@ -84,19 +84,25 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
-                  Name
+                  Curriculum Code
                 </TableCell>
                 <TableCell>
-                  Email
+                  CMO
                 </TableCell>
                 <TableCell>
-                  Location
+                  Version
                 </TableCell>
                 <TableCell>
-                  Phone
+                  Date Created
                 </TableCell>
                 <TableCell>
-                  Registration date
+                  Date Approved
+                </TableCell>
+                <TableCell>
+                  Department Code
+                </TableCell>
+                <TableCell>
+                  Username
                 </TableCell>
                 <TableCell>
                   Action
@@ -124,7 +130,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar
+                      {/* <Avatar
                         src={customer.avatarUrl}
                         sx={{ mr: 2 }}
                       >
@@ -135,21 +141,28 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                         variant="body1"
                       >
                         {customer.name}
-                      </Typography>
+                      </Typography> */}
+                      Curriculum Code
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
+                   CMO
                   </TableCell>
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                   Version
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                  {format(customer.createdAt, 'dd/MM/yyyy')}
                   </TableCell>
                   <TableCell>
-                    {format(customer.createdAt, 'dd/MM/yyyy')}
+                  {format(customer.createdAt, 'dd/MM/yyyy')}
                   </TableCell>
+                  <TableCell>
+                    Department Code
+                    </TableCell>
+                    <TableCell>
+                     Username
+                    </TableCell>
                   <TableCell>
                     <Button
                     startIcon={(<EditIcon fontSize="small" />)}

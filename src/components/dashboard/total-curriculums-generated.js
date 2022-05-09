@@ -3,21 +3,22 @@ import { Box, Card, CardContent, CardHeader, Divider, Typography, useTheme } fro
 import LaptopMacIcon from '@mui/icons-material/LaptopMac';
 import PhoneIcon from '@mui/icons-material/Phone';
 import TabletIcon from '@mui/icons-material/Tablet';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 
-export const TrafficByDevice = (props) => {
+export const TotalCurriculumsGenerated = (props) => {
   const theme = useTheme();
 
   const data = {
     datasets: [
       {
-        data: [63, 15, 22],
-        backgroundColor: ['#3F51B5', '#e53935', '#FB8C00'],
+        data: [63],
+        backgroundColor: ['#3F51B5'],
         borderWidth: 8,
         borderColor: '#FFFFFF',
         hoverBorderColor: '#FFFFFF'
       }
     ],
-    labels: ['Desktop', 'Tablet', 'Mobile']
+    labels: ['Curriculums']
   };
 
   const options = {
@@ -42,30 +43,18 @@ export const TrafficByDevice = (props) => {
     }
   };
 
-  const devices = [
+  const curriculum = [
     {
-      title: 'Desktop',
-      value: 63,
-      icon: LaptopMacIcon,
+      title: 'Curriculum',
+      value: 100,
+      icon: LocalLibraryIcon,
       color: '#3F51B5'
-    },
-    {
-      title: 'Tablet',
-      value: 15,
-      icon: TabletIcon,
-      color: '#E53935'
-    },
-    {
-      title: 'Mobile',
-      value: 23,
-      icon: PhoneIcon,
-      color: '#FB8C00'
     }
   ];
 
   return (
     <Card {...props}>
-      <CardHeader title="Traffic by Device" />
+      <CardHeader title="Total Curriculums Generated" />
       <Divider />
       <CardContent>
         <Box
@@ -86,7 +75,7 @@ export const TrafficByDevice = (props) => {
             pt: 2
           }}
         >
-          {devices.map(({
+          {curriculum.map(({
             color,
             icon: Icon,
             title,

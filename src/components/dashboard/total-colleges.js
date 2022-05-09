@@ -1,7 +1,9 @@
-import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Avatar, Card, CardContent, Grid, Typography, Box } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import SchoolIcon from '@mui/icons-material/School';
 
-export const TotalProfit = (props) => (
+export const TotalColleges = (props) => (
   <Card {...props}>
     <CardContent>
       <Grid
@@ -15,13 +17,13 @@ export const TotalProfit = (props) => (
             gutterBottom
             variant="overline"
           >
-            TOTAL PROFIT
+            TOTAL COLLEGES
           </Typography>
           <Typography
             color="textPrimary"
             variant="h4"
           >
-            $23k
+            0
           </Typography>
         </Grid>
         <Grid item>
@@ -32,10 +34,33 @@ export const TotalProfit = (props) => (
               width: 56
             }}
           >
-            <AttachMoneyIcon />
+            <SchoolIcon />
           </Avatar>
         </Grid>
       </Grid>
+      <Box
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          pt: 2
+        }}
+      >
+        <ArrowUpwardIcon color="success" />
+        <Typography
+          variant="body2"
+          sx={{
+            mr: 1
+          }}
+        >
+          16%
+        </Typography>
+        <Typography
+          color="textSecondary"
+          variant="caption"
+        >
+          Since last month
+        </Typography>
+      </Box>
     </CardContent>
   </Card>
 );

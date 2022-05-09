@@ -37,7 +37,6 @@ export default function FormDialog() {
       sLab: '',
       sPreReq: '',
       sCoReq: '',
-      sUser: '',
       sKac: '',
       sClassCode: ''
     },
@@ -54,12 +53,14 @@ export default function FormDialog() {
           'Subject description is required'),
       sLec: Yup
         .number()
-        .max(99999999999)
+        .typeError("Input must be a number")
+        .max(99999999999, "LEC Units must be below 12 digits.")
         .required(
           'LEC units is required'),
       sLab: Yup
-        .number()
-        .max(99999999999)
+        .number("Input must be a number")
+        .typeError("Input must be a number")
+        .max(99999999999, "LAB Units must be below 12 digits")
         .required(
           'LAB units is required'),
       sPreReq: Yup
@@ -68,11 +69,6 @@ export default function FormDialog() {
         .required(
           'Pre-requisite is required'),
       sCoReq: Yup
-        .string()
-        .max(255)
-        .required(
-          'Pre-requisite is required'),
-      sUser: Yup
         .string()
         .max(255)
         .required(
@@ -97,7 +93,6 @@ export default function FormDialog() {
           formik.values.sLab,
           formik.values.sPreReq,
           formik.values.sCoReq,
-          formik.values.sUser,
           formik.values.sKac,
           formik.values.sClassCode
         )
@@ -133,7 +128,7 @@ export default function FormDialog() {
         >Add Subject</DialogTitle>
         <form onSubmit={formik.handleSubmit}>
         <DialogContent>
-          
+
              <TextField
                 error={Boolean(formik.touched.sCode && formik.errors.sCode)}
                 fullWidth
@@ -214,19 +209,6 @@ export default function FormDialog() {
               />
 
               <TextField
-                error={Boolean(formik.touched.sUser && formik.errors.sUser)}
-                fullWidth
-                helperText={formik.touched.sUser && formik.errors.sUser}
-                label="Username"
-                margin="normal"
-                name="sUser"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.sUser}
-                variant="outlined"
-              />
-
-              <TextField
                 error={Boolean(formik.touched.sKac && formik.errors.sKac)}
                 fullWidth
                 helperText={formik.touched.sKac && formik.errors.sKac}
@@ -251,7 +233,7 @@ export default function FormDialog() {
                 value={formik.values.sClassCode}
                 variant="outlined"
               />
-          
+
         </DialogContent>
         <DialogActions>
           <Box>
@@ -295,12 +277,6 @@ export const SubjectListToolbar = (props) => (
         Subject
       </Typography>
       <Box sx={{ m: 1 }}>
-        <Button
-          startIcon={(<ArchiveIcon fontSize="small" />)}
-          sx={{ mr: 1 }}
-        >
-          Archive
-        </Button>
         <FormDialog>
         </FormDialog>
       </Box>
