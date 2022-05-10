@@ -19,7 +19,7 @@ export const AccountPassword = (props) => {
       <Card>
         <CardHeader
           subheader="Use a password you have not used before"
-          title="Password"
+          title="Change Password"
         />
         <Divider />
         <CardContent>
