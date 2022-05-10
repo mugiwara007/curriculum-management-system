@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '@mui/material';
 
-export const SettingsPassword = (props) => {
+export const SettingsEmail = (props) => {
   const [values, setValues] = useState({
-    password: '',
-    confirm: ''
+    email: '',
+    newemail: '',
   });
-
+  
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -18,42 +18,31 @@ export const SettingsPassword = (props) => {
     <form {...props}>
       <Card>
         <CardHeader
-          subheader="Use a password you have not used before"
-          title="Password"
+          title="Change email"
         />
         <Divider />
         <CardContent>
           <h3>Current</h3>
           <TextField
             fullWidth
-            label="Current Password"
+            label="Current Email"
             margin="normal"
-            name="current"
+            name="currentemail"
             onChange={handleChange}
-            type="password"
+            type="email"
             value={values.current}
             variant="outlined"
           />
+          
           <h3>New</h3>
           <TextField
             fullWidth
-            label="New Password"
+            label="New Email"
             margin="normal"
-            name="new"
+            name="newemail"
             onChange={handleChange}
-            type="password"
+            type="email"
             value={values.new}
-            variant="outlined"
-          />
-          <h3>Retype new</h3>
-          <TextField
-            fullWidth
-            label="Confirm Password"
-            margin="normal"
-            name="confirm"
-            onChange={handleChange}
-            type="password"
-            value={values.confirm}
             variant="outlined"
           />
         </CardContent>
@@ -69,7 +58,7 @@ export const SettingsPassword = (props) => {
             color="primary"
             variant="contained"
           >
-            Update password
+            Update Email
           </Button>
         </Box>
       </Card>

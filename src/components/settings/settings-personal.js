@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '@mui/material';
 
-export const SettingsPassword = (props) => {
+export const SettingsPersonal = (props) => {
   const [values, setValues] = useState({
-    password: '',
-    confirm: ''
+    name: '',
+    lname: '',
+    mname: '',
+    gender:'',
   });
 
   const handleChange = (event) => {
@@ -17,43 +19,39 @@ export const SettingsPassword = (props) => {
   return (
     <form {...props}>
       <Card>
-        <CardHeader
-          subheader="Use a password you have not used before"
-          title="Password"
-        />
         <Divider />
         <CardContent>
-          <h3>Current</h3>
+          <h3>Personal Information</h3>
+          <div>
           <TextField
             fullWidth
-            label="Current Password"
+            label="First name"
             margin="normal"
-            name="current"
+            name="name"
             onChange={handleChange}
-            type="password"
+            type="text"
             value={values.current}
             variant="outlined"
           />
-          <h3>New</h3>
-          <TextField
+         <TextField
             fullWidth
-            label="New Password"
+            label="Last name"
             margin="normal"
-            name="new"
+            name="lname"
             onChange={handleChange}
-            type="password"
-            value={values.new}
+            type="text"
+            value={values.current}
             variant="outlined"
           />
-          <h3>Retype new</h3>
+          </div>
           <TextField
             fullWidth
-            label="Confirm Password"
+            label="Middle name"
             margin="normal"
-            name="confirm"
+            name="mname"
             onChange={handleChange}
-            type="password"
-            value={values.confirm}
+            type="text"
+            value={values.current}
             variant="outlined"
           />
         </CardContent>
@@ -69,7 +67,7 @@ export const SettingsPassword = (props) => {
             color="primary"
             variant="contained"
           >
-            Update password
+            Save
           </Button>
         </Box>
       </Card>

@@ -2,6 +2,8 @@ import Head from 'next/head';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { AccountProfile } from '../components/account/account-profile';
 import { AccountProfileDetails } from '../components/account/account-profile-details';
+import { AccountEmail } from '../components/account/account-email';
+import { AccountPassword } from '../components/account/account-password';
 import { DashboardLayout } from '../components/dashboard-layout';
 
 const Account = () => (
@@ -31,7 +33,7 @@ const Account = () => (
         >
           <Grid
             item
-            lg={4}
+            lg={40}
             md={6}
             xs={12}
           >
@@ -39,12 +41,29 @@ const Account = () => (
           </Grid>
           <Grid
             item
-            lg={8}
+            lg={5}
             md={6}
             xs={12}
           >
             <AccountProfileDetails />
           </Grid>
+          <Grid
+            item
+            lg={3}
+            md={6}
+            xs={12}
+          >
+            <AccountPassword />
+          </Grid>
+          <Grid
+            item
+            lg={4}
+            md={6}
+            xs={12}
+          >
+            <AccountEmail />
+          </Grid>
+          
         </Grid>
       </Container>
     </Box>

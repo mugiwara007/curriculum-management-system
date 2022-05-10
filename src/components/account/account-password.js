@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '@mui/material';
 
-export const SettingsPassword = (props) => {
+export const AccountPassword = (props) => {
   const [values, setValues] = useState({
     password: '',
     confirm: ''
@@ -19,11 +19,11 @@ export const SettingsPassword = (props) => {
       <Card>
         <CardHeader
           subheader="Use a password you have not used before"
-          title="Password"
+          title="Change Password"
         />
         <Divider />
         <CardContent>
-          <h3>Current</h3>
+          <h4>Current</h4>
           <TextField
             fullWidth
             label="Current Password"
@@ -34,7 +34,7 @@ export const SettingsPassword = (props) => {
             value={values.current}
             variant="outlined"
           />
-          <h3>New</h3>
+          <h4>New</h4>
           <TextField
             fullWidth
             label="New Password"
@@ -45,7 +45,7 @@ export const SettingsPassword = (props) => {
             value={values.new}
             variant="outlined"
           />
-          <h3>Retype new</h3>
+          <h4>Retype new</h4>
           <TextField
             fullWidth
             label="Confirm Password"
