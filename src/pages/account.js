@@ -71,9 +71,9 @@ const Account = () => (
 );
 
 Account.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
+    <DashboardLayout>
+        {page}
+    </DashboardLayout>
 );
 
 export default Account;

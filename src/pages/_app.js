@@ -6,6 +6,26 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { createEmotionCache } from '../utils/create-emotion-cache';
 import { theme } from '../theme';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import { SubjectProvider } from 'src/components/data-handling/subject-crud';
+import { UserProvider } from 'src/components/data-handling/user-crud';
+import { CollegeProvider } from 'src/components/data-handling/college-crud';
+import { DeptProvider } from 'src/components/data-handling/department-crud';
+import { AuthProvider } from 'src/contexts/AuthContext';
+// import Login from './index';
+// import Account from './account';
+// import Colleges from './colleges';
+// import Curriculum from './curriculum';
+// import Customers from './customers';
+// import Departments from './departments';
+// import Dashboard from '.';
+// import Notifications from './notifications';
+// import Settings from './settings';
+// import Subjects from './subjects';
+// import PrivateRoute from 'src/routes/PrivateRoute';
+import PageAuth from 'src/routes/PageAuth';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -13,26 +33,36 @@ const App = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   const getLayout = Component.getLayout ?? ((page) => page);
-
+  
   return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <title>
-          Material Kit Pro
-        </title>
-        <meta
-          name="viewport"
-          content="initial-scale=1, width=device-width"
-        />
-      </Head>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeProvider>
-      </LocalizationProvider>
-    </CacheProvider>
+      <AuthProvider>
+          <SubjectProvider>
+            <UserProvider>
+              <CollegeProvider>
+                <DeptProvider>
+                  <CacheProvider value={emotionCache}>
+                    <Head>
+                      <title>
+                        Material Kit Pro
+                      </title>
+                      <meta
+                        name="viewport"
+                        content="initial-scale=1, width=device-width"
+                      />
+                    </Head>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        {getLayout(<Component {...pageProps} />)}
+                        <PageAuth />
+                      </ThemeProvider>
+                    </LocalizationProvider>
+                  </CacheProvider>
+                </DeptProvider>
+              </CollegeProvider>
+            </UserProvider>
+          </SubjectProvider>
+      </AuthProvider>
   );
 };
-
 export default App;

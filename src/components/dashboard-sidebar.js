@@ -22,10 +22,12 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
+import { useAuth } from 'src/contexts/AuthContext';
+import NavItemRender from './nav-side-map';
 
 const items = [
   {
-    href: '/',
+    href: '/dashboard',
     icon: (<ChartBarIcon fontSize="small" />),
     title: 'Dashboard'
   },
@@ -73,32 +75,13 @@ const items = [
     href: '/settings',
     icon: (<CogIcon fontSize="small" />),
     title: 'Settings'
-  },
-  {
-    href: '/login',
-    icon: (<LockIcon fontSize="small" />),
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: (<UserAddIcon fontSize="small" />),
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: (<XCircleIcon fontSize="small" />),
-    title: 'Error'
-  },
-  {
-    href: '/',
-    icon: (<LogoutIcon fontSize="small" />),
-    title: 'Sign Out'
   }
 ];
 
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
   const router = useRouter();
+  const { signout } = useAuth()
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {
     defaultMatches: true,
     noSsr: false
@@ -190,14 +173,22 @@ export const DashboardSidebar = (props) => {
           }}
         /> */}
         <Box sx={{ flexGrow: 1 }}>
-          {items.map((item) => (
+            {items.map((item) => (
             <NavItem
-              key={item.title}
-              icon={item.icon}
-              href={item.href}
-              title={item.title}
-            />
+            key={item.title}
+            icon={item.icon}
+            href={item.href}
+            title={item.title}
+          />
           ))}
+            {/* <NavItemRender items={items} /> */}
+           <NavItem
+              key="Sign Out"
+              icon={(<LogoutIcon fontSize="small" />)}
+              href="/"
+              title="Sign Out"
+              onClick={() => signout()}
+            />
         </Box>
         <Divider sx={{ borderColor: '#2D3748' }} />
       </Box>

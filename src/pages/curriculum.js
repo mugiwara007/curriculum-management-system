@@ -29,9 +29,9 @@ const Curriculum = () => (
   </>
 );
 Curriculum.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
+    <DashboardLayout>
+      {page}
+    </DashboardLayout>
 );
 
 export default Curriculum;

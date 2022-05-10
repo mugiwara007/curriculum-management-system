@@ -3,7 +3,6 @@ import { Box, Container } from '@mui/material';
 import { SubjectListResults } from '../components/subject/subject-list-results';
 import { SubjectListToolbar } from '../components/subject/subject-list-toolbar';
 import { DashboardLayout } from '../components/dashboard-layout';
-import { customers } from '../__mocks__/customers';
 
 const Subjects = () => (
   <>
@@ -22,16 +21,16 @@ const Subjects = () => (
       <Container maxWidth={false}>
         <SubjectListToolbar />
         <Box sx={{ mt: 3 }}>
-          <SubjectListResults customers={customers} />
+          <SubjectListResults />
         </Box>
       </Container>
     </Box>
   </>
 );
 Subjects.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
+    <DashboardLayout>
+      {page}
+    </DashboardLayout>
 );
 
 export default Subjects;
