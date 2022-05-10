@@ -9,9 +9,69 @@ import { Facebook as FacebookIcon } from '../icons/facebook';
 import { Google as GoogleIcon } from '../icons/google';
 import { fetchSignInMethodsForEmail } from 'firebase/auth';
 import { useAuth } from 'src/contexts/AuthContext';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import * as React from 'react';
 const bgImagePath =
 "/static/images/soar_bulsu_2019.jpg"
+
+export function FormDialog() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div style={{display : 'inline-block'}}>
+      <Link
+        to="/"
+        variant="subtitle2"
+        underline="hover"
+        sx={{
+          cursor: 'pointer'
+        }}
+        onClick={handleClickOpen}
+      >
+        Click Here
+      </Link>
+      <Dialog open={open} 
+      onClose={handleClose}>
+        <DialogTitle
+        display="flex"
+        justifyContent="center"
+        >Password Reset</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+           To Receive a Password Reset Email, Please Type Your Registered Email Address Below.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button color="primary"
+           variant="contained"
+          onClick={handleClose}>Send Password Reset</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
 
 const Login = () => {
   const { currentUser } = useAuth()
@@ -195,20 +255,7 @@ const Login = () => {
             >
              Forgot Password?
               {' '}
-              <NextLink
-                href="/"
-              >
-                <Link
-                  to="/"
-                  variant="subtitle2"
-                  underline="hover"
-                  sx={{
-                    cursor: 'pointer'
-                  }}
-                >
-                  Click Here
-                </Link>
-              </NextLink>
+              <FormDialog></FormDialog>
             </Typography>
           </form>
         </Container>
