@@ -6,6 +6,7 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, getAuth, updatePassword} from 'firebase/auth'
 import { auth } from 'src/firebase/firebase-auth'
@@ -18,25 +19,22 @@ export function userAuth(){
 
 export function UserProvider({ children }) 
 {
-
-  const usersCollectionRef = collection(db, "users");
-
   function addUser (Email, Name, Pass, UserCode, UserName, UserLevel) 
   {
-    addDoc(usersCollectionRef, 
-    {
-      email: Email,
-      name: Name,
-      password: Pass,
-      usercode: UserCode,
-      username: UserName,
-      userlevel: UserLevel
-    });
-
     createUserWithEmailAndPassword(auth, Email, Pass)
         .then((userCredential) => 
         {
             const user = userCredential.user;
+            setDoc(doc(db, "users", user.uid) ,
+              {
+                email: Email,
+                name: Name,
+                password: Pass,
+                usercode: UserCode,
+                username: UserName,
+                userlevel: parseInt(UserLevel),
+                archive:false,
+              });
         })
         .catch((error) => 
         {

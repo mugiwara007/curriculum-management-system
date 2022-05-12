@@ -20,7 +20,7 @@ const Notifications = () => (
       }}
     >
       <Container maxWidth={false}>
-        <NotificationsListToolbar />
+        {/* <NotificationsListToolbar /> */}
         <Box sx={{ pt: 3 }}>
           <Grid
             container

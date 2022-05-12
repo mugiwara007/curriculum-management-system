@@ -68,13 +68,14 @@ export const AccountProfileDetails = (props) => {
               xs={12}
             >
               <TextField
+                sx={{width:'100%'}}
                 fullWidth
-                helperText="Please specify the first name"
+                helperText="Please specify your full name"
                 label="First name"
-                name="firstName"
+                name="name"
                 onChange={handleChange}
                 required
-                value={values.firstName}
+                value={values.name}
                 variant="outlined"
               />
             </Grid>
@@ -99,6 +100,7 @@ export const AccountProfileDetails = (props) => {
               xs={12}
             >
               <TextField
+                sx={{width:'100%'}}
                 fullWidth
                 label="Last name"
                 name="lastName"
@@ -113,15 +115,7 @@ export const AccountProfileDetails = (props) => {
               md={6}
               xs={12}
             >
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phone"
-                onChange={handleChange}
-                type="number"
-                value={values.phone}
-                variant="outlined"
-              />
+              
             </Grid>
             
             <Grid
@@ -139,7 +133,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
+             <Grid
               item
               md={6}
               xs={12}

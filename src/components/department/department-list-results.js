@@ -17,7 +17,7 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import { collection, Firestore, getDocs, onSnapshot, query, doc} from '@firebase/firestore';
+import { collection, Firestore, getDocs, onSnapshot, query, doc, updateDoc, where } from '@firebase/firestore';
 import { getInitials } from '../../utils/get-initials';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
@@ -28,11 +28,60 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { deptAuth } from '../data-handling/department-crud';
-import {db} from 'src/firebase/firebase-auth' 
+import {db} from 'src/firebase/firebase-auth'
 import * as React from 'react';
+import * as Yup from 'yup';
+import { getArchivelist, setArchivelist, setArchiveDisable } from '../userModel';
 
-export default function FormDialog() {
+export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
+  var id = props.id
+
+  const formik = useFormik({
+    initialValues: {
+      Department_Code: props.Department_Code,
+      Description: props.Description,
+      College_Code: props.College_Code,
+    },
+    validationSchema: Yup.object({
+      Department_Code: Yup
+      .string()
+      .max(100)
+      .required
+      (
+        'Department Code is required'
+      ),
+      Description: Yup
+      .string()
+      .max(100)
+      .required
+      (
+        'Description is required'
+      ),
+      College_Code: Yup
+      .string()
+      .max(32)
+      .required
+      (
+        'College Code is required'
+      ),
+    }),
+    onSubmit: async() => {
+
+    }
+  });
+
+
+  const updateDepartment = async () =>{
+    const updateDepartment = {
+      dept_code: formik.values.Department_Code,
+      dept_desc: formik.values.Description,
+      colld_code: formik.values.College_Code,
+    }
+    const washingtonRef = doc(db, "departments", id);
+    await updateDoc(washingtonRef,updateDepartment)
+    handleClose()
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -59,36 +108,44 @@ export default function FormDialog() {
         <DialogContent>
 
               <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="depCode"
-                label="Department Code"
-                type="text"
+                error={Boolean(formik.touched.Department_Code && formik.errors.Department_Code)}
                 fullWidth
+                helperText={formik.touched.Department_Code && formik.errors.Department_Code}
+                label="Department Code"
+                margin="dense"
+                name={"Department_Code"}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.Department_Code}
+                // id="depCode"
+                // type="text"
                 variant="outlined"
               />
 
               <TextField
                 required
-                autoFocus
                 margin="dense"
                 id="description"
                 label="Description"
                 type="text"
                 fullWidth
                 variant="outlined"
+                onChange={formik.handleChange}
+                value={formik.values.Description}
+                name={"Description"}
               />
 
               <TextField
                 required
-                autoFocus
                 margin="dense"
                 id="colCode"
                 label="College Code"
                 type="text"
                 fullWidth
                 variant="outlined"
+                onChange={formik.handleChange}
+                value={formik.values.College_Code}
+                name={"College_Code"}
               />
 
         </DialogContent>
@@ -103,7 +160,8 @@ export default function FormDialog() {
               <Button
               color="primary"
               variant='contained'
-              onClick={handleClose}>Done
+              type="submit"
+              onClick={updateDepartment}>Done
               </Button>
             </Box>
         </DialogActions>
@@ -113,7 +171,7 @@ export default function FormDialog() {
 }
 
 
-export const DepartmentListResults = ({ customers, ...rest }) => {
+export const DepartmentListResults = () => {
   const [selectedDeptIds, setSelectedDeptIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -122,10 +180,12 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
   const deptCollectionRef = collection(db, "departments");
   const [indexValue, setIndexValue] = useState(0)
   const [limitValue, setLimitValue] = useState(limit)
+  const [customers, setCustomers] = useState([])
+  const [checkAll, setCheckAll] = useState(false)
 
   function allDept()
   {
-    const q = query(collection(db, "departments"));
+    const q = query(collection(db, "departments"), where("archive", "==", false));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const deps = [];
       querySnapshot.forEach((doc) => {
@@ -153,35 +213,46 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
   }, []);
 
   const handleSelectAll = (event) => {
-    let newSelectedCustomerIds;
-
-    if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
-    } else {
-      newSelectedCustomerIds = [];
+    setCheckAll(!checkAll)
+    var newSelected = []
+    if(event.target.checked){
+      depts.map((data)=>{
+        newSelected.push(data.id)
+      })
+      setSelectedDeptIds(newSelected)
+      setArchivelist(newSelected)
     }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    else{
+      setSelectedDeptIds([])
+      setArchivelist('')
+    }
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomerIds.indexOf(id);
+    if(event.target.checked){
+    const selectedIndex = selectedDeptIds.indexOf(id);
     let newSelectedCustomerIds = [];
 
     if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
+      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedDeptIds, id);
     } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
+      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedDeptIds.slice(1));
     } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
+      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedDeptIds.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, selectedIndex),
-        selectedCustomerIds.slice(selectedIndex + 1)
+        selectedDeptIds.slice(0, selectedIndex),
+        selectedDeptIds.slice(selectedIndex + 1)
       );
     }
 
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    setSelectedDeptIds(newSelectedCustomerIds);
+    setArchivelist(newSelectedCustomerIds)
+  }
+  else{
+    setSelectedDeptIds([]);
+    setArchivelist('')
+  }
   };
 
   const handleLimitChange = (event) => {
@@ -193,7 +264,7 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
   };
 
   return (
-    <Card {...rest}>
+    <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
           <Table>
@@ -201,7 +272,7 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedDeptIds.length === customers.length}
+                    checked={checkAll}
                     color="primary"
                     indeterminate={
                       selectedDeptIds.length > 0
@@ -260,7 +331,12 @@ export const DepartmentListResults = ({ customers, ...rest }) => {
                     {dept.colld_code}
                   </TableCell>
                   <TableCell>
-                    <FormDialog>
+                    <FormDialog
+                    id = {dept.id}
+                    Department_Code = {dept.dept_code}
+                    Description = {dept.dept_desc}
+                    College_Code = {dept.colld_code}
+                    >
                     </FormDialog>
                 </TableCell>
                 </TableRow>

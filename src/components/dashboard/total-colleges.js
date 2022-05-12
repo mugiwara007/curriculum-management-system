@@ -23,7 +23,7 @@ export const TotalColleges = (props) => (
             color="textPrimary"
             variant="h4"
           >
-            0
+            {props.count}
           </Typography>
         </Grid>
         <Grid item>
@@ -45,7 +45,7 @@ export const TotalColleges = (props) => (
           pt: 2
         }}
       >
-        <ArrowUpwardIcon color="success" />
+        {/* <ArrowUpwardIcon color="success" />
         <Typography
           variant="body2"
           sx={{
@@ -59,7 +59,7 @@ export const TotalColleges = (props) => (
           variant="caption"
         >
           Since last month
-        </Typography>
+        </Typography> */}
       </Box>
     </CardContent>
   </Card>

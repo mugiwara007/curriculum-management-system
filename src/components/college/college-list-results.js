@@ -38,13 +38,49 @@ import { useFormik } from 'formik';
 import * as React from 'react';
 import { db } from 'src/firebase/firebase-auth'
 import { storage } from 'src/firebase/firebase-auth';
+import * as Yup from 'yup';
 // import { FormDialog } from 'src/components/college/college-list-toolbar';
-import { deleteDoc, getDocs, collection, doc, onSnapshot, query } from '@firebase/firestore';
+import { deleteDoc, getDocs, collection, doc, onSnapshot, query, updateDoc, where } from '@firebase/firestore';
 import imageFunc from 'src/components/college/college-list-toolbar';
 
-export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
+import { getArchivelist, setArchivelist, setArchiveDisable } from '../userModel';
 
+export default function FormDialog(props) {
+  const [open, setOpen] = React.useState(false);
+  var id = props.id
+
+  const formik = useFormik({
+    initialValues: {
+      college_code: props.college_code,
+      college_description: props.college_description,
+      college_logo: props.college_logo,
+    },
+    validationSchema: Yup.object({
+      college_code: Yup
+      .string()
+      .max(100)
+      .required
+      (
+        'Department Code is required'
+      ),
+      college_description: Yup
+      .string()
+      .max(100)
+      .required
+      (
+        'Description is required'
+      ),
+      college_logo: Yup
+      .string()
+      .max(32)
+      .required
+      (
+        'College Code is required'
+      ),
+    }),
+    onSubmit: async() => {
+    }
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -54,6 +90,16 @@ export default function FormDialog() {
     setOpen(false);
   };
 
+  const updateCollege = async() =>{
+    const updateCollege = {
+      coll_code: formik.values.college_code,
+      coll_desc: formik.values.college_description,
+      coll_logo: formik.values.college_logo,
+    }
+    const washingtonRef = doc(db, "colleges", id);
+    await updateDoc(washingtonRef,updateCollege)
+    handleClose()
+  }
   return (
     <div style={{display : 'inline-block'}} >
         <Button
@@ -71,40 +117,28 @@ export default function FormDialog() {
         >Update Data</DialogTitle>
         <DialogContent>
 
+             <Avatar alt={formik.values.college_code} src={formik.values.college_logo} sx={{marginLeft:'auto', marginRight:'auto', width:200, height:200}}/>
              <TextField
-                required
-                autoFocus
                 margin="dense"
-                id="colCode"
                 label="College Code"
                 type="text"
                 fullWidth
                 variant="outlined"
+                onChange={formik.handleChange}
+                value={formik.values.college_code}
+                name="college_code"
               />
 
               <TextField
-                required
-                autoFocus
                 margin="dense"
-                id="description"
                 label="Description"
                 type="text"
                 fullWidth
                 variant="outlined"
+                onChange={formik.handleChange}
+                value={formik.values.college_description}
+                name="college_description"
               />
-
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="logo"
-                label="Logo"
-                type="blob"
-                fullWidth
-                variant="outlined"
-              />
-
-
         </DialogContent>
         <DialogActions>
           <Box>
@@ -117,7 +151,7 @@ export default function FormDialog() {
               <Button
                 color="primary"
                 variant='contained'
-                onClick={handleClose}>Done
+                onClick={updateCollege}>Done
               </Button>
           </Box>
         </DialogActions>
@@ -133,6 +167,8 @@ export const CollegeListResults = ({ customers, ...rest }) => {
   const [colleges, setColleges] = useState([]);
   const [indexValue, setIndexValue] = useState(0)
   const [limitValue, setLimitValue] = useState(limit)
+
+  const [checkAll, setCheckAll] = useState(false)
 
   const [imagesList, setimageList] = React.useState([]);
   const imageListRef = ref(storage, "CollegeLogos/")
@@ -151,7 +187,7 @@ export const CollegeListResults = ({ customers, ...rest }) => {
 
   function allColl()
   {
-    const q = query(collection(db, "colleges"));
+    const q = query(collection(db, "colleges"), where("archive", "==", false));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const subs = [];
       querySnapshot.forEach((doc) => {
@@ -166,35 +202,46 @@ export const CollegeListResults = ({ customers, ...rest }) => {
   }, []);
 
   const handleSelectAll = (event) => {
-    let newSelectedCustomerIds;
-
-    if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
-    } else {
-      newSelectedCustomerIds = [];
+    setCheckAll(!checkAll)
+    var newSelected = []
+    if(event.target.checked){
+      colleges.map((data)=>{
+        newSelected.push(data.id)
+      })
+      setSelectedCollegeIds(newSelected)
+      setArchivelist(newSelected)
     }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    else{
+      setSelectedCollegeIds([])
+      setArchivelist('')
+    }
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomerIds.indexOf(id);
-    let newSelectedCustomerIds = [];
-
-    if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
-    } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-    } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, selectedIndex),
-        selectedCustomerIds.slice(selectedIndex + 1)
-      );
+    if(event.target.checked){
+      const selectedIndex = selectedCollegeIds.indexOf(id);
+      let newSelectedCustomerIds = [];
+  
+      if (selectedIndex === -1) {
+        newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCollegeIds, id);
+      } else if (selectedIndex === 0) {
+        newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCollegeIds.slice(1));
+      } else if (selectedIndex === selectedCollegeIds.length - 1) {
+        newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCollegeIds.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelectedCustomerIds = newSelectedCustomerIds.concat(
+          selectedCollegeIds.slice(0, selectedIndex),
+          selectedCollegeIds.slice(selectedIndex + 1)
+        );
+      }
+  
+      setSelectedCollegeIds(newSelectedCustomerIds);
+      setArchivelist(newSelectedCustomerIds)
     }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
+    else{
+      setSelectedCollegeIds([]);
+      setArchivelist('')
+    }
   };
 
   const handleLimitChange = (event) => {
@@ -224,7 +271,7 @@ export const CollegeListResults = ({ customers, ...rest }) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedCollegeIds.length === customers.length}
+                    checked={checkAll}
                     color="primary"
                     indeterminate={
                       selectedCollegeIds.length > 0
@@ -234,13 +281,13 @@ export const CollegeListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell>
                 <TableCell>
+                  Logo
+                </TableCell>
+                <TableCell>
                   College Code
                 </TableCell>
                 <TableCell>
                   Description
-                </TableCell>
-                <TableCell>
-                  Logo
                 </TableCell>
                 <TableCell>
                   Action
@@ -260,6 +307,9 @@ export const CollegeListResults = ({ customers, ...rest }) => {
                       onChange={(event) => handleSelectOne(event, college.id)}
                       value="true"
                     />
+                  </TableCell>
+                  <TableCell>
+                    <Avatar alt={college.coll_code} src={college.coll_logo}  sx={{width:100, height:100}}/>
                   </TableCell>
                   <TableCell>
                     <Box
@@ -286,17 +336,12 @@ export const CollegeListResults = ({ customers, ...rest }) => {
                     {college.coll_desc}
                   </TableCell>
                   <TableCell>
-                    {/* {college.coll_logo} */}
-                    {/* <img src="https://placekitten.com/200/300" width="90" height="90"/> */}
-                    {/* <img src={url}/> */}
-                    {/* {imageList.map((url) => {
-                      return <img src="url"/>;
-                    })} */}
-
-                    {imagesList.map((url) => {return <img src={url} width="90" height="90"/>;})}
-                  </TableCell>
-                  <TableCell>
-                   <FormDialog>
+                   <FormDialog
+                   id={college.id}
+                   college_code={college.coll_code}
+                   college_description={college.coll_desc}
+                   college_logo={college.coll_logo}
+                   >
                    </FormDialog>
                 </TableCell>
                 </TableRow>

@@ -24,6 +24,7 @@ import { Logo } from './logo';
 import { NavItem } from './nav-item';
 import { useAuth } from 'src/contexts/AuthContext';
 import NavItemRender from './nav-side-map';
+import { getUserLevel } from './userModel';
 
 const items = [
   {
@@ -51,16 +52,49 @@ const items = [
     icon: (<SchoolIcon fontSize="small" />),
     title: 'Colleges'
   },
+  // {
+  //   href: '/archives',
+  //   icon: (<ArchiveIcon fontSize="small" />),
+  //   title: 'Archives'
+  // },
+  {
+    href: '/notifications',
+    icon: (<NotificationsActiveIcon fontSize="small" />),
+    title: 'All Notification'
+  },
+  {
+    href: '/account',
+    icon: (<UserIcon fontSize="small" />),
+    title: 'Account'
+  },
+  {
+    href: '/settings',
+    icon: (<CogIcon fontSize="small" />),
+    title: 'Settings'
+  }
+];
+
+const department_head = [
+  {
+    href: '/dashboard',
+    icon: (<ChartBarIcon fontSize="small" />),
+    title: 'Dashboard'
+  },
+  {
+    href: '/subjects',
+    icon: (<MenuBookIcon fontSize="small" />),
+    title: 'Subjects'
+  },
   {
     href: '/curriculum',
     icon: (<LocalLibraryIcon fontSize="small" />),
     title: 'Curriculum'
   },
-  {
-    href: '/archives',
-    icon: (<ArchiveIcon fontSize="small" />),
-    title: 'Archives'
-  },
+  // {
+  //   href: '/archives',
+  //   icon: (<ArchiveIcon fontSize="small" />),
+  //   title: 'Archives'
+  // },
   {
     href: '/notifications',
     icon: (<NotificationsActiveIcon fontSize="small" />),
@@ -172,7 +206,8 @@ export const DashboardSidebar = (props) => {
             my: 3
           }}
         /> */}
-        <Box sx={{ flexGrow: 1 }}>
+        {getUserLevel() < 2 ?
+          <Box sx={{ flexGrow: 1 }}>
             {items.map((item) => (
             <NavItem
             key={item.title}
@@ -190,6 +225,26 @@ export const DashboardSidebar = (props) => {
               onClick={() => signout()}
             />
         </Box>
+        :
+        <Box sx={{ flexGrow: 1 }}>
+            {department_head.map((item) => (
+            <NavItem
+            key={item.title}
+            icon={item.icon}
+            href={item.href}
+            title={item.title}
+          />
+          ))}
+           <NavItem
+              key="Sign Out"
+              icon={(<LogoutIcon fontSize="small" />)}
+              href="/"
+              title="Sign Out"
+              onClick={() => signout()}
+            />
+        </Box>
+        }
+        
         <Divider sx={{ borderColor: '#2D3748' }} />
       </Box>
     </>

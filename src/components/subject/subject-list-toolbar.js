@@ -19,10 +19,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import { subAuth } from '../data-handling/subject-crud';
 import * as Yup from 'yup';
 import * as React from 'react';
 import { useAuth } from 'src/contexts/AuthContext'
+import Link from '@mui/material/Link';
 
 export default function FormDialog() {
   const { currentUser } = useAuth()
@@ -259,7 +261,9 @@ export default function FormDialog() {
   );
 }
 
-export const SubjectListToolbar = (props) => (
+export const SubjectListToolbar = (props) => {
+  const router = useRouter();
+  return(
   <Box {...props}>
     <Box
       sx={{
@@ -302,9 +306,10 @@ export const SubjectListToolbar = (props) => (
               placeholder="Search"
               variant="outlined"
             />
+            <Link onClick={()=>{router.push('/subjects_archive')}} sx={{marginTop:'auto', cursor:'pointer'}}>Subject Archive List</Link>
           </Box>
         </CardContent>
       </Card>
     </Box>
-  </Box>
-);
+  </Box>)
+};

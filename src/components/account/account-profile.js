@@ -11,11 +11,11 @@ import {
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
-  timezone: 'GTM-7'
+  // city: 'Los Angeles',
+  // country: 'USA',
+  // jobTitle: 'Senior Developer',
+  // name: 'Katarina Smith',
+  // timezone: 'GTM-7'
 };
 
 export const AccountProfile = (props) => (
@@ -31,12 +31,12 @@ export const AccountProfile = (props) => (
         <Avatar
           src={user.avatar}
           sx={{
-            height: 64,
+            height: 250,
             mb: 2,
-            width: 64
+            width: 250
           }}
         />
-        <Typography
+        {/* <Typography
           color="textPrimary"
           gutterBottom
           variant="h5"
@@ -54,7 +54,7 @@ export const AccountProfile = (props) => (
           variant="body2"
         >
           {user.timezone}
-        </Typography>
+        </Typography> */}
       </Box>
     </CardContent>
     <Divider />

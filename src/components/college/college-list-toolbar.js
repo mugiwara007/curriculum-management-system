@@ -21,33 +21,37 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { collAuth } from '../data-handling/college-crud';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import * as Yup from 'yup';
 import * as React from 'react';
 import { ref, uploadBytes, getStorage, listAll, getDownloadURL } from 'firebase/storage'
 import {v4} from 'uuid'
 import { AltRoute } from '@mui/icons-material';
-import { storage } from 'src/firebase/firebase-auth';
+import { storage, db } from 'src/firebase/firebase-auth';
+import { collection, addDoc, doc, updateDoc } from "firebase/firestore"; 
+import { getArchivelist, setArchivelist, setArchiveDisable } from '../userModel';
+import Link from '@mui/material/Link';
+
 
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
   const [imageUpload, setImageUpload] = React.useState(null);
   const [imagesList, setimageList] = React.useState([]);
+  const [image, setImage] = React.useState(null)
   const { currentUser } = useAuth()
   const { addCollege } = collAuth()
   const imageListRef = ref(storage, "CollegeLogos/")
-
   const uploadImage = () => 
   {
-    if (imageUpload == null)
-    {
-      return;
-    };
-    const imageRef = ref(storage, "CollegeLogos/" +  imageUpload.name + v4());
+    const imageRef = ref(storage, "CollegeLogos/" +  "CICT/" + imageUpload.name + v4());
 
-    uploadBytes(imageRef, imageUpload).then(() => 
+    uploadBytes(imageRef, imageUpload).then((snapshot) => 
     {
-      alert("image uploaded");
+      getDownloadURL(snapshot.ref).then(url => {
+        setImage(url)
+        img = url
+      })
     })
   };
 
@@ -88,21 +92,40 @@ export default function FormDialog() {
           'College Logo is required')
     }),
 
-    onSubmit: () => 
+    onSubmit: async() => 
     {
-      if (currentUser)
-      {
-        addCollege(
-          formik.values.cCode,
-          formik.values.cDesc,
-          formik.values.cLogo
-        )
+      // if (currentUser)
+      // {
+      //   addCollege(
+      //     formik.values.cCode,
+      //     formik.values.cDesc,
+      //     formik.values.cLogo,
+      //   )
 
-        formik.setSubmitting(false)
-      }
+      //   formik.setSubmitting(false)
+      // }
+
+      
     }
   });
+  
 
+  const addCollegeFunc = async() =>{
+    const imageRef = ref(storage, "CollegeLogos/" +  "CICT/" + imageUpload.name + v4());
+    var img = ''
+    uploadBytes(imageRef, imageUpload).then((snapshot) => 
+    {
+      getDownloadURL(snapshot.ref).then(async(url)=> {
+        const docRef = await addDoc(collection(db, "colleges"), {
+          coll_code: formik.values.cCode,
+          coll_desc: formik.values.cDesc,
+          coll_logo: url,
+          archive:false
+        });
+        setOpen(false);
+      })
+    })
+  }
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -161,7 +184,6 @@ export default function FormDialog() {
                 value={formik.values.cDesc}
                 variant="outlined"
               />
-
               <TextField
                 // error={Boolean(formik.touched.cLogo && formik.errors.cLogo)}
                 // helperText={formik.touched.cLogo && formik.errors.cLogo}
@@ -174,7 +196,9 @@ export default function FormDialog() {
                 // variant="outlined"
                 fullWidth
                 type="file"
-                onChange={(event) => {setImageUpload(event.target.files[0])}
+                onChange={(event) => {
+                  setImageUpload(event.target.files[0])
+                }
                 }
               />
                 {/* {imagesList.map((url) => {return <img src={url}/>;})} */}
@@ -194,7 +218,7 @@ export default function FormDialog() {
                     variant='contained'
                     disabled={formik.isSubmitting}
                     type="submit"
-                    onClick={uploadImage}>Done
+                    onClick={addCollegeFunc}>Done
                   </Button>
               </Box>
           </DialogActions>
@@ -219,12 +243,28 @@ function SimpleDialog() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    if(getArchivelist() == null || getArchivelist() == '' || getArchivelist().length < 1){
+      alert('Please select item/s first.')
+    }
+    else{
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleArchived = () =>{
+    getArchivelist().map(async(data)=>{
+      const user = doc(db, "colleges", data);
+      await updateDoc(user, {
+        archive: true
+      });
+    })
+    setOpen(false);
+    setArchivelist('')
+  }
 
   return (
     <div style={{display : 'inline-block'}} >
@@ -265,7 +305,7 @@ function SimpleDialog() {
               }}
             color="primary"
             variant='contained'
-            onClick={handleClose}>Comfirm
+            onClick={handleArchived }>Comfirm
             </Button>
           </Box>
         </DialogActions>
@@ -275,7 +315,9 @@ function SimpleDialog() {
 }
 
 
-export const CollegeListToolbar = (props) => (
+export const CollegeListToolbar = (props) => {
+  const router = useRouter();
+  return(
   <Box {...props}>
     <Box
       sx={{
@@ -320,12 +362,13 @@ export const CollegeListToolbar = (props) => (
               placeholder="Search customer"
               variant="outlined"
             />
+            <Link onClick={()=>{router.push('/college_archive')}} sx={{marginTop:'auto', cursor:'pointer'}}>College Archive List</Link>
           </Box>
         </CardContent>
       </Card>
     </Box>
-  </Box>
-);
+  </Box>)
+};
 
 
 

@@ -23,7 +23,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { collection, onSnapshot, query, deleteDoc, addDoc, doc } from 'firebase/firestore';
+import { collection, onSnapshot, query, deleteDoc, addDoc, doc, where, updateDoc } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth';
 import { getArchiveVal } from '../userModel';
 
@@ -39,21 +39,11 @@ export function RetrieveFormDialog(props) {
     setOpen(false);
   };
 
-  const retrieveSub = async () => {
-    const subjectDoc = collection(db, "subjects");
-    const archiveCollectionRef = doc(db, "archived_subjects", props.sub_id);
-      addDoc(subjectDoc, {
-        sub_code: props.sub_code,
-        sub_desc: props.sub_desc,
-        sub_lec: props.sub_lec,
-        sub_lab: props.sub_lab,
-        sub_preReq: props.sub_preReq,
-        sub_coReq: props.sub_coReq,
-        sub_user: props.sub_user,
-        sub_kac: props.sub_kac,
-        sub_classCode: props.sub_classCode
+  const retrieveUser = async () => {
+    const userRef = doc(db, "colleges", props.id);
+    await updateDoc(userRef, {
+        archive: false
       });
-      await deleteDoc(archiveCollectionRef);
   }
 
   return (
@@ -90,7 +80,8 @@ export function RetrieveFormDialog(props) {
               variant='contained'
               disabled={!open}
               type="submit"
-              onClick={() => retrieveSub()}>
+              onClick={() => retrieveUser()}
+            >
               Confirm
             </Button>
           </Box>
@@ -111,7 +102,7 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
   const [archiveValue, setArchiveValue] = useState(getArchiveVal())
 
   function allArchSub(){
-    const q = query(collection(db, "archived_subjects"));
+    const q = query(collection(db, "colleges"), where('archive', "==", true));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const arch_subs = [];
     querySnapshot.forEach((doc) => {
@@ -197,33 +188,17 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
                   />
                 </TableCell> */}
                 <TableCell>
-                  Subject Code
+                  Image
                 </TableCell>
                 <TableCell>
-                  Description
+                  College Code
                 </TableCell>
                 <TableCell>
-                  LEC Units
+                  College Description
                 </TableCell>
                 <TableCell>
-                  LAB Units
+                  Action
                 </TableCell>
-                <TableCell>
-                  Pre-Requisite
-                </TableCell>
-                <TableCell>
-                  Co-Requisite
-                </TableCell>
-                <TableCell>
-                  Username
-                </TableCell>
-                <TableCell>
-                  KAC
-                </TableCell>
-                <TableCell>
-                  Class Code
-                </TableCell>
-                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -240,19 +215,13 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
                       value="true"
                     />
                   </TableCell> */}
-                  <TableCell>
+                  {/* <TableCell>
                     <Box
                       sx={{
                         alignItems: 'center',
                         display: 'flex'
                       }}
                     >
-                      {/* <Avatar
-                        src={subject.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(subject.name)}
-                      </Avatar> */}
                       <Typography
                         color="textPrimary"
                         variant="body1"
@@ -260,43 +229,20 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
                         {archSub.sub_code}
                       </Typography>
                     </Box>
+                  </TableCell> */}
+                  <TableCell>
+                  <Avatar alt={archSub.coll_code} src={archSub.coll_logo}  sx={{width:100, height:100}}/>
                   </TableCell>
                   <TableCell>
-                    {archSub.sub_desc}
+                    {archSub.coll_code}
                   </TableCell>
                   <TableCell>
-                    {archSub.sub_lec}
-                  </TableCell>
-                  <TableCell>
-                    {archSub.sub_lab}
-                  </TableCell>
-                  <TableCell>
-                    {archSub.sub_preReq}
-                  </TableCell>
-                  <TableCell>
-                    {archSub.sub_coReq}
-                  </TableCell>
-                  <TableCell>
-                    {archSub.sub_user}
-                  </TableCell>
-                  <TableCell>
-                    {archSub.sub_kac}
-                  </TableCell>
-                  <TableCell>
-                    {archSub.sub_classCode}
+                    {archSub.colld_desc}
                   </TableCell>
                   <TableCell>
                     <RetrieveFormDialog
-                      sub_id={archSub.id}
-                      sub_code={archSub.sub_code}
-                      sub_desc={archSub.sub_desc}
-                      sub_lec={archSub.sub_lec}
-                      sub_lab={archSub.sub_lab}
-                      sub_preReq={archSub.sub_preReq}
-                      sub_coReq={archSub.sub_coReq}
-                      sub_user={archSub.sub_user}
-                      sub_kac={archSub.sub_kac}
-                      sub_classCode={archSub.sub_classCode}>
+                        id={archSub.id}
+                      >
                     </RetrieveFormDialog>
                   </TableCell>
                 </TableRow>

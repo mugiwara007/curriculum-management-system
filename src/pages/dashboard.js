@@ -10,8 +10,68 @@ import { TotalColleges } from '../components/dashboard/total-colleges';
 import { TotalCurriculumsGenerated } from '../components/dashboard/total-curriculums-generated';
 import { DashboardLayout } from '../components/dashboard-layout';
 import {  withAuth } from '../routes/withAuth'
+import * as React from 'react'
 
-const Dashboard = () => (
+import { db } from 'src/firebase/firebase-auth';
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+
+const Dashboard = () => {
+  const [userCount, setUserCount] = React.useState(0)
+  const [subjectCount, setSubjectCount] = React.useState(0)
+  const [departmentCount, setDepartmentCount] = React.useState(0)
+  const [collegeCount, setCollegeCount] = React.useState(0)
+
+  function userCounter(){
+    const q = query(collection(db, "users"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      var count = 0;
+      querySnapshot.forEach((doc) => {
+          count++
+      });
+      setUserCount(count)
+  });
+  }
+  function subjectCounter(){
+    const q = query(collection(db, "subjects"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      var count = 0;
+      querySnapshot.forEach((doc) => {
+          count++
+      });
+      setSubjectCount(count)
+  });
+  }
+  function departmentCounter(){
+    const q = query(collection(db, "departments"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      var count = 0;
+      querySnapshot.forEach((doc) => {
+          count++
+      });
+      setDepartmentCount(count)
+  });
+  }
+  function collegeCounter(){
+    const q = query(collection(db, "colleges"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      var count = 0;
+      querySnapshot.forEach((doc) => {
+          count++
+      });
+      setCollegeCount(count)
+  });
+  }
+
+
+  React.useEffect(() => {
+    userCounter()
+    subjectCounter()
+    departmentCounter()
+    collegeCounter()
+  }, [])
+  
+
+  return(
   <>
     <Head>
       <title>
@@ -37,7 +97,7 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
-            <TotalUsers />
+            <TotalUsers count={userCount-1} />
           </Grid>
           <Grid
             item
@@ -46,7 +106,7 @@ const Dashboard = () => (
             sm={6}
             xs={12}
           >
-            <TotalSubjects />
+            <TotalSubjects count={subjectCount}/>
           </Grid>
           <Grid
             item
@@ -55,7 +115,7 @@ const Dashboard = () => (
             sm={6}
             xs={12}
           >
-            <TotalDepartments />
+            <TotalDepartments count={departmentCount}/>
           </Grid>
           <Grid
             item
@@ -64,7 +124,7 @@ const Dashboard = () => (
             sm={6}
             xs={12}
           >
-            <TotalColleges sx={{ height: '100%' }} />
+            <TotalColleges sx={{ height: '100%' }} count={collegeCount}/>
           </Grid>
           {/* <Grid
             item
@@ -91,7 +151,7 @@ const Dashboard = () => (
             xl={12}
             xs={12}
           >
-            <LatestCurriculumGenerated sx={{ height: '100%' }} />
+            {/* <LatestCurriculumGenerated sx={{ height: '100%' }} /> */}
           </Grid>
           {/* <Grid
             item
@@ -105,8 +165,8 @@ const Dashboard = () => (
         </Grid>
       </Container>
     </Box>
-  </>
-);
+  </>)
+}
 
 Dashboard.getLayout = (page) => (
   <DashboardLayout>
