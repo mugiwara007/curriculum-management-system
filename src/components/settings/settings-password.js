@@ -3,7 +3,8 @@ import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '
 
 export const SettingsPassword = (props) => {
   const [values, setValues] = useState({
-    password: '',
+    old_password: '',
+    new_password: '',
     confirm: ''
   });
 

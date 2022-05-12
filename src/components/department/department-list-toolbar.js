@@ -21,7 +21,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { deptAuth } from '../data-handling/department-crud';
 import * as React from 'react';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 import * as Yup from 'yup';
+import { getArchivelist, setArchivelist, getArchiveDisable } from '../userModel';
+
+import Link from '@mui/material/Link';
+
+import { db } from 'src/firebase/firebase-auth';
+import { doc, updateDoc } from "firebase/firestore";
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -153,14 +160,31 @@ export default function FormDialog() {
 
 function SimpleDialog() {
   const [open, setOpen] = React.useState(false);
+  const [archiveDisable, setArchiveDisable] = React.useState(true)
 
   const handleClickOpen = () => {
-    setOpen(true);
+    if(getArchivelist() == null || getArchivelist() == '' || getArchivelist().length < 1){
+      alert('Please select item/s first.')
+    }
+    else{
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleArchived = () =>{
+    getArchivelist().map(async(data)=>{
+      const user = doc(db, "departments", data);
+      await updateDoc(user, {
+        archive: true
+      });
+    })
+    setOpen(false);
+    setArchivelist('')
+  }
 
   return (
     <div style={{display : 'inline-block'}} >
@@ -201,7 +225,7 @@ function SimpleDialog() {
               }}
             color="primary"
             variant='contained'
-            onClick={handleClose}>Comfirm
+            onClick={handleArchived}>Comfirm
             </Button>
           </Box>
         </DialogActions>
@@ -211,7 +235,9 @@ function SimpleDialog() {
 }
 
 
-export const DepartmentListToolbar = (props) => (
+export const DepartmentListToolbar = (props) => {
+  const router = useRouter();
+  return(
   <Box {...props}>
     <Box
       sx={{
@@ -256,9 +282,10 @@ export const DepartmentListToolbar = (props) => (
               placeholder="Search customer"
               variant="outlined"
             />
+            <Link onClick={()=>{router.push('/department_archive')}} sx={{marginTop:'auto', cursor:'pointer'}}>Department Archive List</Link>
           </Box>
         </CardContent>
       </Card>
     </Box>
-  </Box>
-);
+  </Box>)
+};

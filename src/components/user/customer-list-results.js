@@ -24,22 +24,30 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
-import { collection, Firestore, getDocs, onSnapshot, query, doc} from '@firebase/firestore';
+import { collection, Firestore, getDocs, onSnapshot, query, doc, where} from '@firebase/firestore';
 import {db} from 'src/firebase/firebase-auth' 
 import { useFormik } from 'formik';
 import { userAuth } from '../data-handling/user-crud';
 import * as Yup from 'yup';
+import { setArchivelist } from '../userModel';
 
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 export default function FormDialog(props) {
   const [open, setOpen] = useState(false);
   const { updateUser } = userAuth()
 
+  const [userLevel, setUserLevel] = React.useState(props.userlevel)
+
   const formik = useFormik({
     initialValues: {
       Email: props.email,
       Name: props.name,
-      Password: props.pass,
+      Password: props.password,
       Usercode: props.usercode,
       Username: props.username,
       Userlevel: props.userlevel
@@ -79,13 +87,6 @@ export default function FormDialog(props) {
       .required
       (
         'Username is required'
-      ),
-      Userlevel: Yup
-      .string()
-      .max(50)
-      .required
-      (
-        'User level is required'
       )
     }),
     onSubmit: () => {
@@ -96,7 +97,7 @@ export default function FormDialog(props) {
         formik.values.Password,
         formik.values.Usercode,
         formik.values.Username,
-        formik.values.Userlevel
+        parseInt(userLevel)
       )
       formik.setSubmitting(false)
     }
@@ -193,19 +194,21 @@ export default function FormDialog(props) {
               value={formik.values.Username}
               variant="outlined"
               />
-
-              <TextField
-              error={Boolean(formik.touched.Userlevel && formik.errors.Userlevel)}
-              fullWidth
-              helperText={formik.touched.Userlevel && formik.errors.Userlevel}
-              label='Userlevel'
-              margin="normal"
-              name="Userlevel"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.Userlevel}
-              variant="outlined"
-              />
+              <FormControl sx={{marginLeft:1, marginTop:2}}>
+                <FormLabel id="demo-radio-buttons-group-label">User Level</FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue={formik.values.Userlevel.toString()}
+                  name="radio-buttons-group"
+                  onChange={(event)=>{
+                    setUserLevel(event.target.value)
+                    formik.values.Userlevel = parseInt(event.target.value)
+                  }}
+                  >
+                    <FormControlLabel value="2" control={<Radio />} label="Department Chair" />
+                    <FormControlLabel value="3" control={<Radio />} label="Dean" />
+                </RadioGroup>
+              </FormControl>
         </DialogContent>
 
         <DialogActions>
@@ -219,7 +222,6 @@ export default function FormDialog(props) {
             <Button
             color="primary"
             variant='contained'
-            disabled={formik.isSubmitting}
             type="submit"
             onClick={handleClose}>Done
             </Button>
@@ -242,11 +244,14 @@ export const CustomerListResults = () => {
 
   function allUsers()
   {
-    const q = query(collection(db, "users"));
+    const q = query(collection(db, "users"), where("userlevel", ">", 1));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const userr = [];
       querySnapshot.forEach((doc) => {
-        userr.push({ ...doc.data(), id: doc.id });
+        if(!doc.data().archive)
+        {
+          userr.push({ ...doc.data(), id: doc.id });
+        }
       });
          setUsers(userr)
       });
@@ -267,6 +272,7 @@ export const CustomerListResults = () => {
     }
 
     setSelectedCustomerIds(newSelectedCustomerIds);
+    setArchivelist(newSelectedCustomerIds)
   };
 
   const handleSelectOne = (event, id) => {
@@ -288,6 +294,7 @@ export const CustomerListResults = () => {
       );
     }
     setSelectedCustomerIds(newSelectedCustomerIds);
+    setArchivelist(newSelectedCustomerIds)
   };
 
   const handleLimitChange = (event) => {

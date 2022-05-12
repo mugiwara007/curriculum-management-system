@@ -13,12 +13,14 @@ import { Download as DownloadIcon } from '../../icons/download';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import * as React from 'react';
+import { getArchiveVal, setArchiveVal } from '../userModel';
 
 export default function CenteredTabs() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    setArchiveVal(newValue);
   };
 
   return (
@@ -44,12 +46,12 @@ export const ArchivesListToolbar = (props) => (
         m: -1
       }}
     >
-      <CenteredTabs></CenteredTabs>
+      {/* <CenteredTabs></CenteredTabs> */}
       <Typography
         sx={{ m: 1 }}
         variant="h4"
       >
-        Archives
+        Subjects Archives
       </Typography>
     </Box>
     <Box sx={{ mt: 3 }}>

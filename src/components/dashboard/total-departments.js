@@ -26,7 +26,7 @@ export const TotalDepartments = (props) => (
             color="textPrimary"
             variant="h4"
           >
-            0
+            {props.count}
           </Typography>
         </Grid>
         <Grid item>
@@ -48,7 +48,7 @@ export const TotalDepartments = (props) => (
           pt: 2
         }}
       >
-        <ArrowUpwardIcon color="success" />
+        {/* <ArrowUpwardIcon color="success" />
         <Typography
           variant="body2"
           sx={{
@@ -62,7 +62,7 @@ export const TotalDepartments = (props) => (
           variant="caption"
         >
           Since last month
-        </Typography>
+        </Typography> */}
       </Box>
       {/* <Box sx={{ pt: 3 }}>
         <LinearProgress

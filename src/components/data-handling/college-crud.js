@@ -28,6 +28,7 @@ export function CollegeProvider({ children })
             coll_code: cCode,
             coll_desc: cDesc,
             coll_logo: cLogo,
+            archive:false,
         });
     };
     

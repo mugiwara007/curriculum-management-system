@@ -22,7 +22,7 @@ const Departments = () => (
       <Container maxWidth={false}>
         <DepartmentListToolbar />
         <Box sx={{ mt: 3 }}>
-          <DepartmentListResults customers={customers} />
+          <DepartmentListResults />
         </Box>
       </Container>
     </Box>

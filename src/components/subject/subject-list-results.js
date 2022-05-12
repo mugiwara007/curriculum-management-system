@@ -451,13 +451,16 @@ export const SubjectListResults = () => {
                   Co-Requisite
                 </TableCell>
                 <TableCell>
-                  Username
-                </TableCell>
-                <TableCell>
                   KAC
                 </TableCell>
                 <TableCell>
                   Class Code
+                </TableCell>
+                <TableCell>
+                  Update Action
+                </TableCell>
+                <TableCell>
+                  Retrieve Action
                 </TableCell>
                 <TableCell />
                 <TableCell />
@@ -512,9 +515,6 @@ export const SubjectListResults = () => {
                   </TableCell>
                   <TableCell>
                     {subject.sub_coReq}
-                  </TableCell>
-                  <TableCell>
-                    {subject.sub_user}
                   </TableCell>
                   <TableCell>
                     {subject.sub_kac}

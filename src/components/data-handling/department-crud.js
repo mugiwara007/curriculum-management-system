@@ -26,6 +26,7 @@ export function DeptProvider({ children }) {
         dept_code: deptCode,
         dept_desc: deptDesc,
         colld_code: collDepCode,
+        archive:false,
       });
     };
   

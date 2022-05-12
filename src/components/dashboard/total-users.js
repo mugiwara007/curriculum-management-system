@@ -26,7 +26,7 @@ export const TotalUsers = (props) => (
             color="textPrimary"
             variant="h4"
           >
-            0
+            {props.count}
           </Typography>
         </Grid>
         <Grid item>
@@ -48,8 +48,8 @@ export const TotalUsers = (props) => (
           alignItems: 'center'
         }}
       >
-        <ArrowDownwardIcon color="error" />
-        <Typography
+        {/* <ArrowDownwardIcon color="error" /> */}
+        {/* <Typography
           color="error"
           sx={{
             mr: 1
@@ -63,7 +63,7 @@ export const TotalUsers = (props) => (
           variant="caption"
         >
           Since last month
-        </Typography>
+        </Typography> */}
       </Box>
     </CardContent>
   </Card>

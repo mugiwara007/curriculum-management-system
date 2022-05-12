@@ -5,7 +5,7 @@ import {
   CardContent,
   TextField,
   InputAdornment,
-  SvgIcon, Typography
+  SvgIcon, Typography, getAccordionActionsUtilityClass
 } from '@mui/material';
 import { Search as SearchIcon } from '../../icons/search';
 import { Upload as UploadIcon } from '../../icons/upload';
@@ -20,14 +20,28 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useFormik } from 'formik';
 import { userAuth } from '../data-handling/user-crud';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useAuth } from 'src/contexts/AuthContext';
 import * as Yup from 'yup';
+import { getArchivelist, getUserLevel, setArchivelist } from '../userModel';
+import { db } from 'src/firebase/firebase-auth';
+import { doc, updateDoc } from "firebase/firestore";
 
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
+import Link from '@mui/material/Link';
 export default function FormDialog() {
 
   const [open, setOpen] = React.useState(false);
   const { addUser } = userAuth()
+  const [userLevel, setUserLevel] = React.useState(getUserLevel())
+
+  
 
   const formik = useFormik({
     initialValues:
@@ -37,7 +51,7 @@ export default function FormDialog() {
       Password: '',
       Usercode: '',
       Username: '',
-      Userlevel: '',
+      Userlevel: '3',
     },
     validationSchema: Yup.object({
       Email: Yup
@@ -75,13 +89,13 @@ export default function FormDialog() {
       (
         'Username is required'
       ),
-      Userlevel: Yup
-      .string()
-      .max(50)
-      .required
-      (
-        'User level is required'
-      )
+      // Userlevel: Yup
+      // .number()
+      // .max(50)
+      // .required
+      // (
+      //   'User level is required'
+      // )
     }),
     onSubmit: () => {
       addUser(
@@ -90,7 +104,7 @@ export default function FormDialog() {
         formik.values.Password,
         formik.values.Usercode,
         formik.values.Username,
-        formik.values.Userlevel,
+        userLevel,
       )
     }
   });
@@ -154,6 +168,7 @@ export default function FormDialog() {
               label="Password"
               margin="normal"
               name="Password"
+              type="password"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.Password}
@@ -187,7 +202,7 @@ export default function FormDialog() {
               variant="outlined"
               />
 
-              <TextField
+              {/* <TextField
               error={Boolean(formik.touched.Userlevel && formik.errors.Userlevel)}
               fullWidth
               helperText={formik.touched.Userlevel && formik.errors.Userlevel}
@@ -198,7 +213,21 @@ export default function FormDialog() {
               onChange={formik.handleChange}
               value={formik.values.Userlevel}
               variant="outlined"
-              />
+              /> */}
+              <FormControl sx={{marginLeft:1, marginTop:2}}>
+                <FormLabel id="demo-radio-buttons-group-label">User Level</FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="2"
+                  name="radio-buttons-group"
+                  onChange={(event)=>{
+                    setUserLevel(event.target.value)
+                  }}
+                  >
+                    <FormControlLabel value="2" control={<Radio />} label="Department Chair" />
+                    <FormControlLabel value="3" control={<Radio />} label="Dean" />
+                </RadioGroup>
+              </FormControl>
         </DialogContent>
 
         <DialogActions>
@@ -212,9 +241,9 @@ export default function FormDialog() {
             <Button
             color="primary"
             variant='contained'
-            disabled={formik.isSubmitting}
             type="submit"
-            onClick={handleClose}>
+            onClick={handleClose}
+            >
               Done
             </Button>
           </Box>
@@ -229,12 +258,28 @@ export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    if(getArchivelist() == null || getArchivelist() == '' || getArchivelist().length < 1){
+      alert('Please select item/s first.')
+    }
+    else{
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleArchived = () =>{
+    getArchivelist().map(async(data)=>{
+      const user = doc(db, "users", data);
+      await updateDoc(user, {
+        archive: true
+      });
+    })
+    setOpen(false);
+    setArchivelist('')
+  }
 
   return (
     <div style={{display : 'inline-block'}} >
@@ -275,7 +320,7 @@ export default function FormDialog() {
               }}
             color="primary"
             variant='contained'
-            onClick={handleClose}>Comfirm
+            onClick={handleArchived}>Comfirm
             </Button>
           </Box>
         </DialogActions>
@@ -284,7 +329,9 @@ export default function FormDialog() {
   );
 }
 
-export const CustomerListToolbar = (props) => (
+export const CustomerListToolbar = (props) => {
+  const router = useRouter();
+  return(
   <Box {...props}>
     <Box
       sx={{
@@ -335,9 +382,11 @@ export const CustomerListToolbar = (props) => (
               placeholder="Search customer"
               variant="outlined"
             />
+            <Link onClick={()=>{router.push('/user_archive')}} sx={{marginTop:'auto', cursor:'pointer'}}>User Archive List</Link>
           </Box>
         </CardContent>
       </Card>
     </Box>
   </Box>
-);
+  )
+};
