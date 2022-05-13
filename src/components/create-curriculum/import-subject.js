@@ -23,7 +23,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import React, { Component, useState, useEffect } from 'react';
 import { useAuth } from 'src/contexts/AuthContext';
-import { deleteDoc, getDocs, collection, doc, onSnapshot, query, where } from 'firebase/firestore';
+import { deleteDoc, getDocs, collection, doc, getDoc, onSnapshot, query, addDoc,where } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth'
 import { auth } from 'src/firebase/firebase-auth';
 import { AltRoute } from '@mui/icons-material';
@@ -56,7 +56,7 @@ const { currentUser } = useAuth()
     allSub()
   }, []);
 
-  const addSubCurr = (subID) => {
+  const addSubCurr = async (subID) => {
     if (subID){
         auth.onAuthStateChanged(async user => {
             if (user) {
@@ -127,7 +127,6 @@ const { currentUser } = useAuth()
 
   return (
     <div style={{display : 'inline-block'}} >
-    <form onSubmit={() => handleSubmit()}>
     <Button
       variant="outlined"
       sx={{ mr: 1 }}
@@ -239,13 +238,13 @@ const { currentUser } = useAuth()
             <Button
             color="primary"
             variant='contained'
-            type="submit">
+            type="submit"
+            onClick={() => addSubCurr(subID)}>
               Import
             </Button>
           </Box>
         </DialogActions>
       </Dialog>
-      </form>
       </div>
   );
 }
