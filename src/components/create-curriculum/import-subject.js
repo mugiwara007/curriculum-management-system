@@ -56,7 +56,7 @@ const { currentUser } = useAuth()
     allSub()
   }, []);
 
-  const addSubCurr = async (subID) => {
+  const importSubCurr = async (subID) => {
     if (subID){
         auth.onAuthStateChanged(async user => {
             if (user) {
@@ -68,9 +68,11 @@ const { currentUser } = useAuth()
                     sub_desc: docSnap.data().sub_desc,
                     sub_lec: docSnap.data().sub_lec,
                     sub_lab: docSnap.data().sub_lab,
+                    total_units: docSnap.data().total_units,
+                    hour_pw: docSnap.data().hour_pw,
                     sub_preReq: docSnap.data().sub_preReq,
                     sub_coReq: docSnap.data().sub_coReq,
-                    curr_sem: props.value
+                    curr_sem: Number(props.value)
                 });
                 } else {
                 // User is signed out
@@ -239,7 +241,7 @@ const { currentUser } = useAuth()
             color="primary"
             variant='contained'
             type="submit"
-            onClick={() => addSubCurr(subID)}>
+            onClick={() => importSubCurr(subID)}>
               Import
             </Button>
           </Box>

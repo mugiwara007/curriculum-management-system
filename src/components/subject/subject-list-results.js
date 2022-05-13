@@ -46,6 +46,8 @@ export default function FormDialog(props) {
       sDesc: props.sub_desc,
       sLec: props.sub_lec,
       sLab: props.sub_lab,
+      sTotalUn: props.sub_lec,
+      sHours: props.sub_lab,
       sPreReq: props.sub_preReq,
       sCoReq: props.sub_coReq,
       sKac: props.sub_kac,
@@ -72,6 +74,16 @@ export default function FormDialog(props) {
         .max(99999999999)
         .required(
           'LAB units is required'),
+      sTotalUn: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'Total units units is required'),
+      sHours: Yup
+          .number()
+          .max(99999999999)
+          .required(
+            'Hours per week units is required'),
       sPreReq: Yup
         .string()
         .max(255)
@@ -101,6 +113,8 @@ export default function FormDialog(props) {
         formik.values.sDesc,
         formik.values.sLec,
         formik.values.sLab,
+        formik.values.sTotalUn,
+        formik.values.sHours,
         formik.values.sPreReq,
         formik.values.sCoReq,
         formik.values.sKac,
@@ -188,6 +202,32 @@ export default function FormDialog(props) {
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.sLab}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sTotalUn && formik.errors.sTotalUn)}
+                fullWidth
+                helperText={formik.touched.sTotalUn && formik.errors.sTotalUn}
+                label='Total Units'
+                margin="normal"
+                name="sTotalUn"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sTotalUn}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sHours && formik.errors.sHours)}
+                fullWidth
+                helperText={formik.touched.sHours && formik.errors.sHours}
+                label='Hours Per Week'
+                margin="normal"
+                name="sHours"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sHours}
                 variant="outlined"
               />
 
@@ -322,6 +362,8 @@ export function ArchiveFormDialog(props) {
                 props.sub_desc,
                 props.sub_lec,
                 props.sub_lab,
+                props.total_units,
+                props.hour_pw,
                 props.sub_preReq,
                 props.sub_coReq,
                 props.sub_user,
@@ -438,11 +480,17 @@ export const SubjectListResults = () => {
                 <TableCell>
                   Description
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{textAlign:'center'}}>
                   LEC Units
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{textAlign:'center'}}>
                   LAB Units
+                </TableCell>
+                <TableCell sx={{textAlign:'center'}}>
+                  Total Units
+                </TableCell>
+                <TableCell sx={{textAlign:'center'}}>
+                  Hour Per Week
                 </TableCell>
                 <TableCell>
                   Pre-Requisite
@@ -480,7 +528,7 @@ export const SubjectListResults = () => {
                       value="true"
                     />
                   </TableCell> */}
-                  <TableCell>
+                  <TableCell sx={{pl: 3}}>
                     <Box
                       sx={{
                         alignItems: 'center',
@@ -501,25 +549,31 @@ export const SubjectListResults = () => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{pl: 3}}>
                     {subject.sub_desc}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
                     {subject.sub_lec}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
                     {subject.sub_lab}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject.total_units}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject.hour_pw}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
                     {subject.sub_preReq}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{pl: 3}}>
                     {subject.sub_coReq}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{pl: 3}}>
                     {subject.sub_kac}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{pl: 3}}>
                     {subject.sub_classCode}
                   </TableCell>
                   <TableCell>
@@ -529,6 +583,8 @@ export const SubjectListResults = () => {
                       sub_desc={subject.sub_desc}
                       sub_lec={subject.sub_lec}
                       sub_lab={subject.sub_lab}
+                      total_units={subject.total_units}
+                      hour_pw={subject.hour_pw}
                       sub_preReq={subject.sub_preReq}
                       sub_coReq={subject.sub_coReq}
                       sub_kac={subject.sub_kac}
@@ -542,6 +598,8 @@ export const SubjectListResults = () => {
                       sub_desc={subject.sub_desc}
                       sub_lec={subject.sub_lec}
                       sub_lab={subject.sub_lab}
+                      total_units={subject.total_units}
+                      hour_pw={subject.hour_pw}
                       sub_preReq={subject.sub_preReq}
                       sub_coReq={subject.sub_coReq}
                       sub_user={subject.sub_user}
