@@ -31,11 +31,7 @@ import {
   import { db } from 'src/firebase/firebase-auth'
   
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-
-
-export default function ImportDialog(){
-
-}
+import { ImportDialog } from './import-subject';
 
 export const CreateTables = (props) => {
   const [subjects1, setSubjects1] = useState([]);
@@ -207,7 +203,7 @@ export const CreateTables = (props) => {
             <Table>
               <TableRow>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                hello
+                <ImportDialog value='1' />
               </TableCell>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
                 warrup
@@ -308,7 +304,7 @@ export const CreateTables = (props) => {
             <Table>
               <TableRow>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                hello
+                <ImportDialog value='2' />
               </TableCell>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
                 warrup
