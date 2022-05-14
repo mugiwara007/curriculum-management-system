@@ -31,9 +31,20 @@ export const CreateTables = (props) => {
   const [totalLab2, setTotalLab2] = useState(0);
   const [totalUnit2, setTotalUnit2] = useState(0);
   const [totalHr2, setTotalHr2] = useState(0);
+  const [yearOption, setYearOption] = useState(10)
 
   function allCurrSub1(){
-    const sub1Ref = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", "first_year");
+    let year="";
+    if (yearOption == 10){
+      year = "first_year"
+    } else if (yearOption == 20){
+      year = "second_year"
+    } else if (yearOption == 30){
+      year = "third_year"
+    } else if (yearOption == 40){
+      year = "fourth_year"
+    }
+    const sub1Ref = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", year);
     const q = query(sub1Ref, where("curr_sem", '==',1));
     let tLec1 = 0
     let tLab1 = 0
@@ -60,10 +71,20 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub1()
-  }, []);
+  }, [yearOption]);
 
-  function allCurrSub2(){                        //pakipalitan nalang tong dalawa ng id ng document ng curriculum at kung anong year mula sa drop down dun sa toolbar
-    const sub2Ref = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", "first_year");
+  function allCurrSub2(){
+    let year="";
+    if (yearOption == 10){
+      year = "first_year"
+    } else if (yearOption == 20){
+      year = "second_year"
+    } else if (yearOption == 30){
+      year = "third_year"
+    } else if (yearOption == 40){
+      year = "fourth_year"
+    }
+    const sub2Ref = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", year);
     const q = query(sub2Ref, where("curr_sem", '==',2));
     let tLec2 = 0
     let tLab2 = 0
@@ -90,7 +111,11 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub2()
-  }, []);
+  }, [yearOption]);
+
+  const setOption = (event) =>{
+    setYearOption(event.target.value)
+  }
 
   return (
   <Card {...props}>
@@ -107,7 +132,7 @@ export const CreateTables = (props) => {
                       Year Level
                     </InputLabel>
                     <NativeSelect
-                    
+                      onChange={setOption}
                       defaultValue={10}
                       inputProps={{
                         name: 'year',
