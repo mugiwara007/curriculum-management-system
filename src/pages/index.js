@@ -25,7 +25,7 @@ const bgImagePath =
 
 const styles = {
   loginContainer: {
-      backgroundImage: `url(${"/static/images/curmasysFinal.jpg"})`,
+      backgroundImage: `url(${"/static/images/CurMaFINAL.png"})`,
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
       position: "absolute",
