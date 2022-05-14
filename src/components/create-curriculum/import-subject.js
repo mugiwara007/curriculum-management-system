@@ -1,18 +1,12 @@
 import {
-    Avatar,
     Box,
     Card,
-    Checkbox,
     Table,
     TableBody,
-    CardContent,
-    TextField,
     TableCell,
-    InputAdornment,
     TableHead,
     TablePagination,
     TableRow,
-    SvgIcon,
     Typography,
     Button,
   } from '@mui/material';
@@ -23,23 +17,21 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import React, { Component, useState, useEffect } from 'react';
 import { useAuth } from 'src/contexts/AuthContext';
-import { deleteDoc, getDocs, collection, doc, getDoc, onSnapshot, query, addDoc,where } from 'firebase/firestore';
+import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, where } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth'
 import { auth } from 'src/firebase/firebase-auth';
-import { AltRoute } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
 
 export const ImportDialog = (props) =>{
 const { currentUser } = useAuth()
-  const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(0);
-  const subjectsCollectionRef = collection(db, "subjects");
   const [currSubjects, setCurrSubjects] = useState([]);
   const [indexValue, setIndexValue] = useState(0)
   const [limitValue, setLimitValue] = useState(limit)
   const [open, setOpen] = useState(false);
-  const semester= props.semester;
   const [subID, setSubID] = useState()
+  const [isChecked,setIsChecked]= useState()
 
   function allSub(){
     const q = query(collection(db, "subjects"));
@@ -75,11 +67,12 @@ const { currentUser } = useAuth()
                     curr_sem: Number(props.value)
                 });
                 } else {
-                // User is signed out
-                // ...
+                  
                 }
         });
         handleClose();
+    } else {
+      alert("Please select a subject to import.");
     }
   };
 
@@ -88,6 +81,8 @@ const { currentUser } = useAuth()
   };
 
   const handleClose = () => {
+    setIsChecked(null)
+    setSubID(null)
     setOpen(false);
   };
 
@@ -132,6 +127,7 @@ const { currentUser } = useAuth()
     <Button
       variant="outlined"
       sx={{ mr: 1 }}
+      startIcon={(<AddIcon fontSize="small" />)}
       onClick={handleClickOpen} >
         Import Subject
     </Button>
@@ -176,10 +172,9 @@ const { currentUser } = useAuth()
                 <TableRow
                   hover
                   key={subject.id}
-                  selected={selectedSubjectIds.indexOf(subject.id) !== -1}
                 >
                   <TableCell>
-                    <input type="radio" value={subject.id} name="subject" checked={subID === subject.id} onChange={handleChange} />
+                    <input type="radio" value={subject.id} name="subject" checked={isChecked} onChange={handleChange} />
                     </TableCell>
                   <TableCell sx={{pl: 3}}>
                     <Box
@@ -224,7 +219,7 @@ const { currentUser } = useAuth()
         onRowsPerPageChange={handleLimitChange}
         page={page}
         rowsPerPage={limit}
-        rowsPerPageOptions={5}
+        rowsPerPageOptions={[5]}
       />
     </Card>
   </DialogContent>

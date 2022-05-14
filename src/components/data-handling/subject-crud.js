@@ -10,7 +10,6 @@ import {
   getDocs,
   doc,
 } from "firebase/firestore";
-import { async } from "@firebase/util";
 import { auth } from 'src/firebase/firebase-auth';
 
 const SubjectCrud = React.createContext()

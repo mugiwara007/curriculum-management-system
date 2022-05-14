@@ -1,60 +1,60 @@
 import {
-    Avatar,
     Box,
     Card,
-    Checkbox,
     Table,
     TableBody,
     TableCell,
     TableHead,
-    TableRow,
-    Typography,
-    Button,
-    CardContent,
-    
+    TableRow
   } from '@mui/material';
-  import PerfectScrollbar from 'react-perfect-scrollbar';
-    import SaveIcon from '@mui/icons-material/Save';
-    import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-    import List from '@mui/material/List';
-    import ListItem from '@mui/material/ListItem';
-    import ListItemText from '@mui/material/ListItemText';
     import Divider from '@mui/material/Divider';
-    import TextField from '@mui/material/TextField';
-  import { TocTwoTone } from '@mui/icons-material';
   import InputLabel from '@mui/material/InputLabel';
   import FormControl from '@mui/material/FormControl';
   import NativeSelect from '@mui/material/NativeSelect';
-  import React, { Component, useState, useEffect } from 'react';
+  import React, { useState, useEffect } from 'react';
   import { useAuth } from 'src/contexts/AuthContext';
-  import { deleteDoc, getDocs, collection, doc, onSnapshot, query, where } from 'firebase/firestore';
+  import { collection, onSnapshot, query, where } from 'firebase/firestore';
   import { db } from 'src/firebase/firebase-auth'
-  
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { ImportDialog } from './import-subject';
+import { AddCurrSubDialog } from './add-curr-subject';
+import { sub, subMinutes } from 'date-fns';
 
 export const CreateTables = (props) => {
   const [subjects1, setSubjects1] = useState([]);
   const [subjects2, setSubjects2] = useState([]);
-  const [totalLec1, setTotalLec1] = useState(0)
-  const [totalLab1, setTotalLab1] = useState(0)
-  const [totalUnit1, setTotalUnit1] = useState(0)
-  const [totalHr1, setTotalHr1] = useState(0)
-  const [totalLec2, setTotalLec2] = useState(0)
-  const [totalLab2, setTotalLab2] = useState(0)
-  const [totalUnit2, setTotalUnit2] = useState(0)
-  const [totalHr2, setTotalHr2] = useState(0)
   const { currentUser } = useAuth()
+  const [totalLec1, setTotalLec1] = useState(0);
+  const [totalLab1, setTotalLab1] = useState(0);
+  const [totalUnit1, setTotalUnit1] = useState(0);
+  const [totalHr1, setTotalHr1] = useState(0);
+  const [totalLec2, setTotalLec2] = useState(0);
+  const [totalLab2, setTotalLab2] = useState(0);
+  const [totalUnit2, setTotalUnit2] = useState(0);
+  const [totalHr2, setTotalHr2] = useState(0);
 
   function allCurrSub1(){
     const sub1Ref = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", "first_year");
     const q = query(sub1Ref, where("curr_sem", '==',1));
+    let tLec1 = 0
+    let tLab1 = 0
+    let tUnit1 = 0
+    let tHrPw1 = 0
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const subs = [];
       querySnapshot.forEach((doc) => {
           subs.push({ ...doc.data(), id: doc.id });
       });
          setSubjects1(subs)
+
+         subs.map((currSub) => tLec1 += Number(currSub.sub_lec));
+         subs.map((currSub) => tLab1 += Number(currSub.sub_lab));
+         subs.map((currSub) => tUnit1 += Number(currSub.total_units));
+         subs.map((currSub) => tHrPw1 += Number(currSub.hour_pw));
+
+         setTotalLec1(tLec1)
+         setTotalLab1(tLab1)
+         setTotalUnit1(tUnit1)
+         setTotalHr1(tHrPw1)
       });
   }
 
@@ -62,15 +62,29 @@ export const CreateTables = (props) => {
     allCurrSub1()
   }, []);
 
-  function allCurrSub2(){
+  function allCurrSub2(){                        //pakipalitan nalang tong dalawa ng id ng document ng curriculum at kung anong year mula sa drop down dun sa toolbar
     const sub2Ref = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", "first_year");
     const q = query(sub2Ref, where("curr_sem", '==',2));
+    let tLec2 = 0
+    let tLab2 = 0
+    let tUnit2 = 0
+    let tHrPw2 = 0
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const subs = [];
       querySnapshot.forEach((doc) => {
           subs.push({ ...doc.data(), id: doc.id });
       });
          setSubjects2(subs)
+
+         subs.map((currSub) => tLec2 += Number(currSub.sub_lec));
+         subs.map((currSub) => tLab2 += Number(currSub.sub_lab));
+         subs.map((currSub) => tUnit2 += Number(currSub.total_units));
+         subs.map((currSub) => tHrPw2 += Number(currSub.hour_pw));
+
+         setTotalLec2(tLec2)
+         setTotalLab2(tLab2)
+         setTotalUnit2(tUnit2)
+         setTotalHr2(tHrPw2)
       });
   }
 
@@ -159,16 +173,16 @@ export const CreateTables = (props) => {
                     {subject1.sub_desc}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    {subject1.sub_lec}
+                    {Number(subject1.sub_lec).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    {subject1.sub_lab}
+                    {Number(subject1.sub_lab).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    {subject1.total_units}
+                    {Number(subject1.total_units).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    {subject1.hour_pw}
+                    {Number(subject1.hour_pw).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
                     {subject1.sub_preReq}
@@ -184,16 +198,16 @@ export const CreateTables = (props) => {
               <b>TOTAL:</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>0</b>
+              <b>{ totalLec1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>0</b>
+              <b>{ totalLab1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>0</b>
+              <b>{ totalUnit1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>0</b>
+              <b>{ totalHr1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
@@ -206,7 +220,7 @@ export const CreateTables = (props) => {
                 <ImportDialog value='1' />
               </TableCell>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                warrup
+                <AddCurrSubDialog value="1" />
               </TableCell>
               </TableRow>
             </Table>
@@ -260,16 +274,16 @@ export const CreateTables = (props) => {
                     {subject2.sub_desc}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    {subject2.sub_lec}
+                    {Number(subject2.sub_lec).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    {subject2.sub_lab}
+                    {Number(subject2.sub_lab).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    {subject2.total_units}
+                    {Number(subject2.total_units).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    {subject2.hour_pw}
+                    {Number(subject2.hour_pw).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
                     {subject2.sub_preReq}
@@ -285,16 +299,16 @@ export const CreateTables = (props) => {
               <b>TOTAL:</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>0</b>
+              <b>{ totalLec2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>0</b>
+              <b>{ totalLab2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>0</b>
+              <b>{ totalUnit2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>0</b>
+              <b>{ totalHr2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
@@ -307,7 +321,7 @@ export const CreateTables = (props) => {
                 <ImportDialog value='2' />
               </TableCell>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                warrup
+                <AddCurrSubDialog value="2" />
               </TableCell>
               </TableRow>
             </Table>
