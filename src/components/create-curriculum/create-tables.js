@@ -5,7 +5,8 @@ import {
     TableBody,
     TableCell,
     TableHead,
-    TableRow
+    TableRow,
+    Button
   } from '@mui/material';
     import Divider from '@mui/material/Divider';
   import InputLabel from '@mui/material/InputLabel';
@@ -13,11 +14,84 @@ import {
   import NativeSelect from '@mui/material/NativeSelect';
   import React, { useState, useEffect } from 'react';
   import { useAuth } from 'src/contexts/AuthContext';
-  import { collection, onSnapshot, query, where } from 'firebase/firestore';
+  import { collection, onSnapshot, query, where, doc, deleteDoc } from 'firebase/firestore';
   import { db } from 'src/firebase/firebase-auth'
+  import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import { ImportDialog } from './import-subject';
 import { AddCurrSubDialog } from './add-curr-subject';
 import { sub, subMinutes } from 'date-fns';
+import Delete from '@mui/icons-material/Delete';
+
+export const DeleteSubDialog = (props) =>{
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const deleteSubject = async () => {
+    let nyear="";
+    if (props.year == 10){
+      nyear = "first_year"
+    } else if (props.year == 20){
+      nyear = "second_year"
+    } else if (props.year == 30){
+      nyear = "third_year"
+    } else if (props.year == 40){
+      nyear = "fourth_year"
+    }
+    const subjectDoc = doc(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", nyear, props.id);
+    await deleteDoc(subjectDoc);
+  };
+
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+          color="error"
+          variant="contained"
+          startIcon={(<Delete fontSize="small" />)}
+          onClick={handleClickOpen}
+        >
+          Delete
+        </Button>
+      <Dialog open={open}
+        onClose={handleClose}>
+        <DialogTitle
+        display="flex"
+        justifyContent="center"
+        >Delete Subject</DialogTitle>
+        <DialogContent>
+        <p>Are you sure you want to delete this?</p>
+        </DialogContent>
+        <DialogActions>
+          <Box>
+              <Button
+              color="primary"
+              onClick={handleClose}>Cancel
+              </Button>
+            </Box>
+            <Box p={2}>
+              <Button
+              color="primary"
+              variant='contained'
+              type="submit"
+              onClick={deleteSubject}>
+                Confirm
+              </Button>
+            </Box>
+        </DialogActions>
+      </Dialog>
+      </div>
+  );
+}
 
 export const CreateTables = (props) => {
   const [subjects1, setSubjects1] = useState([]);
@@ -182,6 +256,9 @@ export const CreateTables = (props) => {
                   <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
                     CO-REQ
                   </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    ACTION
+                  </TableCell>
                   </TableBody>
 
   {/*First Semester TextFields*/}  
@@ -215,6 +292,9 @@ export const CreateTables = (props) => {
                   <TableCell sx={{pl: 3}}>
                     {subject1.sub_coReq}
                   </TableCell>
+                  <TableCell>
+                    <DeleteSubDialog id={subject1.id} year={yearOption} />
+                  </TableCell>
                 </TableRow>
               ))}
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
@@ -233,6 +313,8 @@ export const CreateTables = (props) => {
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>{ totalHr1.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
@@ -283,6 +365,9 @@ export const CreateTables = (props) => {
                   <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
                     CO-REQ
                   </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    ACTION
+                  </TableCell>
                   </TableBody>
 
   {/*First Semester TextFields*/}  
@@ -316,6 +401,9 @@ export const CreateTables = (props) => {
                   <TableCell sx={{pl: 3}}>
                     {subject2.sub_coReq}
                   </TableCell>
+                  <TableCell>
+                    <DeleteSubDialog id={subject2.id} year={yearOption} />
+                  </TableCell>
                 </TableRow>
               ))}
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
@@ -334,6 +422,8 @@ export const CreateTables = (props) => {
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>{ totalHr2.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
