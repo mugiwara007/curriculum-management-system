@@ -1,11 +1,14 @@
 import {
     Card,
+    Button,
   } from '@mui/material';
     import List from '@mui/material/List';
     import ListItem from '@mui/material/ListItem';
     import ListItemText from '@mui/material/ListItemText';
     import Divider from '@mui/material/Divider';
-  import React, { Component } from 'react';
+   import TextField from '@mui/material/TextField';
+   import React, { Component } from 'react';
+   import SendIcon from '@mui/icons-material/Send';
   
     const style = {
       width: '100%',
@@ -17,20 +20,17 @@ import {
       fontWeight: 'bold',
       textAlign: 'center',
     }
-    const summary = {
-      color: 'black',
-      fontSize: 15,
-      width: '100',
-  
-    }
-    const when = {
-      color: 'black',
-      fontSize: 13,
-      width: '100',
-    }
-  
+    const comment = {
+        width: '100%',
+        bgcolor: 'background.paper',
+        mt:2,
+        mb:2,
+      };
+      const submit = {
+        width: '100%',
+      };
     
-export const HistoryLog = (props) => (
+export const Comments = (props) => (
   <Card {...props}>
       <List sx={style} 
       component="nav"
@@ -39,18 +39,20 @@ export const HistoryLog = (props) => (
           <ListItemText 
            disableTypography
            style={maintext}
-           primary="History"/>
+           primary="Add a Comment"/>
         </ListItem>
         <Divider />
-        <ListItem button 
-        divider>
-          <ListItemText 
-          disableTypography
-          style={summary}
-          primary="No comments added"
-          secondary={<div style={when}>0 minutes ago</div>}
-          />
-        </ListItem>
+        <TextField sx={comment}
+          id="outlined-textarea"
+          label="Comment"
+          placeholder="Placeholder"
+          multiline
+        />
       </List>
+      <Button sx={submit}
+      variant="contained" 
+      endIcon={<SendIcon />}>
+         Submit
+      </Button>
   </Card>
 );
