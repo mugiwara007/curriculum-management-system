@@ -1,12 +1,20 @@
 import {
-    Box,
-    Card,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Button
+  Avatar,
+  Box,
+  Card,
+  Checkbox,
+  Table,
+  TableBody,
+  CardContent,
+  TextField,
+  TableCell,
+  InputAdornment,
+  TableHead,
+  TablePagination,
+  TableRow,
+  SvgIcon,
+  Typography,
+  Button,
   } from '@mui/material';
     import Divider from '@mui/material/Divider';
   import InputLabel from '@mui/material/InputLabel';
@@ -14,7 +22,7 @@ import {
   import NativeSelect from '@mui/material/NativeSelect';
   import React, { useState, useEffect } from 'react';
   import { useAuth } from 'src/contexts/AuthContext';
-  import { collection, onSnapshot, query, where, doc, deleteDoc } from 'firebase/firestore';
+  import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
   import { db } from 'src/firebase/firebase-auth'
   import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -24,6 +32,268 @@ import { ImportDialog } from './import-subject';
 import { AddCurrSubDialog } from './add-curr-subject';
 import { sub, subMinutes } from 'date-fns';
 import Delete from '@mui/icons-material/Delete';
+import * as Yup from 'yup';
+import EditIcon from '@mui/icons-material/Edit';
+import { useFormik } from 'formik';
+
+export default function UpdateSubDialog(props) {
+  const { currentUser } = useAuth()
+  const [open, setOpen] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      sCode: props.sub_code,
+      sDesc: props.sub_desc,
+      sLec: props.sub_lec,
+      sLab: props.sub_lab,
+      sTotalUn: props.total_units,
+      sHours: props.hour_pw,
+      sPreReq: props.sub_preReq,
+      sCoReq: props.sub_coReq
+    },
+    validationSchema: Yup.object({
+      sCode: Yup
+        .string()
+        .max(255)
+        .required(
+          'Subject code is required'),
+      sDesc: Yup
+        .string()
+        .max(255)
+        .required(
+          'Subject description is required'),
+      sLec: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'LEC units is required'),
+      sLab: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'LAB units is required'),
+      sTotalUn: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'Total units units is required'),
+      sHours: Yup
+          .number()
+          .max(99999999999)
+          .required(
+            'Hours per week units is required'),
+      sPreReq: Yup
+        .string()
+        .max(255)
+        .required(
+          'Pre-requisite is required'),
+      sCoReq: Yup
+        .string()
+        .max(255)
+        .required(
+          'Co-requisite is required'),
+    }),
+    onSubmit: () => {
+      if (currentUser){
+      updateSubject(
+        formik.values.sCode,
+        formik.values.sDesc,
+        formik.values.sLec,
+        formik.values.sLab,
+        formik.values.sTotalUn,
+        formik.values.sHours,
+        formik.values.sPreReq,
+        formik.values.sCoReq,
+      )
+      }
+      formik.setSubmitting(false)
+    }
+  });
+  
+const updateSubject = (newSubCode,newSubDesc,newSubLec,newSubLab,newTotalUnits,newHrPW,
+  newSubPreReq,newSubCoReq) => {
+    let nyear="";
+    if (props.year == 10){
+      nyear = "first_year"
+    } else if (props.year == 20){
+      nyear = "second_year"
+    } else if (props.year == 30){
+      nyear = "third_year"
+    } else if (props.year == 40){
+      nyear = "fourth_year"
+    }                           
+                                                //curriculum id
+    const subjectDoc = doc(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", nyear, props.sub_id);
+    const newFields = { 
+      sub_code: newSubCode,
+      sub_desc: newSubDesc,
+      sub_lec: newSubLec,
+      sub_lab: newSubLab,
+      total_units: newTotalUnits,
+      hour_pw: newHrPW,
+      sub_preReq: newSubPreReq,
+      sub_coReq: newSubCoReq
+    };
+    updateDoc(subjectDoc, newFields);
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+        startIcon={(<EditIcon fontSize="small" />)}
+        variant="outlined"
+        sx={{ mr: 1 }}
+        onClick={handleClickOpen} >
+          Update
+      </Button>
+      <Dialog open={open}
+      onClose={handleClose}
+      >
+        <form onSubmit={formik.handleSubmit}>
+        <DialogTitle
+        display="flex"
+        justifyContent="center" >Update Subject</DialogTitle>
+
+          <DialogContent>
+                      
+              <TextField
+                error={Boolean(formik.touched.sCode && formik.errors.sCode)}
+                fullWidth
+                helperText={formik.touched.sCode && formik.errors.sCode}
+                label='Subject Code'
+                margin="normal"
+                name="sCode"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sCode}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sDesc && formik.errors.sDesc)}
+                fullWidth
+                helperText={formik.touched.sDesc && formik.errors.sDesc}
+                label='Subject Description'
+                margin="normal"
+                name="sDesc"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sDesc}
+                variant="outlined"
+              />
+
+
+              <TextField
+                error={Boolean(formik.touched.sLec && formik.errors.sLec)}
+                fullWidth
+                helperText={formik.touched.sLec && formik.errors.sLec}
+                label='LEC Units'
+                margin="normal"
+                name="sLec"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sLec}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sLab && formik.errors.sLab)}
+                fullWidth
+                helperText={formik.touched.sLab && formik.errors.sLab}
+                label='LAB Units'
+                margin="normal"
+                name="sLab"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sLab}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sTotalUn && formik.errors.sTotalUn)}
+                fullWidth
+                helperText={formik.touched.sTotalUn && formik.errors.sTotalUn}
+                label='Total Units'
+                margin="normal"
+                name="sTotalUn"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sTotalUn}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sHours && formik.errors.sHours)}
+                fullWidth
+                helperText={formik.touched.sHours && formik.errors.sHours}
+                label='Hours Per Week'
+                margin="normal"
+                name="sHours"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sHours}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sPreReq && formik.errors.sPreReq)}
+                fullWidth
+                helperText={formik.touched.sPreReq && formik.errors.sPreReq}
+                label='Subject Pre-Requisite'
+                margin="normal"
+                name="sPreReq"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sPreReq}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sCoReq && formik.errors.sCoReq)}
+                fullWidth
+                helperText={formik.touched.sCoReq && formik.errors.sCoReq}
+                label='Subject Co-Requisite'
+                margin="normal"
+                name="sCoReq"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sCoReq}
+                variant="outlined"
+              />
+                  
+            </DialogContent>
+
+          <DialogActions>
+          <Box>
+            <Button
+            color="primary"
+            onClick={handleClose}>Cancel
+            </Button>
+          </Box>
+          <Box p={2}>
+            <Button
+            color="primary"
+            variant='contained'
+            disabled={formik.isSubmitting}
+            type="submit"
+            onClick={handleClose}>
+              Done
+            </Button>
+          </Box>
+        </DialogActions>
+        </form>
+      </Dialog>
+      </div>
+  );
+}
 
 export const DeleteSubDialog = (props) =>{
   const [open, setOpen] = useState(false);
@@ -46,7 +316,7 @@ export const DeleteSubDialog = (props) =>{
       nyear = "third_year"
     } else if (props.year == 40){
       nyear = "fourth_year"
-    }
+    }                                         //collection id ng curriculum
     const subjectDoc = doc(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", nyear, props.id);
     await deleteDoc(subjectDoc);
   };
@@ -145,7 +415,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub1()
-  }, [yearOption]);
+  }, [yearOption,subjects1]);
 
   function allCurrSub2(){
     let year="";
@@ -185,7 +455,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub2()
-  }, [yearOption]);
+  }, [yearOption,subjects2]);
 
   const setOption = (event) =>{
     setYearOption(event.target.value)
@@ -259,6 +529,9 @@ export const CreateTables = (props) => {
                   <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
                     ACTION
                   </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+              
+                  </TableCell>
                   </TableBody>
 
   {/*First Semester TextFields*/}  
@@ -293,6 +566,19 @@ export const CreateTables = (props) => {
                     {subject1.sub_coReq}
                   </TableCell>
                   <TableCell>
+                    <UpdateSubDialog  
+                      sub_id={subject1.id}
+                      sub_code={subject1.sub_code}
+                      sub_desc={subject1.sub_desc}
+                      sub_lec={subject1.sub_lec}
+                      sub_lab={subject1.sub_lab}
+                      total_units={subject1.total_units}
+                      hour_pw={subject1.hour_pw}
+                      sub_preReq={subject1.sub_preReq}
+                      sub_coReq={subject1.sub_coReq}
+                      year={yearOption}/>
+                  </TableCell>
+                  <TableCell>
                     <DeleteSubDialog id={subject1.id} year={yearOption} />
                   </TableCell>
                 </TableRow>
@@ -313,6 +599,8 @@ export const CreateTables = (props) => {
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>{ totalHr1.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
@@ -368,6 +656,8 @@ export const CreateTables = (props) => {
                   <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
                     ACTION
                   </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                  </TableCell>
                   </TableBody>
 
   {/*First Semester TextFields*/}  
@@ -402,6 +692,19 @@ export const CreateTables = (props) => {
                     {subject2.sub_coReq}
                   </TableCell>
                   <TableCell>
+                    <UpdateSubDialog  
+                      sub_id={subject2.id}
+                      sub_code={subject2.sub_code}
+                      sub_desc={subject2.sub_desc}
+                      sub_lec={subject2.sub_lec}
+                      sub_lab={subject2.sub_lab}
+                      total_units={subject2.total_units}
+                      hour_pw={subject2.hour_pw}
+                      sub_preReq={subject2.sub_preReq}
+                      sub_coReq={subject2.sub_coReq}
+                      year={yearOption}/>
+                  </TableCell>
+                  <TableCell>
                     <DeleteSubDialog id={subject2.id} year={yearOption} />
                   </TableCell>
                 </TableRow>
@@ -422,6 +725,8 @@ export const CreateTables = (props) => {
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>{ totalHr2.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>

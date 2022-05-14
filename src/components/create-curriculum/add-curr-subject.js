@@ -95,7 +95,7 @@ export const AddCurrSubDialog = (props) => {
     const addCurrSubject = async (newSubCode,newSubDesc,newSubLec,newSubLab,newTotalUnits,newHrPW,
       newSubPreReq,newSubCoReq) =>{
         auth.onAuthStateChanged(async user => {
-          if (user) {
+          if (user) {                                       //collection id ng curriculums
             const currSubRef = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", "first_year");
             addDoc(currSubRef, {
                 sub_code: newSubCode,

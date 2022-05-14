@@ -51,7 +51,7 @@ const { currentUser } = useAuth()
   const importSubCurr = async (subID) => {
     if (subID){
         auth.onAuthStateChanged(async user => {
-            if (user) {
+            if (user) {                                         //collection id ng curriculum
                 const currSubRef = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", "first_year");
                 const docRef = doc(db, "subjects", subID);
                 const docSnap = await getDoc(docRef);
@@ -68,7 +68,7 @@ const { currentUser } = useAuth()
                 });
                 } else {
                   
-                }
+              }
         });
         handleClose();
     } else {
