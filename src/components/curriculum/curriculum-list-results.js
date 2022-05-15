@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
 import ReportIcon from '@mui/icons-material/Report';
+import ReactPDF from '@react-pdf/renderer';
 import EditIcon from '@mui/icons-material/Edit';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -33,6 +34,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
 import { subAuth } from '../data-handling/subject-crud';
 import { useAuth } from 'src/contexts/AuthContext';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import ArchiveIcon from '@mui/icons-material/Archive';
 
 export default function UpdateModal(props) 
@@ -191,6 +193,44 @@ export function ArchiveModal(props)
   );
 }
 
+export function DownloadPDF(props)
+{
+  // const [open, setOpen] = useState(false);
+
+  const downloadPDFButton = () => 
+  {
+    // ReactPDF.render(<MyDocument />, `${__dirname}/example.pdf`);
+    alert("BUTTON TEST");
+  };
+   
+  const MyDocument = () => 
+  (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.section}>
+          <Text>Section #1</Text>
+        </View>
+        <View style={styles.section}>
+          <Text>Section #2</Text>
+        </View>
+      </Page>
+    </Document>
+  );
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+        color="info"
+        startIcon={(<PrintIcon fontSize="small" />)}
+        variant="outlined"
+        sx={{ mr: 1 }}
+        onClick={downloadPDFButton} >
+          Generate Report
+      </Button>
+    </div>
+  );
+}
+
 export const CurriculumListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
@@ -341,13 +381,9 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     <ArchiveModal>
                       {/* ARCHIVE */}
                     </ArchiveModal>
-                  <Button
-                    startIcon={(<ReportIcon fontSize="small" />)}
-                    variant="outlined"
-                    sx={{ mr: 1 }}
-                  >
-                    Generate Report
-                  </Button>
+                    <DownloadPDF>
+                      {/* PDF */}
+                    </DownloadPDF>
                 </TableCell>
                 </TableRow>
               ))}
