@@ -10,7 +10,6 @@ import {
   getDocs,
   doc,
 } from "firebase/firestore";
-import { async } from "@firebase/util";
 import { auth } from 'src/firebase/firebase-auth';
 
 const SubjectCrud = React.createContext()
@@ -24,7 +23,7 @@ export function SubjectProvider({ children }) {
   const subjectsCollectionRef = collection(db, "subjects");
   const archiveCollectionRef = collection(db, "archived_subjects");
 
-  const addSubject = async (newSubCode,newSubDesc,newSubLec,newSubLab,
+  const addSubject = async (newSubCode,newSubDesc,newSubLec,newSubLab,newTotalUnits,newHrPW,
     newSubPreReq,newSubCoReq,newSubKac,newSubClassCode) =>{
       auth.onAuthStateChanged(async user => {
         if (user) {
@@ -41,6 +40,8 @@ export function SubjectProvider({ children }) {
           sub_desc: newSubDesc,
           sub_lec: newSubLec,
           sub_lab: newSubLab,
+          total_units: newTotalUnits,
+          hour_pw: newHrPW,
           sub_preReq: newSubPreReq,
           sub_coReq: newSubCoReq,
           sub_user: newSubUser,
@@ -54,7 +55,7 @@ export function SubjectProvider({ children }) {
       });
   };
 
-  const updateSubject = async (id, newSubCode,newSubDesc,newSubLec,newSubLab,
+  const updateSubject = async (id, newSubCode,newSubDesc,newSubLec,newSubLab,newTotalUnits,newHrPW,
     newSubPreReq,newSubCoReq,newSubKac,newSubClassCode) => {
     const subjectDoc = doc(db, "subjects", id);
       auth.onAuthStateChanged(async user => {
@@ -72,6 +73,8 @@ export function SubjectProvider({ children }) {
                 sub_desc: newSubDesc,
                 sub_lec: newSubLec,
                 sub_lab: newSubLab,
+                total_units: newTotalUnits,
+                hour_pw: newHrPW,
                 sub_preReq: newSubPreReq,
                 sub_coReq: newSubCoReq,
                 sub_user: newSubUser,

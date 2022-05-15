@@ -37,6 +37,8 @@ export default function FormDialog() {
       sDesc: '',
       sLec: '',
       sLab: '',
+      sTotalUn: '',
+      sHours: '',
       sPreReq: '',
       sCoReq: '',
       sKac: '',
@@ -65,6 +67,16 @@ export default function FormDialog() {
         .max(99999999999, "LAB Units must be below 12 digits")
         .required(
           'LAB units is required'),
+      sTotalUn: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'Total units units is required'),
+      sHours: Yup
+        .number()
+        .max(99999999999)
+        .required(
+          'Hours per week units is required'),
       sPreReq: Yup
         .string()
         .max(255)
@@ -93,6 +105,8 @@ export default function FormDialog() {
           formik.values.sDesc,
           formik.values.sLec,
           formik.values.sLab,
+          formik.values.sTotalUn,
+          formik.values.sHours,
           formik.values.sPreReq,
           formik.values.sCoReq,
           formik.values.sKac,
@@ -127,7 +141,7 @@ export default function FormDialog() {
         <DialogTitle
         display="flex"
         justifyContent="center"
-        >Add Subject</DialogTitle>
+        >Add Subject to Curriculum</DialogTitle>
         <form onSubmit={formik.handleSubmit}>
         <DialogContent>
 
@@ -181,6 +195,32 @@ export default function FormDialog() {
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.sLab}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sTotalUn && formik.errors.sTotalUn)}
+                fullWidth
+                helperText={formik.touched.sTotalUn && formik.errors.sTotalUn}
+                label='Total Units'
+                margin="normal"
+                name="sTotalUn"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sTotalUn}
+                variant="outlined"
+              />
+
+              <TextField
+                error={Boolean(formik.touched.sHours && formik.errors.sHours)}
+                fullWidth
+                helperText={formik.touched.sHours && formik.errors.sHours}
+                label='Hours Per Week'
+                margin="normal"
+                name="sHours"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.sHours}
                 variant="outlined"
               />
 
