@@ -214,7 +214,7 @@ const { currentUser } = useAuth()
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={currentUser && currSubjects.length}
+        count={currentUser && Number(currSubjects.length)}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
