@@ -23,6 +23,7 @@
     "@mui/styled-engine-sc": "^5.5.2",
     "@mui/styles": "^5.0.2",
     "@react-navigation/native-stack": "^6.6.1",
+    "@react-pdf/renderer": "^2.1.1",
     "chart.js": "^3.5.1",
     "date-fns": "^2.25.0",
     "firebase": "^9.6.10",
