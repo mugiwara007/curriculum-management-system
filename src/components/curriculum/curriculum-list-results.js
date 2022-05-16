@@ -250,7 +250,7 @@ export function DownloadPDF(props)
                 <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -0.5, fontWeight: 'bold'}} variant="subtitle1" gutterBottom component="div" fullWidth>
                 College of Information and Communications Technology
                 </Typography>
-      <Divider variant="middle" sx={{marginBottom: 2.5}}/>
+      <Divider variant="middle" sx={{marginTop: 0.5, marginBottom: 2.5, borderBottomWidth: 2.3, borderColor:'black'}}/>
                 <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1, fontWeight: 'bold'}} variant="subtitle1" gutterBottom component="div" fullWidth>
                 BACHELOR OF SCIENCE IN INFORMATION SYSTEMS
                 </Typography>
