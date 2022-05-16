@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -30,6 +30,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { useFormik } from 'formik';
+import { useReactToPrint } from "react-to-print";
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
 import { subAuth } from '../data-handling/subject-crud';
@@ -195,27 +196,12 @@ export function ArchiveModal(props)
 
 export function DownloadPDF(props)
 {
-  // const [open, setOpen] = useState(false);
+  const componentRef = useRef();
 
-  const downloadPDFButton = () => 
-  {
-    // ReactPDF.render(<MyDocument />, `${__dirname}/example.pdf`);
-    alert("BUTTON TEST");
-  };
-   
-  const MyDocument = () => 
-  (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text>Section #1</Text>
-        </View>
-        <View style={styles.section}>
-          <Text>Section #2</Text>
-        </View>
-      </Page>
-    </Document>
-  );
+  const downloadPDFButton = useReactToPrint
+  ({
+    content: () => componentRef.current,
+  });
 
   return (
     <div style={{display : 'inline-block'}} >
@@ -227,6 +213,12 @@ export function DownloadPDF(props)
         onClick={downloadPDFButton} >
           Generate Report
       </Button>
+
+      <Box sx={{display:'none'}}>
+        <Box ref={componentRef}>
+          <Text>TESTTETSTETS</Text>
+        </Box>
+      </Box>
     </div>
   );
 }
