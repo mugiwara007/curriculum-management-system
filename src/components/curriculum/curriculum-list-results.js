@@ -8,6 +8,7 @@ import {
   Card,
   Checkbox,
   Table,
+  TextField,
   TableBody,
   TableCell,
   TableHead,
@@ -17,8 +18,218 @@ import {
   Button,
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
+import ReportIcon from '@mui/icons-material/Report';
+import ReactPDF from '@react-pdf/renderer';
 import EditIcon from '@mui/icons-material/Edit';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import PrintIcon from '@mui/icons-material/Print';
+import Dialog from '@mui/material/Dialog';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import { useFormik } from 'formik';
+import DialogTitle from '@mui/material/DialogTitle';
+import * as React from 'react';
+import { subAuth } from '../data-handling/subject-crud';
+import { useAuth } from 'src/contexts/AuthContext';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import ArchiveIcon from '@mui/icons-material/Archive';
+
+export default function UpdateModal(props) 
+{
+  const [open, setOpen] = useState(false);
+  const [DeptCode, setDeptCode] = React.useState();
+
+  const handleClickOpen = () => 
+  {
+    setOpen(true);
+  };
+
+  const handleClose = () => 
+  {
+    setOpen(false);
+  };
+
+  const handleChange = (SelectChangeEvent) => 
+  {
+    setDeptCode(event.target.value);
+  };
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+        startIcon={(<EditIcon fontSize="small" />)}
+        variant="outlined"
+        sx={{ mr: 1 }}
+        onClick={handleClickOpen} >
+          Update
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle display="flex" justifyContent="center" >Update Subject</DialogTitle>
+          <DialogContent>
+            <TextField
+              fullWidth
+              label="Curriculum Code" 
+              variant="outlined" 
+              margin="normal"
+              type="text"
+              />
+
+            <TextField
+            fullWidth
+            label="CMO" 
+            variant="outlined" 
+            margin="normal"
+            type="text"
+            />
+
+            <TextField
+            fullWidth
+            label="Version" 
+            variant="outlined" 
+            margin="normal"
+            type="text"
+            />
+            
+            <FormControl sx={{ m: "auto", mt: 1, width: 1}}>
+              <InputLabel id="demo-simple-select-autowidth-label">Department Code</InputLabel>
+              <Select
+                value={DeptCode}
+                onChange={handleChange}
+                fullWidth
+                label="Department Code"
+              >
+                <MenuItem value=""><em>None</em></MenuItem>
+                <MenuItem value={10}>BSIT</MenuItem>
+                <MenuItem value={21}>BSIS</MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+            fullWidth
+            label="Username" 
+            variant="outlined" 
+            margin="normal"
+            type="text"
+            />
+          </DialogContent>
+
+          <DialogActions>
+            <Box>
+              <Button
+              color="primary"
+              onClick={handleClose}>Cancel
+              </Button>
+            </Box>
+            <Box p={2}>
+              <Button
+              color="primary"
+              variant='contained'
+              type="submit"
+              onClick={handleClose}>
+                Done
+              </Button>
+            </Box>
+          </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
+export function ArchiveModal(props) 
+{
+  const [open, setOpen] = useState(false);
+
+  const handleDeleteClickOpen = () => 
+  {
+    setOpen(true);
+  };
+
+  const handleDeleteClose = () => 
+  {
+    setOpen(false);
+  };
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+        color="info"
+        startIcon={(<ArchiveIcon fontSize="small" />)}
+        variant="outlined"
+        sx={{ mr: 1 }}
+        onClick={handleDeleteClickOpen} >
+          Archive
+      </Button>
+      <Dialog open={open}
+      onClose={handleDeleteClose}
+      >
+        <DialogTitle display="flex" justifyContent="center" >Confirm Archive</DialogTitle>
+          <DialogContent>
+            <p>Are you sure you want to archive this?</p>
+          </DialogContent>
+
+          <DialogActions>
+            <Box>
+              <Button
+                color="primary"
+                onClick={handleDeleteClose}>Cancel
+              </Button> 
+            </Box>
+
+            <Box p={2}>
+              <Button
+                color="primary"
+                variant='contained'
+                type="submit"
+                onClick={handleDeleteClose}>
+                  Confirm
+              </Button>
+          </Box>
+          </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
+export function DownloadPDF(props)
+{
+  // const [open, setOpen] = useState(false);
+
+  const downloadPDFButton = () => 
+  {
+    // ReactPDF.render(<MyDocument />, `${__dirname}/example.pdf`);
+    alert("BUTTON TEST");
+  };
+   
+  const MyDocument = () => 
+  (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.section}>
+          <Text>Section #1</Text>
+        </View>
+        <View style={styles.section}>
+          <Text>Section #2</Text>
+        </View>
+      </Page>
+    </Document>
+  );
+
+  return (
+    <div style={{display : 'inline-block'}} >
+      <Button
+        color="info"
+        startIcon={(<PrintIcon fontSize="small" />)}
+        variant="outlined"
+        sx={{ mr: 1 }}
+        onClick={downloadPDFButton} >
+          Generate Report
+      </Button>
+    </div>
+  );
+}
 
 export const CurriculumListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -164,20 +375,15 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                      Username
                     </TableCell>
                   <TableCell>
-                    <Button
-                    startIcon={(<EditIcon fontSize="small" />)}
-                    variant="outlined"
-                    sx={{ mr: 1 }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    startIcon={(<PrintIcon fontSize="small" />)}
-                    variant="outlined"
-                    sx={{ mr: 1 }}
-                  >
-                    Print
-                  </Button>
+                    <UpdateModal>
+                      {/* UPDATE */}
+                    </UpdateModal>
+                    <ArchiveModal>
+                      {/* ARCHIVE */}
+                    </ArchiveModal>
+                    <DownloadPDF>
+                      {/* PDF */}
+                    </DownloadPDF>
                 </TableCell>
                 </TableRow>
               ))}

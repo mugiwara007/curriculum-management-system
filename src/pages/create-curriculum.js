@@ -8,6 +8,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {  withAuth } from '../routes/withAuth'
 import NextLink from 'next/link';
+import { Comments } from 'src/components/create-curriculum/create-comments';
 
 const Dashboard = () => (
   <>
@@ -85,6 +86,17 @@ const Dashboard = () => (
           >
             <CreateTables />
           </Grid>
+          <Grid
+            item
+            lg={4}
+            md={12}
+            xl={3}
+            xs={12}
+          >
+            <Comments sx={{ height: '100%' }} />
+          </Grid>
+
+
         </Grid>
       </Container>
     </Box>

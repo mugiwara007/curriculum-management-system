@@ -28,7 +28,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function FormDialog()
+export default function AddCurriculumModal()
 {
   const [open, setOpen] = React.useState(false);
   const [DeptCode, setDeptCode] = React.useState();
@@ -152,8 +152,9 @@ export const CurriculumListToolbar = (props) =>
         Curriculum
       </Typography>
       <Box sx={{ m: 1 }}>
-        <FormDialog>
-        </FormDialog>
+        <AddCurriculumModal>
+          {/* ADD CURRICULUM */}
+        </AddCurriculumModal>
       </Box>
     </Box>
     <Box sx={{ mt: 3 }}>
