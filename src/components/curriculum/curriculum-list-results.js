@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -17,12 +17,15 @@ import {
   Typography,
   Button,
 } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { getInitials } from '../../utils/get-initials';
 import ReportIcon from '@mui/icons-material/Report';
 import ReactPDF from '@react-pdf/renderer';
+import NativeSelect from '@mui/material/NativeSelect';
 import EditIcon from '@mui/icons-material/Edit';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
 import PrintIcon from '@mui/icons-material/Print';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
@@ -30,6 +33,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { useFormik } from 'formik';
+import { useReactToPrint } from "react-to-print";
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
 import { subAuth } from '../data-handling/subject-crud';
@@ -195,27 +199,12 @@ export function ArchiveModal(props)
 
 export function DownloadPDF(props)
 {
-  // const [open, setOpen] = useState(false);
+  const componentRef = useRef();
 
-  const downloadPDFButton = () => 
-  {
-    // ReactPDF.render(<MyDocument />, `${__dirname}/example.pdf`);
-    alert("BUTTON TEST");
-  };
-   
-  const MyDocument = () => 
-  (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text>Section #1</Text>
-        </View>
-        <View style={styles.section}>
-          <Text>Section #2</Text>
-        </View>
-      </Page>
-    </Document>
-  );
+  const downloadPDFButton = useReactToPrint
+  ({
+    content: () => componentRef.current,
+  });
 
   return (
     <div style={{display : 'inline-block'}} >
@@ -227,6 +216,231 @@ export function DownloadPDF(props)
         onClick={downloadPDFButton} >
           Generate Report
       </Button>
+
+      <Box sx={{display:'none'}}>
+        <Box ref={componentRef}>
+        <Card {...props}>
+        <Box>
+        <TableHead>
+                <TableCell  sx={{width:'20%', backgroundColor:'#ffffff'}}>
+                </TableCell>
+              </TableHead>
+              <Stack 
+                direction="row" 
+                display="flex"
+                justifyContent="center"
+                alignItems="center">
+                <Avatar sx={{ width: 90, height: 90, marginRight: 18}} src="https://firebasestorage.googleapis.com/v0/b/curmasys.appspot.com/o/PDFLogos%2FBSU.png?alt=media&token=f9e6706c-344b-473b-b426-cf826e2d6d1d" />
+
+                <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: -2, fontWeight: 'bold', marginBottom: -5}} variant="subtitle1" gutterBottom component="div" fullWidth>
+                  Republic of the Philippines
+                  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: -1, fontWeight: 'bold'}} variant="subtitle1" gutterBottom component="div" fullWidth>
+                    Bulacan State University   
+                    <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: -1}}  variant="overline" display="block" gutterBottom>
+                      City of Malolos, Bulacan
+                      <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: -2}}  variant="overline" display="block" gutterBottom>
+                        Tel/Fax (044) 791-0153
+                      </Typography>
+                    </Typography>
+                  </Typography>
+                </Typography>
+
+                <Avatar sx={{ width: 90, height: 90, marginLeft: 18}} src="https://firebasestorage.googleapis.com/v0/b/curmasys.appspot.com/o/PDFLogos%2FCICT.png?alt=media&token=d0a28c1c-d802-4975-8a98-8f3aeedfefa9" />
+              </Stack>
+                <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -0.5, fontWeight: 'bold'}} variant="subtitle1" gutterBottom component="div" fullWidth>
+                College of Information and Communications Technology
+                </Typography>
+      <Divider variant="middle" sx={{marginTop: 0.5, marginBottom: 2.5, borderBottomWidth: 2.3, borderColor:'black'}}/>
+                <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1, fontWeight: 'bold'}} variant="subtitle1" gutterBottom component="div" fullWidth>
+                BACHELOR OF SCIENCE IN INFORMATION SYSTEMS
+                </Typography>
+                <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: 3.5}}variant="overline" display="block" gutterBottom>
+                  (Based on CMO No. 25 s 2015)
+                </Typography>
+                <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1}} variant="subtitle2" gutterBottom component="div" fullWidth>
+                FIRST YEAR
+                </Typography>
+              <TableCell>
+              <p><b>First Semester</b></p>
+              </TableCell>
+      <Divider />
+    
+    {/*First Semester Header*/}
+            <Table>
+              <TableBody>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+                         {/*First Semester TextFields*/}  
+                  <TableRow
+                    hover
+                  >
+                  <TableCell sx={{pl: 3}}>
+                    IT402
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    WMAD
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    2.0
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    3.0
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    3.0
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    3.0
+                  </TableCell>
+                  <TableCell sx={{pl: 1}}>
+                    OOP 2
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    N/A
+                  </TableCell>
+                </TableRow>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>3.0</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>3.0</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>1.0</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>3.0</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+            </Table>
+            <Table>
+              <TableRow>
+              </TableRow>
+            </Table>
+
+ {/*Second Semester Headings*/}
+
+           <Divider />
+            <TableCell>
+              <p><b>Second Semester</b></p>
+              </TableCell>
+              <Divider />
+              <Table>
+                <TableBody>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+  {/*First Semester TextFields*/} 
+                <TableRow
+                  hover
+                >
+                  <TableCell sx={{pl: 3}}>
+                    IT101
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    Ethics
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    2.0
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    3.0
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    1.0
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    3.0
+                  </TableCell>
+                  <TableCell sx={{pl: 1}}>
+                    ROTC
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    N/A
+                  </TableCell>
+                </TableRow>
+
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>2.0</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>2.0</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>2.0</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>2.0</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+            </Table>
+            </Box>
+          </Card>
+        </Box>
+      </Box>
     </div>
   );
 }
@@ -316,7 +530,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                   Username
                 </TableCell>
                 <TableCell>
-                  Action
+                  Actions
                 </TableCell>
               </TableRow>
             </TableHead>
