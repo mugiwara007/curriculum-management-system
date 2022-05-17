@@ -40,6 +40,8 @@ import { subAuth } from '../data-handling/subject-crud';
 import { useAuth } from 'src/contexts/AuthContext';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import { getCurriculumID, setCurriculumID } from '../create-curriculum/curriculum-model';
+import { useRouter } from 'next/router';
 
 export default function UpdateModal(props) 
 {
@@ -456,6 +458,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const router = useRouter()
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -496,6 +499,11 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
+
+  function sendData(id) {
+    setCurriculumID(id)
+    router.push('/create-curriculum')
+  }
 
   return (
     <Card {...rest}>
@@ -601,6 +609,13 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     >
                       {/* UPDATE */}
                     </UpdateModal>
+                    <Button
+                      startIcon={(<EditIcon fontSize="small" />)}
+                      variant="outlined"
+                      sx={{ mr: 1 }}
+                      onClick={() => sendData(customer.dateCreated)} >
+                        Edit
+                    </Button>
                     <ArchiveModal>
                       {/* ARCHIVE */}
                     </ArchiveModal>
