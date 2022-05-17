@@ -401,6 +401,11 @@ export const CreateTables = (props) => {
       });
          setSubjects1(subs)
 
+        tLec1 = 0
+        tLab1 = 0
+        tUnit1 = 0
+        tHrPw1 = 0
+
          subs.map((currSub) => tLec1 += Number(currSub.sub_lec));
          subs.map((currSub) => tLab1 += Number(currSub.sub_lab));
          subs.map((currSub) => tUnit1 += Number(currSub.total_units));
@@ -415,7 +420,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub1()
-  }, [yearOption,subjects1]);
+  }, [yearOption]);
 
   function allCurrSub2(){
     let year="";
@@ -441,6 +446,11 @@ export const CreateTables = (props) => {
       });
          setSubjects2(subs)
 
+        tLec2 = 0
+        tLab2 = 0
+        tUnit2 = 0
+        tHrPw2 = 0
+
          subs.map((currSub) => tLec2 += Number(currSub.sub_lec));
          subs.map((currSub) => tLab2 += Number(currSub.sub_lab));
          subs.map((currSub) => tUnit2 += Number(currSub.total_units));
@@ -455,7 +465,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub2()
-  }, [yearOption,subjects2]);
+  }, [yearOption]);
 
   const setOption = (event) =>{
     setYearOption(event.target.value)
