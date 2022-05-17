@@ -44,6 +44,7 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 export default function UpdateModal(props) 
 {
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState(props.data)
   const [DeptCode, setDeptCode] = React.useState();
 
   const handleClickOpen = () => 
@@ -79,6 +80,7 @@ export default function UpdateModal(props)
               variant="outlined" 
               margin="normal"
               type="text"
+              value={data.currCode}
               />
 
             <TextField
@@ -87,6 +89,7 @@ export default function UpdateModal(props)
             variant="outlined" 
             margin="normal"
             type="text"
+            value={data.cmo}
             />
 
             <TextField
@@ -95,6 +98,7 @@ export default function UpdateModal(props)
             variant="outlined" 
             margin="normal"
             type="text"
+            value={data.currVersion}
             />
             
             <FormControl sx={{ m: "auto", mt: 1, width: 1}}>
@@ -117,6 +121,7 @@ export default function UpdateModal(props)
             variant="outlined" 
             margin="normal"
             type="text"
+            value={data.username}
             />
           </DialogContent>
 
@@ -132,7 +137,9 @@ export default function UpdateModal(props)
               color="primary"
               variant='contained'
               type="submit"
-              onClick={handleClose}>
+              onClick={()=>{
+                console.log(data)
+              }}>
                 Done
               </Button>
             </Box>
@@ -567,29 +574,31 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                       >
                         {customer.name}
                       </Typography> */}
-                      Curriculum Code
+                      {customer.currCode}
                     </Box>
                   </TableCell>
                   <TableCell>
-                   CMO
+                  {customer.cmo}
                   </TableCell>
                   <TableCell>
-                   Version
+                  {customer.currVersion}
                   </TableCell>
                   <TableCell>
-                  {format(customer.createdAt, 'dd/MM/yyyy')}
+                  {customer.dateCreated}
                   </TableCell>
                   <TableCell>
-                  {format(customer.createdAt, 'dd/MM/yyyy')}
+                  {customer.dateApproved}
                   </TableCell>
                   <TableCell>
-                    Department Code
+                  {customer.depCode}
                     </TableCell>
                     <TableCell>
-                     Username
+                    {customer.username}
                     </TableCell>
                   <TableCell>
-                    <UpdateModal>
+                    <UpdateModal
+                    data={customer}
+                    >
                       {/* UPDATE */}
                     </UpdateModal>
                     <ArchiveModal>

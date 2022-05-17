@@ -27,11 +27,17 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { doc, setDoc } from "firebase/firestore";
+import { db } from 'src/firebase/firebase-auth';
+import { compareAsc } from 'date-fns';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
+import * as Yup from 'yup';
 
 export default function AddCurriculumModal()
 {
   const [open, setOpen] = React.useState(false);
-  const [DeptCode, setDeptCode] = React.useState();
+  const [DeptCode, setDeptCode] = React.useState('BSIT');
 
   const handleClickOpen = () => 
   {
@@ -43,10 +49,71 @@ export default function AddCurriculumModal()
     setOpen(false);
   };
 
-  const handleChange = (SelectChangeEvent) => 
+  const handleChange = (event) => 
   {
     setDeptCode(event.target.value);
   };
+
+  const formik = useFormik({
+    initialValues:
+    {
+      currCode: '',
+      cmo: '',
+      currVersion: '',
+      deptCode: '',
+      username: '',
+    },
+    validationSchema: Yup.object({
+      currCode: Yup
+        .string()
+        .max(11)
+        .required(
+          'College Code is required'),
+      cmo: Yup
+        .string()
+        .max(255)
+        .required(
+          'College Description is required'),
+      currVersion: Yup
+        .string()
+        .max(11)
+        .required(
+          'College Logo is required'),
+      deptCode: Yup
+        .string()
+        .max(255)
+        .required(
+          'College Description is required'),
+      username: Yup
+        .string()
+        .max(11)
+        .required(
+          'College Logo is required')
+      
+    }),
+
+    onSubmit: async() => 
+    {
+      // if (currentUser)
+      // {
+      //   addCollege(
+      //     formik.values.cCode,
+      //     formik.values.cDesc,
+      //     formik.values.cLogo,
+      //   )
+
+      //   formik.setSubmitting(false)
+      // }
+
+      
+    }
+  });
+
+  const addCurriculum = async(data) =>{
+    const curr_id = Date.parse(new Date())
+    await setDoc(doc(db, "curriculumns", curr_id.toString()), data);
+    handleClose()
+  }
 
   return (
     <div style={{display : 'inline-block'}} >
@@ -70,6 +137,9 @@ export default function AddCurriculumModal()
             variant="outlined" 
             margin="normal"
             type="text"
+            name="currCode"
+            onChange={formik.handleChange}
+            value={formik.values.currCode}
             />
 
             <TextField
@@ -78,6 +148,9 @@ export default function AddCurriculumModal()
             variant="outlined" 
             margin="normal"
             type="text"
+            name="cmo"
+            onChange={formik.handleChange}
+            value={formik.values.cmo}
             />
 
             <TextField
@@ -86,19 +159,23 @@ export default function AddCurriculumModal()
             variant="outlined" 
             margin="normal"
             type="text"
+            name="currVersion"
+            onChange={formik.handleChange}
+            value={formik.values.currVersion}
             />
             
             <FormControl sx={{ m: "auto", mt: 1, width: 1}}>
               <InputLabel id="demo-simple-select-autowidth-label">Department Code</InputLabel>
               <Select
                 value={DeptCode}
-                onChange={handleChange}
+                onChange={(event)=>{
+                  setDeptCode(event.target.value)
+                }}
                 fullWidth
                 label="Department Code"
               >
-                <MenuItem value=""><em>None</em></MenuItem>
-                <MenuItem value={10}>BSIT</MenuItem>
-                <MenuItem value={21}>BSIS</MenuItem>
+                <MenuItem value={'BSIT'}>BSIT</MenuItem>
+                <MenuItem value={'BSIS'}>BSIS</MenuItem>
               </Select>
             </FormControl>
 
@@ -108,6 +185,9 @@ export default function AddCurriculumModal()
             variant="outlined" 
             margin="normal"
             type="text"
+            name="username"
+            onChange={formik.handleChange}
+            value={formik.values.username}
             />
           </DialogContent>
           <DialogActions>
@@ -122,7 +202,10 @@ export default function AddCurriculumModal()
                 <Button
                   color="primary"
                   variant='contained'
-                  onClick={handleClose}>
+                  onClick={()=>{
+                    addCurriculum({currCode: formik.values.currCode,cmo:formik.values.cmo,currVersion:formik.values.currVersion,depCode:DeptCode,username:formik.values.username, dateCreated:Date.parse(new Date()).toString(), dateApproved:'--'})
+                  }
+                  }>
                     Done
                 </Button>
               </Box>
