@@ -35,10 +35,14 @@ import Delete from '@mui/icons-material/Delete';
 import * as Yup from 'yup';
 import EditIcon from '@mui/icons-material/Edit';
 import { useFormik } from 'formik';
+import { useLocation } from 'react-router-dom';
+import { getCurriculumID } from './curriculum-model';
+
 
 export default function UpdateSubDialog(props) {
   const { currentUser } = useAuth()
   const [open, setOpen] = useState(false);
+  const curriculum_id = getCurriculumID();
 
   const formik = useFormik({
     initialValues: {
@@ -123,7 +127,7 @@ const updateSubject = (newSubCode,newSubDesc,newSubLec,newSubLab,newTotalUnits,n
       nyear = "fourth_year"
     }                           
                                                 //curriculum id
-    const subjectDoc = doc(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", nyear, props.sub_id);
+    const subjectDoc = doc(db, "curriculumns", curriculum_id, nyear, props.sub_id);
     const newFields = { 
       sub_code: newSubCode,
       sub_desc: newSubDesc,
@@ -307,6 +311,7 @@ export const DeleteSubDialog = (props) =>{
   };
 
   const deleteSubject = async () => {
+    const curriculum_id = getCurriculumID();
     let nyear="";
     if (props.year == 10){
       nyear = "first_year"
@@ -317,7 +322,7 @@ export const DeleteSubDialog = (props) =>{
     } else if (props.year == 40){
       nyear = "fourth_year"
     }                                         //collection id ng curriculum
-    const subjectDoc = doc(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", nyear, props.id);
+    const subjectDoc = doc(db, "curriculumns", curriculum_id, nyear, props.id);
     await deleteDoc(subjectDoc);
   };
 
@@ -376,6 +381,7 @@ export const CreateTables = (props) => {
   const [totalUnit2, setTotalUnit2] = useState(0);
   const [totalHr2, setTotalHr2] = useState(0);
   const [yearOption, setYearOption] = useState(10)
+  const curriculum_id = getCurriculumID();
 
   function allCurrSub1(){
     let year="";
@@ -388,7 +394,7 @@ export const CreateTables = (props) => {
     } else if (yearOption == 40){
       year = "fourth_year"
     }
-    const sub1Ref = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", year);
+    const sub1Ref = collection(db, "curriculumns", curriculum_id, year);
     const q = query(sub1Ref, where("curr_sem", '==',1));
     let tLec1 = 0
     let tLab1 = 0
@@ -424,6 +430,7 @@ export const CreateTables = (props) => {
 
   function allCurrSub2(){
     let year="";
+    const curriculum_id = getCurriculumID();
     if (yearOption == 10){
       year = "first_year"
     } else if (yearOption == 20){
@@ -433,7 +440,7 @@ export const CreateTables = (props) => {
     } else if (yearOption == 40){
       year = "fourth_year"
     }
-    const sub2Ref = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", year);
+    const sub2Ref = collection(db, "curriculumns", curriculum_id, year);
     const q = query(sub2Ref, where("curr_sem", '==',2));
     let tLec2 = 0
     let tLab2 = 0

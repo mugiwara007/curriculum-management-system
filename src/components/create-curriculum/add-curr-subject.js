@@ -15,10 +15,12 @@ import { auth } from 'src/firebase/firebase-auth';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import AddIcon from '@mui/icons-material/Add';
+import { getCurriculumID } from './curriculum-model';
 
 export const AddCurrSubDialog = (props) => {
     const { currentUser } = useAuth()
     const [open, setOpen] = React.useState(false);
+    const curriculum_id = getCurriculumID()
   
     const formik = useFormik({
       initialValues: {
@@ -96,7 +98,7 @@ export const AddCurrSubDialog = (props) => {
       newSubPreReq,newSubCoReq) =>{
         auth.onAuthStateChanged(async user => {
           if (user) {                                       //collection id ng curriculums
-            const currSubRef = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", "first_year");
+            const currSubRef = collection(db, "curriculumns", curriculum_id, "first_year");
             addDoc(currSubRef, {
                 sub_code: newSubCode,
                 sub_desc: newSubDesc,

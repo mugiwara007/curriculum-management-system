@@ -21,9 +21,11 @@ import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, where } fr
 import { db } from 'src/firebase/firebase-auth'
 import { auth } from 'src/firebase/firebase-auth';
 import AddIcon from '@mui/icons-material/Add';
+import { getCurriculumID } from './curriculum-model';
 
 export const ImportDialog = (props) =>{
 const { currentUser } = useAuth()
+const curriculum_id = getCurriculumID();
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(0);
   const [currSubjects, setCurrSubjects] = useState([]);
@@ -52,7 +54,7 @@ const { currentUser } = useAuth()
     if (subID){
         auth.onAuthStateChanged(async user => {
             if (user) {                                         //collection id ng curriculum
-                const currSubRef = collection(db, "curriculumns", "ps9MYwDR6ubdupS6P7TT", "first_year");
+                const currSubRef = collection(db, "curriculumns", curriculum_id, "first_year");
                 const docRef = doc(db, "subjects", subID);
                 const docSnap = await getDoc(docRef);
                 addDoc(currSubRef, {

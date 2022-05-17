@@ -2,6 +2,7 @@ var _userLevel  = "2";
 var _archiveList;
 var _archiveVal;
 var _archiveDisable = true;
+
 export const setUserLevel = (userLevel) =>{
     _userLevel = userLevel
 }
