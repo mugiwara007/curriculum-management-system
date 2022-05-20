@@ -126,7 +126,6 @@ const updateSubject = (newSubCode,newSubDesc,newSubLec,newSubLab,newTotalUnits,n
     } else if (props.year == 40){
       nyear = "fourth_year"
     }                           
-                                                //curriculum id
     const subjectDoc = doc(db, "curriculumns", curriculum_id, nyear, props.sub_id);
     const newFields = { 
       sub_code: newSubCode,
@@ -629,10 +628,10 @@ export const CreateTables = (props) => {
             <Table>
               <TableRow>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                <ImportDialog value='1' />
+                <ImportDialog value='1' year={yearOption} />
               </TableCell>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                <AddCurrSubDialog value="1" />
+                <AddCurrSubDialog value="1" year={yearOption} />
               </TableCell>
               </TableRow>
             </Table>
@@ -755,10 +754,10 @@ export const CreateTables = (props) => {
             <Table>
               <TableRow>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                <ImportDialog value='2' />
+                <ImportDialog value='2' year={yearOption} />
               </TableCell>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                <AddCurrSubDialog value="2" />
+                <AddCurrSubDialog value="2" year={yearOption} />
               </TableCell>
               </TableRow>
             </Table>
