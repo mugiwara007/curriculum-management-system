@@ -53,8 +53,18 @@ const curriculum_id = getCurriculumID();
   const importSubCurr = async (subID) => {
     if (subID){
         auth.onAuthStateChanged(async user => {
-            if (user) {                                         //collection id ng curriculum
-                const currSubRef = collection(db, "curriculumns", curriculum_id, "first_year");
+            if (user) {             
+              let nyear="";
+              if (props.year == 10){
+                nyear = "first_year"
+              } else if (props.year == 20){
+                nyear = "second_year"
+              } else if (props.year == 30){
+                nyear = "third_year"
+              } else if (props.year == 40){
+                nyear = "fourth_year"
+              }                 
+                const currSubRef = collection(db, "curriculumns", curriculum_id, nyear);
                 const docRef = doc(db, "subjects", subID);
                 const docSnap = await getDoc(docRef);
                 addDoc(currSubRef, {
