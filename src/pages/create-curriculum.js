@@ -9,7 +9,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {  withAuth } from '../routes/withAuth'
 import NextLink from 'next/link';
 import { Comments } from 'src/components/create-curriculum/create-comments';
-
+import HistoryIcon from '@mui/icons-material/History';
 const Dashboard = () => (
   <>
     <Head>
@@ -46,6 +46,12 @@ const Dashboard = () => (
             Cancel
           </Button>
           </NextLink>
+          <Button
+            startIcon={(<HistoryIcon fontSize="small" />)}
+            sx={{ mr: 1 }}
+          >
+            Apply Version
+          </Button>
           <Button
             color="primary"
             variant="contained"
