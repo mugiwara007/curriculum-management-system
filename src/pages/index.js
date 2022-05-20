@@ -7,7 +7,7 @@ import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Facebook as FacebookIcon } from '../icons/facebook';
 import { Google as GoogleIcon } from '../icons/google';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail  } from "firebase/auth";
 import { useAuth } from 'src/contexts/AuthContext';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -18,7 +18,9 @@ import * as React from 'react';
 import { setUserLevel } from 'src/components/userModel';
 import { db, auth } from 'src/firebase/firebase-auth';
 import { doc, getDoc } from "firebase/firestore";
-
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 const bgImagePath =
 "/static/images/soar_bulsu_2019.jpg"
@@ -38,6 +40,22 @@ const styles = {
 
 export function FormDialog() {
   const [open, setOpen] = React.useState(false);
+  const formik = useFormik({
+    initialValues: {
+      email: ''
+    },
+    validationSchema: Yup.object({
+      email: Yup
+      .string()
+      .max(100)
+      .required
+      (
+        'Email is required'
+      ),
+    }),
+    onSubmit: async() => {
+    }
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -46,6 +64,20 @@ export function FormDialog() {
   const handleClose = () => {
     setOpen(false);
   };
+
+
+  const handlePasswordReset = async (values, actions) => {
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, formik.values.email)
+      .then(() => {
+        console.log('Password reset email sent successfully');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+      });
+  }
 
   return (
     <div style={{display : 'inline-block'}}>
@@ -78,13 +110,16 @@ export function FormDialog() {
             type="email"
             fullWidth
             variant="standard"
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            name="email"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button color="primary"
            variant="contained"
-          onClick={handleClose}>Send Password Reset</Button>
+          onClick={handlePasswordReset}>Send Password Reset</Button>
         </DialogActions>
       </Dialog>
     </div>
