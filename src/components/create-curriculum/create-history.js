@@ -39,18 +39,25 @@ export const HistoryLog = (props) => (
           <ListItemText 
            disableTypography
            style={maintext}
-           primary="History"/>
+           primary="Version History"/>
         </ListItem>
         <Divider />
-        <ListItem button 
-        divider>
+
+        {props.data && props.data.map((data)=>{
+          return(
+            <ListItem button 
+          divider>
           <ListItemText 
           disableTypography
           style={summary}
-          primary="No comments added"
-          secondary={<div style={when}>0 minutes ago</div>}
+          primary={data.id}
+          // secondary={<div style={when}>0 minutes ago</div>}
           />
         </ListItem>
+          )
+        })
+        }
+
       </List>
   </Card>
 );

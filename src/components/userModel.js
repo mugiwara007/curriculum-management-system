@@ -2,6 +2,7 @@ var _userLevel  = "2";
 var _archiveList;
 var _archiveVal;
 var _archiveDisable = true;
+var _email;
 
 export const setUserLevel = (userLevel) =>{
     _userLevel = userLevel
@@ -29,4 +30,11 @@ export const setArchiveDisable = (archiveDisable) =>{
 }
 export const getArchiveDisable = () =>{
     return _archiveDisable
+}
+
+export const setEmail = (email) =>{
+    _email = email
+}
+export const getEmail = () =>{
+    return _email
 }

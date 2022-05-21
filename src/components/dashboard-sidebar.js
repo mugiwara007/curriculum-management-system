@@ -62,16 +62,16 @@ const items = [
     icon: (<NotificationsActiveIcon fontSize="small" />),
     title: 'All Notification'
   },
-  {
-    href: '/account',
-    icon: (<UserIcon fontSize="small" />),
-    title: 'Account'
-  },
-  {
-    href: '/settings',
-    icon: (<CogIcon fontSize="small" />),
-    title: 'Settings'
-  }
+  // {
+  //   href: '/account',
+  //   icon: (<UserIcon fontSize="small" />),
+  //   title: 'Account'
+  // },
+  // {
+  //   href: '/settings',
+  //   icon: (<CogIcon fontSize="small" />),
+  //   title: 'Settings'
+  // }
 ];
 
 const department_head = [
@@ -100,16 +100,44 @@ const department_head = [
     icon: (<NotificationsActiveIcon fontSize="small" />),
     title: 'All Notification'
   },
+  // {
+  //   href: '/account',
+  //   icon: (<UserIcon fontSize="small" />),
+  //   title: 'Account'
+  // },
+  // {
+  //   href: '/settings',
+  //   icon: (<CogIcon fontSize="small" />),
+  //   title: 'Settings'
+  // }
+];
+
+const dean = [
   {
-    href: '/account',
-    icon: (<UserIcon fontSize="small" />),
-    title: 'Account'
+    href: '/dashboard',
+    icon: (<ChartBarIcon fontSize="small" />),
+    title: 'Dashboard'
   },
   {
-    href: '/settings',
-    icon: (<CogIcon fontSize="small" />),
-    title: 'Settings'
-  }
+    href: '/curriculum',
+    icon: (<LocalLibraryIcon fontSize="small" />),
+    title: 'Curriculum'
+  },
+  {
+    href: '/notifications',
+    icon: (<NotificationsActiveIcon fontSize="small" />),
+    title: 'All Notification'
+  },
+  // {
+  //   href: '/account',
+  //   icon: (<UserIcon fontSize="small" />),
+  //   title: 'Account'
+  // },
+  // {
+  //   href: '/settings',
+  //   icon: (<CogIcon fontSize="small" />),
+  //   title: 'Settings'
+  // }
 ];
 
 export const DashboardSidebar = (props) => {
@@ -206,7 +234,7 @@ export const DashboardSidebar = (props) => {
             my: 3
           }}
         /> */}
-        {getUserLevel() < 2 ?
+        {getUserLevel() == 1 ?
           <Box sx={{ flexGrow: 1 }}>
             {items.map((item) => (
             <NavItem
@@ -226,7 +254,11 @@ export const DashboardSidebar = (props) => {
             />
         </Box>
         :
-        <Box sx={{ flexGrow: 1 }}>
+        <></>
+        }
+        
+        {getUserLevel() == 2 ?
+          <Box sx={{ flexGrow: 1 }}>
             {department_head.map((item) => (
             <NavItem
             key={item.title}
@@ -235,6 +267,7 @@ export const DashboardSidebar = (props) => {
             title={item.title}
           />
           ))}
+            {/* <NavItemRender items={items} /> */}
            <NavItem
               key="Sign Out"
               icon={(<LogoutIcon fontSize="small" />)}
@@ -243,8 +276,31 @@ export const DashboardSidebar = (props) => {
               onClick={() => signout()}
             />
         </Box>
+        :
+        <></>
         }
-        
+
+        {getUserLevel() == 3 ?
+         <Box sx={{ flexGrow: 1 }}>
+         {dean.map((item) => (
+         <NavItem
+         key={item.title}
+         icon={item.icon}
+         href={item.href}
+         title={item.title}
+       />
+       ))}
+        <NavItem
+           key="Sign Out"
+           icon={(<LogoutIcon fontSize="small" />)}
+           href="/"
+           title="Sign Out"
+           onClick={() => signout()}
+         />
+        </Box>
+        :
+        <></>
+        }
         <Divider sx={{ borderColor: '#2D3748' }} />
       </Box>
     </>
