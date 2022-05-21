@@ -27,17 +27,20 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, collection, setDocs, query, where, onSnapshot } from "firebase/firestore";
 import { db } from 'src/firebase/firebase-auth';
 import { compareAsc } from 'date-fns';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import * as Yup from 'yup';
+import { useEffect } from 'react';
+import { getEmail } from '../userModel';
 
 export default function AddCurriculumModal()
 {
   const [open, setOpen] = React.useState(false);
   const [DeptCode, setDeptCode] = React.useState('BSIT');
+  const [department, setDepartment] = React.useState([])
 
   const handleClickOpen = () => 
   {
@@ -109,9 +112,44 @@ export default function AddCurriculumModal()
     }
   });
 
+  useEffect(() => {
+    const q = query(collection(db, "departments"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const temp= [];
+      querySnapshot.forEach((doc) => {
+          temp.push(doc.data());
+      });
+      setDepartment(temp)
+    });
+  }, [])
+  
+
   const addCurriculum = async(data) =>{
     const curr_id = Date.parse(new Date())
-    await setDoc(doc(db, "curriculumns", curr_id.toString()), data);
+    const curriculum_doc = doc(db,"curriculumns", curr_id.toString())
+    const version_collection = collection(curriculum_doc,"versions")
+    await setDoc(curriculum_doc, data);
+    await setDoc(doc(version_collection,data.currVersion.toString()),{
+      version:data.currVersion.toString(),
+    }).then(()=>{
+      const version_doc = doc(version_collection,data.currVersion.toString())
+      const first_year = collection(version_doc,"first_year")
+      const second_year = collection(version_doc,"second_year")
+      const third_year = collection(version_doc,"third_year")
+      const fourth_year = collection(version_doc,"fourth_year")
+      setDoc(doc(first_year,"no_data"),{
+        message:"There is no subject yet in this version"
+      })
+      setDoc(doc(second_year,"no_data"),{
+        message:"There is no subject yet in this version"
+      })
+      setDoc(doc(third_year ,"no_data"),{
+        message:"There is no subject yet in this version"
+      })
+      setDoc(doc(fourth_year,"no_data"),{
+        message:"There is no subject yet in this version"
+      })
+    })
     handleClose()
   }
 
@@ -153,7 +191,7 @@ export default function AddCurriculumModal()
             value={formik.values.cmo}
             />
 
-            <TextField
+            {/* <TextField
             fullWidth
             label="Version" 
             variant="outlined" 
@@ -162,7 +200,7 @@ export default function AddCurriculumModal()
             name="currVersion"
             onChange={formik.handleChange}
             value={formik.values.currVersion}
-            />
+            /> */}
             
             <FormControl sx={{ m: "auto", mt: 1, width: 1}}>
               <InputLabel id="demo-simple-select-autowidth-label">Department Code</InputLabel>
@@ -174,8 +212,9 @@ export default function AddCurriculumModal()
                 fullWidth
                 label="Department Code"
               >
-                <MenuItem value={'BSIT'}>BSIT</MenuItem>
-                <MenuItem value={'BSIS'}>BSIS</MenuItem>
+                {department.map((data, key)=>{
+                  return(<MenuItem value={data.dept_code} key={key}>{data.dept_code}</MenuItem>)
+                })}
               </Select>
             </FormControl>
 
@@ -203,7 +242,8 @@ export default function AddCurriculumModal()
                   color="primary"
                   variant='contained'
                   onClick={()=>{
-                    addCurriculum({currCode: formik.values.currCode,cmo:formik.values.cmo,currVersion:formik.values.currVersion,depCode:DeptCode,username:formik.values.username, dateCreated:Date.parse(new Date()).toString(), dateApproved:'--'})
+                    const current_date =  new Date()
+                    addCurriculum({currCode: formik.values.currCode,cmo:formik.values.cmo,currVersion:1,depCode:DeptCode,username:formik.values.username, dateCreated:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()), dateApproved:'--', email:getEmail(), on_review:false, accepted:false})
                   }
                   }>
                     Done

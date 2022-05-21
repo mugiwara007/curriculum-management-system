@@ -17,11 +17,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import React, { Component, useState, useEffect } from 'react';
 import { useAuth } from 'src/contexts/AuthContext';
-import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, where } from 'firebase/firestore';
+import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, where, setDoc, setDocs } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth'
 import { auth } from 'src/firebase/firebase-auth';
 import AddIcon from '@mui/icons-material/Add';
-import { getCurriculumID } from './curriculum-model';
+import { getCurriculumID, getYearLevel } from './curriculum-model';
 
 export const ImportDialog = (props) =>{
 const { currentUser } = useAuth()
@@ -63,8 +63,11 @@ const curriculum_id = getCurriculumID();
                 nyear = "third_year"
               } else if (props.year == 40){
                 nyear = "fourth_year"
-              }                 
-                const currSubRef = collection(db, "curriculumns", curriculum_id, nyear);
+              }   
+            }              
+                // const currSubRef = collection(db, "curriculumns", curriculum_id, nyear);
+            if (user) {                                         //collection id ng curriculum
+                const currSubRef = collection(db, "curriculumns", curriculum_id, getYearLevel());
                 const docRef = doc(db, "subjects", subID);
                 const docSnap = await getDoc(docRef);
                 addDoc(currSubRef, {
@@ -78,10 +81,74 @@ const curriculum_id = getCurriculumID();
                     sub_coReq: docSnap.data().sub_coReq,
                     curr_sem: Number(props.value)
                 });
+
+                const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
+                const version_collection = collection(curriculum_doc,"versions")
+                const querySnapshot = await getDocs(version_collection);
+                var counter = 1
+                querySnapshot.forEach((doc) => {
+                  counter++
+                });
+                const version_data = {
+                  sub_code: docSnap.data().sub_code,
+                  sub_desc: docSnap.data().sub_desc,
+                  sub_lec: docSnap.data().sub_lec,
+                  sub_lab: docSnap.data().sub_lab,
+                  total_units: docSnap.data().total_units,
+                  hour_pw: docSnap.data().hour_pw,
+                  sub_preReq: docSnap.data().sub_preReq,
+                  sub_coReq: docSnap.data().sub_coReq,
+                  curr_sem: Number(props.value)
+                }
+                if(counter > 2){
+                    setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(async()=>{
+                      const version_doc = doc(version_collection,counter.toString())
+                      const old_version = counter - 1
+                      const old_version_doc = doc(version_collection,old_version.toString())
+                      const first_year_collection = collection(old_version_doc,"first_year")
+                      const second_year_collection = collection(old_version_doc,"second_year")
+                      const third_year_collection = collection(old_version_doc,"third_year")
+                      const fourth_year_collection = collection(old_version_doc,"fourth_year")
+                      const first_year_snap = await getDocs(first_year_collection)
+                      const second_year_snap = await getDocs(second_year_collection)
+                      const third_year_snap = await getDocs(third_year_collection)
+                      const fourth_year_snap = await getDocs(fourth_year_collection)
+                      const year_collection = collection(version_doc,getYearLevel())
+                      first_year_snap.forEach((doc) =>{
+                        addDoc(collection(version_doc,"first_year"), doc.data())
+                      })
+                      second_year_snap.forEach((doc) =>{
+                        addDoc(collection(version_doc,"second_year"), doc.data())
+                      })
+                      third_year_snap.forEach((doc) =>{
+                        addDoc(collection(version_doc,"third_year"), doc.data())
+                      })
+                      fourth_year_snap.forEach((doc) =>{
+                        addDoc(collection(version_doc,"fourth_year"), doc.data())
+                      })
+                      addDoc(year_collection, version_data)
+
+                    }).catch((e)=>{
+                      alert(e)
+                    })
+                }
+                else{
+                  setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(()=>{
+                    const version_doc = doc(version_collection,counter.toString())
+                    const year_collection = collection(version_doc,getYearLevel())
+                    addDoc(year_collection, version_data)
+                  }).catch((e)=>{
+                    alert(e)
+                  })
+                }
+
+
                 } else {
                   
               }
         });
+
+        
         handleClose();
     } else {
       alert("Please select a subject to import.");

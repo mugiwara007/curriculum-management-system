@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Container } from '@mui/material';
+import { Box, Container, decomposeColor } from '@mui/material';
 import { CurriculumListResults } from '../components/curriculum/curriculum-list-results';
 import { CurriculumListToolbar } from '../components/curriculum/curriculum-list-toolbar';
 import { DashboardLayout } from '../components/dashboard-layout';
@@ -7,19 +7,55 @@ import { DashboardLayout } from '../components/dashboard-layout';
 import { db } from 'src/firebase/firebase-auth';
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from 'react';
+import { getEmail, getUserLevel } from 'src/components/userModel';
 
 const Curriculum = () => {
   const [curriculum, setCurriculum] = useState([])
 
   useEffect(async() => {
-    const curriculumns = query(collection(db, "curriculumns"));
-    const unsubscribe = onSnapshot(curriculumns , (querySnapshot) => {
-      const temp = [];
-      querySnapshot.forEach((doc) => {
-        temp.push(doc.data());
+    if(getUserLevel() == 2)
+    {
+      const curriculumns = query(collection(db, "curriculumns"), where('email', "==", getEmail()));
+      const unsubscribe = onSnapshot(curriculumns , (querySnapshot) => {
+        const temp = [];
+        querySnapshot.forEach((doc) => {
+          temp.push({
+            id:doc.id,
+            cmo:doc.data().cmo,
+            currCode: doc.data().currCode,
+            currVersion: doc.data().currVersion,
+            dateApproved: doc.data().dateApproved,
+            dateCreated: doc.data().dateCreated,
+            depCode: doc.data().depCOde,
+            username: doc.data().username,
+            on_review: doc.data().on_review,
+            accepted:doc.data().accepted
+          });
+        });
+        setCurriculum(temp)
       });
-      setCurriculum(temp)
-    });
+    }
+    else{
+      const curriculumns = query(collection(db, "curriculumns"), where('on_review', "==", ));
+      const unsubscribe = onSnapshot(curriculumns , (querySnapshot) => {
+        const temp = [];
+        querySnapshot.forEach((doc) => {
+          temp.push({
+            id:doc.id,
+            cmo:doc.data().cmo,
+            currCode: doc.data().currCode,
+            currVersion: doc.data().currVersion,
+            dateApproved: doc.data().dateApproved,
+            dateCreated: doc.data().dateCreated,
+            depCode: doc.data().depCOde,
+            username: doc.data().username,
+            on_review: doc.data().on_review,
+            accepted:doc.data().accepted
+          });
+        });
+        setCurriculum(temp)
+      });
+    }
   }, [])
   
   return(

@@ -22,7 +22,7 @@ import {
   import NativeSelect from '@mui/material/NativeSelect';
   import React, { useState, useEffect } from 'react';
   import { useAuth } from 'src/contexts/AuthContext';
-  import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+  import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc, setDoc, setDocs, getDocs, addDoc } from 'firebase/firestore';
   import { db } from 'src/firebase/firebase-auth'
   import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -36,13 +36,98 @@ import * as Yup from 'yup';
 import EditIcon from '@mui/icons-material/Edit';
 import { useFormik } from 'formik';
 import { useLocation } from 'react-router-dom';
-import { getCurriculumID } from './curriculum-model';
+import { getCurriculumID, setYearLevel } from './curriculum-model';
+import { getYearLevel } from './curriculum-model';
+import { getUserLevel } from '../userModel';
 
 
 export default function UpdateSubDialog(props) {
   const { currentUser } = useAuth()
   const [open, setOpen] = useState(false);
   const curriculum_id = getCurriculumID();
+
+  const updateVersion = async(docSnap) =>{
+    const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
+              const version_collection = collection(curriculum_doc,"versions")
+              const querySnapshot = await getDocs(version_collection);
+              var counter = 1
+              querySnapshot.forEach((doc) => {
+                counter++
+              });
+              const version_data = {
+                sub_code: docSnap.data.sub_code,
+                sub_desc: docSnap.data.sub_desc,
+                sub_lec: docSnap.data.sub_lec,
+                sub_lab: docSnap.data.sub_lab,
+                total_units: docSnap.data.total_units,
+                hour_pw: docSnap.data.hour_pw,
+                sub_preReq: docSnap.data.sub_preReq,
+                sub_coReq: docSnap.data.sub_coReq,
+                curr_sem: docSnap.data.curr_sem
+              }
+              if(counter > 2){
+                  setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(async()=>{
+                    const version_doc = doc(version_collection,counter.toString())
+                    const old_version = counter - 1
+                    const old_version_doc = doc(version_collection,old_version.toString())
+                    const first_year_collection = collection(old_version_doc,"first_year")
+                    const second_year_collection = collection(old_version_doc,"second_year")
+                    const third_year_collection = collection(old_version_doc,"third_year")
+                    const fourth_year_collection = collection(old_version_doc,"fourth_year")
+                    const first_year_snap = await getDocs(first_year_collection)
+                    const second_year_snap = await getDocs(second_year_collection)
+                    const third_year_snap = await getDocs(third_year_collection)
+                    const fourth_year_snap = await getDocs(fourth_year_collection)
+                    const year_collection = collection(version_doc,getYearLevel())
+                    first_year_snap.forEach((doc) =>{
+                      if(doc.data().sub_code == docSnap.data.sub_code){
+                        addDoc(collection(version_doc,"first_year"), version_data)
+                      }
+                      else{
+                        addDoc(collection(version_doc,"first_year"), doc.data())
+                      }
+                      
+
+                    })
+                    second_year_snap.forEach((doc) =>{
+                      if(doc.data().sub_code == docSnap.data.sub_code){
+                        addDoc(collection(version_doc,"second_year"), version_data)
+                      }
+                      else{
+                        addDoc(collection(version_doc,"second_year"), doc.data())
+                      }
+                    })
+                    third_year_snap.forEach((doc) =>{
+                      if(doc.data().sub_code == docSnap.data.sub_code){
+                        addDoc(collection(version_doc,"third_year"), version_data)
+                      }
+                      else{
+                        addDoc(collection(version_doc,"third_year"), doc.data())
+                      }
+                    })
+                    fourth_year_snap.forEach((doc) =>{
+                      if(doc.data().sub_code == docSnap.data.sub_code){
+                        addDoc(collection(version_doc,"fourth_year"), version_data)
+                      }
+                      else{
+                        addDoc(collection(version_doc,"fourth_year"), doc.data())
+                      }
+                    })
+
+                  }).catch((e)=>{
+                    alert(e)
+                  })
+              }
+              else{
+                setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(()=>{
+                  const version_doc = doc(version_collection,counter.toString())
+                  const year_collection = collection(version_doc,getYearLevel())
+                  addDoc(year_collection, version_data)
+                }).catch((e)=>{
+                  alert(e)
+                })
+              }
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -109,6 +194,18 @@ export default function UpdateSubDialog(props) {
         formik.values.sPreReq,
         formik.values.sCoReq,
       )
+
+      updateVersion({data:{
+        sub_code:formik.values.sCode,
+        sub_desc:formik.values.sDesc,
+        sub_lec:formik.values.sLec,
+        sub_lab:formik.values.sLab,
+        total_units:formik.values.sTotalUn,
+        hour_pw:formik.values.sHours,
+        sub_preReq:formik.values.sPreReq,
+        sub_coReq:formik.values.sCoReq,
+        curr_sem:Number(props.value)
+      }})
       }
       formik.setSubmitting(false)
     }
@@ -323,6 +420,64 @@ export const DeleteSubDialog = (props) =>{
     }                                         //collection id ng curriculum
     const subjectDoc = doc(db, "curriculumns", curriculum_id, nyear, props.id);
     await deleteDoc(subjectDoc);
+
+    const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
+    const version_collection = collection(curriculum_doc,"versions")
+    const querySnapshot = await getDocs(version_collection);
+              var counter = 1
+              querySnapshot.forEach((doc) => {
+                counter++
+              });
+              if(counter > 2){
+                  setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(async()=>{
+                    const version_doc = doc(version_collection,counter.toString())
+                    const old_version = counter - 1
+                    const old_version_doc = doc(version_collection,old_version.toString())
+                    const first_year_collection = collection(old_version_doc,"first_year")
+                    const second_year_collection = collection(old_version_doc,"second_year")
+                    const third_year_collection = collection(old_version_doc,"third_year")
+                    const fourth_year_collection = collection(old_version_doc,"fourth_year")
+                    const first_year_snap = await getDocs(first_year_collection)
+                    const second_year_snap = await getDocs(second_year_collection)
+                    const third_year_snap = await getDocs(third_year_collection)
+                    const fourth_year_snap = await getDocs(fourth_year_collection)
+                    const year_collection = collection(version_doc,getYearLevel())
+                    first_year_snap.forEach((doc) =>{
+                      if(doc.data().sub_code != props.sub_code){
+                        addDoc(collection(version_doc,"first_year"), doc.data())
+                      }
+                    })
+                    second_year_snap.forEach((doc) =>{
+                      if(doc.data().sub_code != props.sub_code){
+                        addDoc(collection(version_doc,"second_year"), doc.data())
+                      }
+                    })
+                    third_year_snap.forEach((doc) =>{
+                      if(doc.data().sub_code != props.sub_code){
+                        addDoc(collection(version_doc,"third_year"), doc.data())
+                      }
+                    })
+                    fourth_year_snap.forEach((doc) =>{
+                      if(doc.data().sub_code != props.sub_code){
+                        addDoc(collection(version_doc,"fourth_year"), doc.data())
+                      }
+                    })
+
+                  }).catch((e)=>{
+                    alert(e)
+                  })
+              }
+              else{
+                setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(()=>{
+                  const version_doc = doc(version_collection,counter.toString())
+                  const year_collection = collection(version_doc,getYearLevel())
+                  addDoc(year_collection, version_data)
+                }).catch((e)=>{
+                  alert(e)
+                })
+              }
+
+
   };
 
 
@@ -492,7 +647,26 @@ export const CreateTables = (props) => {
                       Year Level
                     </InputLabel>
                     <NativeSelect
-                      onChange={setOption}
+                      onChange={(event)=>{
+                        setOption(event)
+                        switch (event.target.value.toString()) {
+                          case '10':
+                            setYearLevel("first_year")
+                            break;
+                          case '20':
+                            setYearLevel("second_year")
+                            break;
+                          case '30':
+                            setYearLevel("third_year")
+                            break;
+                          case '40':
+                            setYearLevel("fourth_year")
+                            break;
+                        
+                          default:
+                            break;
+                        }
+                      }}
                       defaultValue={10}
                       inputProps={{
                         name: 'year',
@@ -592,10 +766,11 @@ export const CreateTables = (props) => {
                       hour_pw={subject1.hour_pw}
                       sub_preReq={subject1.sub_preReq}
                       sub_coReq={subject1.sub_coReq}
-                      year={yearOption}/>
+                      year={yearOption}
+                      value="1"/>
                   </TableCell>
                   <TableCell>
-                    <DeleteSubDialog id={subject1.id} year={yearOption} />
+                    <DeleteSubDialog id={subject1.id} year={yearOption} sub_code={subject1.sub_code}/>
                   </TableCell>
                 </TableRow>
               ))}
@@ -626,6 +801,7 @@ export const CreateTables = (props) => {
               </TableCell>
             </Table>
             <Table>
+              {getUserLevel() == 2 ?
               <TableRow>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
                 <ImportDialog value='1' year={yearOption} />
@@ -634,6 +810,9 @@ export const CreateTables = (props) => {
                 <AddCurrSubDialog value="1" year={yearOption} />
               </TableCell>
               </TableRow>
+              :
+              <></>
+              }
             </Table>
 
  {/*Second Semester Headings*/}
@@ -718,10 +897,11 @@ export const CreateTables = (props) => {
                       hour_pw={subject2.hour_pw}
                       sub_preReq={subject2.sub_preReq}
                       sub_coReq={subject2.sub_coReq}
-                      year={yearOption}/>
+                      year={yearOption}
+                      value="2"/>
                   </TableCell>
                   <TableCell>
-                    <DeleteSubDialog id={subject2.id} year={yearOption} />
+                    <DeleteSubDialog id={subject2.id} year={yearOption} sub_code={subject2.sub_code}/>
                   </TableCell>
                 </TableRow>
               ))}
@@ -752,6 +932,7 @@ export const CreateTables = (props) => {
               </TableCell>
             </Table>
             <Table>
+            {getUserLevel() == 2 ?
               <TableRow>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
                 <ImportDialog value='2' year={yearOption} />
@@ -760,6 +941,9 @@ export const CreateTables = (props) => {
                 <AddCurrSubDialog value="2" year={yearOption} />
               </TableCell>
               </TableRow>
+              :
+              <></>
+              }
             </Table>
        
 

@@ -42,6 +42,10 @@ import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import { getCurriculumID, setCurriculumID } from '../create-curriculum/curriculum-model';
 import { useRouter } from 'next/router';
+import { db } from 'src/firebase/firebase-auth';
+import { doc, updateDoc } from "firebase/firestore";
+import { getUserLevel } from '../userModel';
+import { collection, query, where, onSnapshot } from "firebase/firestore"
 
 export default function UpdateModal(props) 
 {
@@ -155,6 +159,15 @@ export function ArchiveModal(props)
 {
   const [open, setOpen] = useState(false);
 
+  const q = query(collection(db, "cities"), where("state", "==", "CA"));
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const cities = [];
+    querySnapshot.forEach((doc) => {
+        cities.push(doc.data().name);
+    });
+    console.log("Current cities in CA: ", cities.join(", "));
+  });
+
   const handleDeleteClickOpen = () => 
   {
     setOpen(true);
@@ -209,7 +222,43 @@ export function ArchiveModal(props)
 export function DownloadPDF(props)
 {
   const componentRef = useRef();
+  const [first_year, setFirstYear] = React.useState([])
 
+  
+  const first_year_query = query(collection(db, "curriculumns",props.id,"first_year"));
+  // const second_year_query = query(collection(db, "curriculumns",props.id,"second_year_"));
+  // const third_year_query = query(collection(db, "curriculumns",props.id,"third_year"));
+  // const fourth_year_query = query(collection(db, "curriculumns",props.id,"fourth_year"));
+  const unsubscribe1 = onSnapshot(first_year_query, (querySnapshot) => {
+    const temp = [];
+    querySnapshot.forEach((doc) => {
+        temp.push(doc.data());
+    });
+    setFirstYear(temp)
+  });
+  // const unsubscribe2 = onSnapshot(second_year_query, (querySnapshot) => {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setFirstYear(temp)
+  // });
+
+  // const unsubscribe3 = onSnapshot(first_year_query, (querySnapshot) => {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setFirstYear(temp)
+  // });
+  // const unsubscribe4 = onSnapshot(first_year_query, (querySnapshot) => {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setFirstYear(temp)
+  // });
+  
   const downloadPDFButton = useReactToPrint
   ({
     content: () => componentRef.current,
@@ -304,35 +353,43 @@ export function DownloadPDF(props)
                   </TableBody>
 
                          {/*First Semester TextFields*/}  
-                  <TableRow
+                  
+                  {first_year.map((data)=>{
+                    if(data.curr_sem == 1)
+                    {
+                    return(
+                    <TableRow
                     hover
-                  >
-                  <TableCell sx={{pl: 3}}>
-                    IT402
+                    >
+                      <TableCell sx={{pl: 3}}>
+                    {data.sub_code}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                    WMAD
+                  {data.sub_desc}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    2.0
+                  {data.sub_lec}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    3.0
+                  {data.sub_lab}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    3.0
+                  {data.total_units}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    3.0
+                  {data.hour_pw}
                   </TableCell>
                   <TableCell sx={{pl: 1}}>
-                    OOP 2
+                  {data.sub_preReq}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                    N/A
+                  {data.sub_coReq}
                   </TableCell>
-                </TableRow>
-              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+                    </TableRow>
+                    )
+                  }}
+                )}
+               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>TOTAL:</b>
@@ -353,7 +410,7 @@ export function DownloadPDF(props)
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
-            </Table>
+            </Table> 
             <Table>
               <TableRow>
               </TableRow>
@@ -395,34 +452,41 @@ export function DownloadPDF(props)
                   </TableBody>
 
   {/*First Semester TextFields*/} 
-                <TableRow
-                  hover
-                >
-                  <TableCell sx={{pl: 3}}>
-                    IT101
+  {first_year.map((data)=>{
+                    if(data.curr_sem == 2)
+                    {
+                    return(
+                    <TableRow
+                    hover
+                    >
+                      <TableCell sx={{pl: 3}}>
+                    {data.sub_code}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                    Ethics
+                  {data.sub_desc}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    2.0
+                  {data.sub_lec}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    3.0
+                  {data.sub_lab}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    1.0
+                  {data.total_units}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                    3.0
+                  {data.hour_pw}
                   </TableCell>
                   <TableCell sx={{pl: 1}}>
-                    ROTC
+                  {data.sub_preReq}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                    N/A
+                  {data.sub_coReq}
                   </TableCell>
-                </TableRow>
+                    </TableRow>
+                    )
+                  }}
+                )}
 
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
@@ -604,24 +668,88 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {customer.username}
                     </TableCell>
                   <TableCell>
+                    {getUserLevel() == 2 && customer.accepted != true?
+                    <Button
+                    variant="outlined"
+                    disabled={customer.on_review == true ? true : false}
+                    onClick={async()=>{
+                      const washingtonRef = doc(db, "curriculumns", customer.id);
+                      await updateDoc(washingtonRef, {
+                        on_review: true
+                      }).then(()=>{
+                        alert('Wait for the dean approval.')
+                      });
+                    }}
+                    >
+                    {customer.on_review == true ? "On Review" : "Submit Curriculum"}
+                    </Button>
+                    :
+                    <>
+                    {customer.on_review == true ?
+                    <>
+                    <Button
+                    sx={{background:'#0275d8', color:'white'}}
+                    onClick={async()=>{
+                      const washingtonRef = doc(db, "curriculumns", customer.id);
+                      await updateDoc(washingtonRef, {
+                        accepted: true,
+                        on_review: false
+                      }).then(()=>{
+                        alert('Successfully Accepted.')
+                      });
+                    }}
+                    >
+                      Accept
+                    </Button>
+                    <Button
+                    sx={{background:'#d9534f', color:'white'}}
+                    onClick={async()=>{
+                      const washingtonRef = doc(db, "curriculumns", customer.id);
+                      await updateDoc(washingtonRef, {
+                        on_review: false
+                      }).then(()=>{
+                        alert('Successfully Rejected.')
+                      });
+                    }}
+                    >
+                      Reject
+                    </Button>
+                    </>
+                    :
+                    <></>
+                    }
+                    </>
+                    }
+                    {getUserLevel() == 2 ?
                     <UpdateModal
                     data={customer}
                     >
                       {/* UPDATE */}
                     </UpdateModal>
+                    :
+                    <></>
+                    }
                     <Button
                       startIcon={(<EditIcon fontSize="small" />)}
                       variant="outlined"
                       sx={{ mr: 1 }}
-                      onClick={() => sendData(customer.dateCreated)} >
-                        Edit
+                      onClick={() => 
+                      sendData(customer.id)
+                      } >
+                        View
                     </Button>
                     <ArchiveModal>
                       {/* ARCHIVE */}
                     </ArchiveModal>
-                    <DownloadPDF>
+                    {customer.accepted == true ? 
+                    <DownloadPDF
+                    id={customer.id}
+                    >
                       {/* PDF */}
                     </DownloadPDF>
+                    :
+                    <></>
+                    }
                 </TableCell>
                 </TableRow>
               ))}

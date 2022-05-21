@@ -10,7 +10,31 @@ import {  withAuth } from '../routes/withAuth'
 import NextLink from 'next/link';
 import { Comments } from 'src/components/create-curriculum/create-comments';
 import HistoryIcon from '@mui/icons-material/History';
-const Dashboard = () => (
+import { useEffect, useState } from 'react';
+import { db } from 'src/firebase/firebase-auth';
+import { doc, setDoc, collection, setDocs, getDocs, query, where, onSnapshot } from "firebase/firestore";
+import { getCurriculumID } from 'src/components/create-curriculum/curriculum-model';
+import { CreateComments } from 'src/components/create-curriculum/comments';
+import { getUserLevel } from 'src/components/userModel';
+
+const Dashboard = () => {
+  const [version,setVersion] = useState([])
+
+  useEffect(async() => {
+    // const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
+    // const version_collection = collection(curriculum_doc,"versions")
+    const q = query(collection(db,"curriculumns", getCurriculumID(),"versions"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const temp = [];
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+          temp.push({id:doc.id,data:doc.data()});
+      });
+      setVersion(temp)
+    })
+  }, [])
+  
+  return(
   <>
     <Head>
       <title>
@@ -43,7 +67,7 @@ const Dashboard = () => (
             startIcon={(<ArrowBackIcon fontSize="small" />)}
             sx={{ mr: 1 }}
           >
-            Cancel
+            Back
           </Button>
           </NextLink>
           <Button
@@ -52,13 +76,13 @@ const Dashboard = () => (
           >
             Apply Version
           </Button>
-          <Button
+          {/* <Button
             color="primary"
             variant="contained"
             startIcon={(<SaveIcon fontSize="small" />)}
           >
             Save
-          </Button>
+          </Button> */}
         </Box>
       </Box>
  
@@ -81,7 +105,7 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
-            <HistoryLog sx={{ height: '100%' }} />
+            <HistoryLog sx={{ height: '100%' }} data={version}/>
           </Grid>
           <Grid
             item
@@ -99,7 +123,24 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
+            {getUserLevel() == 3 ?
             <Comments sx={{ height: '100%' }} />
+            :
+            <></> 
+            }
+          </Grid>
+          <Grid
+            item
+            lg={8}
+            md={12}
+            xl={9}
+            xs={12}
+          >
+            {getUserLevel() == 3 ?
+            <CreateComments sx={{ height: '100%' }} />
+            :
+            <></> 
+            }
           </Grid>
 
 
@@ -107,7 +148,8 @@ const Dashboard = () => (
       </Container>
     </Box>
   </>
-);
+  )
+}
 
 Dashboard.getLayout = (page) => (
   <DashboardLayout>
