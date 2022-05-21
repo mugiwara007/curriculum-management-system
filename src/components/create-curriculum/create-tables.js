@@ -36,7 +36,7 @@ import * as Yup from 'yup';
 import EditIcon from '@mui/icons-material/Edit';
 import { useFormik } from 'formik';
 import { useLocation } from 'react-router-dom';
-import { getCurriculumID, setYearLevel } from './curriculum-model';
+import { getCurriculumID, getVersion, setYearLevel } from './curriculum-model';
 import { getYearLevel } from './curriculum-model';
 import { getUserLevel } from '../userModel';
 
@@ -523,6 +523,7 @@ export const DeleteSubDialog = (props) =>{
 }
 
 export const CreateTables = (props) => {
+  const curr_ver= getVersion().toString()
   const [subjects1, setSubjects1] = useState([]);
   const [subjects2, setSubjects2] = useState([]);
   const { currentUser } = useAuth()
@@ -548,8 +549,9 @@ export const CreateTables = (props) => {
     } else if (yearOption == 40){
       year = "fourth_year"
     }
-    const sub1Ref = collection(db, "curriculumns", curriculum_id, year);
-    const q = query(sub1Ref, where("curr_sem", '==',1));
+    const sub1Ref = collection(db, "curriculumns", curriculum_id, 'versions', curr_ver, year);
+    
+    const q = query(sub1Ref, where("curr_sem", '==' ,1));
     let tLec1 = 0
     let tLab1 = 0
     let tUnit1 = 0
@@ -594,8 +596,8 @@ export const CreateTables = (props) => {
     } else if (yearOption == 40){
       year = "fourth_year"
     }
-    const sub2Ref = collection(db, "curriculumns", curriculum_id, year);
-    const q = query(sub2Ref, where("curr_sem", '==',2));
+    const sub2Ref = collection(db, "curriculumns", curriculum_id, "versions", curr_ver, year);
+    const q = query(sub2Ref, where("curr_sem", '==', 2));
     let tLec2 = 0
     let tLab2 = 0
     let tUnit2 = 0

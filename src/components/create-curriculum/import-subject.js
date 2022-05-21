@@ -70,17 +70,17 @@ const curriculum_id = getCurriculumID();
                 const currSubRef = collection(db, "curriculumns", curriculum_id, getYearLevel());
                 const docRef = doc(db, "subjects", subID);
                 const docSnap = await getDoc(docRef);
-                addDoc(currSubRef, {
-                    sub_code: docSnap.data().sub_code,
-                    sub_desc: docSnap.data().sub_desc,
-                    sub_lec: docSnap.data().sub_lec,
-                    sub_lab: docSnap.data().sub_lab,
-                    total_units: docSnap.data().total_units,
-                    hour_pw: docSnap.data().hour_pw,
-                    sub_preReq: docSnap.data().sub_preReq,
-                    sub_coReq: docSnap.data().sub_coReq,
-                    curr_sem: Number(props.value)
-                });
+                // addDoc(currSubRef, {
+                //     sub_code: docSnap.data().sub_code,
+                //     sub_desc: docSnap.data().sub_desc,
+                //     sub_lec: docSnap.data().sub_lec,
+                //     sub_lab: docSnap.data().sub_lab,
+                //     total_units: docSnap.data().total_units,
+                //     hour_pw: docSnap.data().hour_pw,
+                //     sub_preReq: docSnap.data().sub_preReq,
+                //     sub_coReq: docSnap.data().sub_coReq,
+                //     curr_sem: Number(props.value)
+                // });
 
                 const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
                 const version_collection = collection(curriculum_doc,"versions")

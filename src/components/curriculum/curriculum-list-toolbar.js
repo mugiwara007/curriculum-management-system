@@ -27,7 +27,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { doc, setDoc, collection, setDocs, query, where, onSnapshot } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where, onSnapshot } from "firebase/firestore";
 import { db } from 'src/firebase/firebase-auth';
 import { compareAsc } from 'date-fns';
 import { useFormik } from 'formik';
@@ -35,9 +35,11 @@ import { useRouter } from 'next/router';
 import * as Yup from 'yup';
 import { useEffect } from 'react';
 import { getEmail } from '../userModel';
+import { auth } from 'src/firebase/firebase-auth'
 
 export default function AddCurriculumModal()
 {
+  const usersCollectionRef = collection(db, "users");
   const [open, setOpen] = React.useState(false);
   const [DeptCode, setDeptCode] = React.useState('BSIT');
   const [department, setDepartment] = React.useState([])
@@ -64,7 +66,6 @@ export default function AddCurriculumModal()
       cmo: '',
       currVersion: '',
       deptCode: '',
-      username: '',
     },
     validationSchema: Yup.object({
       currCode: Yup
@@ -86,12 +87,7 @@ export default function AddCurriculumModal()
         .string()
         .max(255)
         .required(
-          'College Description is required'),
-      username: Yup
-        .string()
-        .max(11)
-        .required(
-          'College Logo is required')
+          'College Description is required')
       
     }),
 
@@ -218,16 +214,6 @@ export default function AddCurriculumModal()
               </Select>
             </FormControl>
 
-            <TextField
-            fullWidth
-            label="Username" 
-            variant="outlined" 
-            margin="normal"
-            type="text"
-            name="username"
-            onChange={formik.handleChange}
-            value={formik.values.username}
-            />
           </DialogContent>
           <DialogActions>
             <Box>
@@ -243,7 +229,17 @@ export default function AddCurriculumModal()
                   variant='contained'
                   onClick={()=>{
                     const current_date =  new Date()
-                    addCurriculum({currCode: formik.values.currCode,cmo:formik.values.cmo,currVersion:1,depCode:DeptCode,username:formik.values.username, dateCreated:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()), dateApproved:'--', email:getEmail(), on_review:false, accepted:false})
+                    let newSubUser=""
+                    auth.onAuthStateChanged(async user => {
+                      const email = user.email;
+                      const userData = query(usersCollectionRef, where("email", "==", email));
+                      const querySnapshot = await getDocs(userData)
+                      await querySnapshot.forEach((doc) => {
+                          const data = doc.data()
+                          newSubUser=data.username
+                          });});
+                    addCurriculum({currCode: formik.values.currCode,cmo:formik.values.cmo,currVersion:1,depCode:DeptCode,username:newSubUser, dateCreated:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()), dateApproved:'--', email:getEmail(), on_review:false, accepted:false})
+                  
                   }
                   }>
                     Done
