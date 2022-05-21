@@ -15,7 +15,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
-import { setUserLevel } from 'src/components/userModel';
+import { setEmail, setUserLevel } from 'src/components/userModel';
 import { db, auth } from 'src/firebase/firebase-auth';
 import { doc, getDoc } from "firebase/firestore";
 import Snackbar from '@mui/material/Snackbar';
@@ -191,6 +191,7 @@ const Login = () => {
 
         if (docSnap.exists()) {
           setUserLevel(docSnap.data().userlevel)
+          setEmail(formik.values.email)
           router.push('/dashboard')
         } else {
           // doc.data() will be undefined in this case
