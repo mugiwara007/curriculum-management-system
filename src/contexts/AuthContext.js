@@ -4,6 +4,7 @@ import { auth } from 'src/firebase/firebase-auth'
 import { db } from 'src/firebase/firebase-auth'
 import { collection ,addDoc, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/router';
+import { setEmail } from 'src/components/userModel';
 
 const AuthContext = React.createContext()
 
@@ -47,6 +48,7 @@ export function AuthProvider({ children }) {
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
+            setEmail(user.email)
             router.push('/dashboard');
         })
         .catch((error) => {

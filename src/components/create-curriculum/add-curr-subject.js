@@ -9,13 +9,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
 import { useAuth } from 'src/contexts/AuthContext';
-import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, where,setDoc } from 'firebase/firestore';
+import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, where,setDoc, } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth'
 import { auth } from 'src/firebase/firebase-auth';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import AddIcon from '@mui/icons-material/Add';
-import { getCurriculumID } from './curriculum-model';
+import { getCurriculumID, getVersion } from './curriculum-model';
 import { getYearLevel } from './curriculum-model';
 
 export const AddCurrSubDialog = (props) => {
