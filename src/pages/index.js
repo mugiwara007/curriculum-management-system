@@ -7,7 +7,7 @@ import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Facebook as FacebookIcon } from '../icons/facebook';
 import { Google as GoogleIcon } from '../icons/google';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail  } from "firebase/auth";
 import { useAuth } from 'src/contexts/AuthContext';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -18,7 +18,11 @@ import * as React from 'react';
 import { setUserLevel } from 'src/components/userModel';
 import { db, auth } from 'src/firebase/firebase-auth';
 import { doc, getDoc } from "firebase/firestore";
-
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const bgImagePath =
 "/static/images/soar_bulsu_2019.jpg"
@@ -36,8 +40,31 @@ const styles = {
   }
 };
 
+const Alert = React.forwardRef(function Alert(props, ref) 
+{
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export function FormDialog() {
   const [open, setOpen] = React.useState(false);
+  const [openSB, setOpenSB] = React.useState(false);
+  const [openSBF, setOpenSBF] = React.useState(false);
+  const formik = useFormik({
+    initialValues: {
+      email: ''
+    },
+    validationSchema: Yup.object({
+      email: Yup
+      .string()
+      .max(100)
+      .required
+      (
+        'Email is required'
+      ),
+    }),
+    onSubmit: async() => {
+    }
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -45,7 +72,45 @@ export function FormDialog() {
 
   const handleClose = () => {
     setOpen(false);
+    setOpenSB(false);
   };
+
+  const handleCloseSB = () => {
+    setOpenSB(false);
+    setOpenSBF(false);
+  };
+
+  const handlePasswordReset = async (values, actions) => {
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, formik.values.email)
+      .then(() => {
+        console.log('Password reset email sent successfully');
+        setOpenSB(true);
+        // return(
+        //   <div>
+        //     <Stack spacing={2} sx={{ width: '100%' }}>
+        //       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        //         <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+        //         This is a warning message!
+        //         </Alert>
+        //       </Snackbar>
+            
+        //     <Alert severity="error">This is an error message!</Alert>
+        //     <Alert severity="warning">This is a warning message!</Alert>
+        //     <Alert severity="info">This is an information message!</Alert>
+        //     <Alert severity="success">This is a success message!</Alert>
+        //     </Stack>
+        //   </div>
+        // );
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+        console.log("ERROROOROOR");
+        setOpenSBF(true);
+      });
+  }
 
   return (
     <div style={{display : 'inline-block'}}>
@@ -78,14 +143,33 @@ export function FormDialog() {
             type="email"
             fullWidth
             variant="standard"
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            name="email"
           />
         </DialogContent>
+        <Stack spacing={2} sx={{ width: '100%' }}>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button color="primary"
            variant="contained"
-          onClick={handleClose}>Send Password Reset</Button>
+          onClick={handlePasswordReset}>Send Password Reset</Button>
         </DialogActions>
+              <Snackbar open={openSB} autoHideDuration={6000} onClose={handleCloseSB}>
+                <Alert onClose={handleCloseSB} severity="success" sx={{ width: '100%' }}>
+                Password reset email sent successfully
+                </Alert>
+              </Snackbar>
+              <Snackbar open={openSBF} autoHideDuration={6000} onClose={handleCloseSB}>
+                <Alert onClose={handleCloseSB} severity="error" sx={{ width: '100%' }}>
+                Password reset failed
+                </Alert>
+              </Snackbar>
+            {/* <Alert severity="error">This is an error message!</Alert>
+            <Alert severity="warning">This is a warning message!</Alert>
+            <Alert severity="info">This is an information message!</Alert>
+            <Alert severity="success">This is a success message!</Alert> */}
+        </Stack>
       </Dialog>
     </div>
   );
