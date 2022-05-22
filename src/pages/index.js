@@ -155,12 +155,12 @@ export function FormDialog() {
            variant="contained"
           onClick={handlePasswordReset}>Send Password Reset</Button>
         </DialogActions>
-              <Snackbar open={openSB} autoHideDuration={6000} onClose={handleCloseSB}>
+              <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSB} autoHideDuration={6000} onClose={handleCloseSB}>
                 <Alert onClose={handleCloseSB} severity="success" sx={{ width: '100%' }}>
                 Password reset email sent successfully
                 </Alert>
               </Snackbar>
-              <Snackbar open={openSBF} autoHideDuration={6000} onClose={handleCloseSB}>
+              <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openSBF} autoHideDuration={6000} onClose={handleCloseSB}>
                 <Alert onClose={handleCloseSB} severity="error" sx={{ width: '100%' }}>
                 Password reset failed
                 </Alert>
