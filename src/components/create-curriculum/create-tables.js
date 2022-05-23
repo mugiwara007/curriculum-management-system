@@ -523,7 +523,6 @@ export const DeleteSubDialog = (props) =>{
 }
 
 export const CreateTables = (props) => {
-  const curr_ver= getVersion().toString()
   const [subjects1, setSubjects1] = useState([]);
   const [subjects2, setSubjects2] = useState([]);
   const { currentUser } = useAuth()
@@ -535,11 +534,12 @@ export const CreateTables = (props) => {
   const [totalLab2, setTotalLab2] = useState(0);
   const [totalUnit2, setTotalUnit2] = useState(0);
   const [totalHr2, setTotalHr2] = useState(0);
-  const [yearOption, setYearOption] = useState(10)
-  const curriculum_id = getCurriculumID();
+  const [yearOption, setYearOption] = useState(10);
 
   function allCurrSub1(){
+    const newVersion = getVersion().toString()
     let year="";
+    const curriculum_id = getCurriculumID();
     if (yearOption == 10){
       year = "first_year"
     } else if (yearOption == 20){
@@ -549,8 +549,7 @@ export const CreateTables = (props) => {
     } else if (yearOption == 40){
       year = "fourth_year"
     }
-    const sub1Ref = collection(db, "curriculumns", curriculum_id, 'versions', curr_ver, year);
-    
+    const sub1Ref = collection(db, "curriculumns", curriculum_id, 'versions', newVersion, year);
     const q = query(sub1Ref, where("curr_sem", '==' ,1));
     let tLec1 = 0
     let tLab1 = 0
@@ -567,7 +566,7 @@ export const CreateTables = (props) => {
         tLab1 = 0
         tUnit1 = 0
         tHrPw1 = 0
-
+        
          subs.map((currSub) => tLec1 += Number(currSub.sub_lec));
          subs.map((currSub) => tLab1 += Number(currSub.sub_lab));
          subs.map((currSub) => tUnit1 += Number(currSub.total_units));
@@ -582,9 +581,10 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub1()
-  }, [yearOption]);
+  }, [yearOption, props.currentVersion]);
 
   function allCurrSub2(){
+    const newVersion = getVersion().toString()
     let year="";
     const curriculum_id = getCurriculumID();
     if (yearOption == 10){
@@ -596,7 +596,7 @@ export const CreateTables = (props) => {
     } else if (yearOption == 40){
       year = "fourth_year"
     }
-    const sub2Ref = collection(db, "curriculumns", curriculum_id, "versions", curr_ver, year);
+    const sub2Ref = collection(db, "curriculumns", curriculum_id, "versions", newVersion, year);
     const q = query(sub2Ref, where("curr_sem", '==', 2));
     let tLec2 = 0
     let tLab2 = 0
@@ -628,7 +628,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub2()
-  }, [yearOption]);
+  }, [yearOption, props.currentVersion]);
 
   const setOption = (event) =>{
     setYearOption(event.target.value)

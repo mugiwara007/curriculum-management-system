@@ -28,6 +28,10 @@ export function AuthProvider({ children }) {
     const router = useRouter();
     const ulevel = 0
     
+      const handleClose = () => {
+        setOpen(false);
+      };
+    
     function register(fname,mname,sname,email, password){
         const res = createUserWithEmailAndPassword(auth, email, password);
         const user = res.user;
@@ -54,8 +58,9 @@ export function AuthProvider({ children }) {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            alert("User not found.")
-            alert(errorMessage)
+            // alert("User not found.")
+            // alert(errorMessage)
+            
         });
 
         return 
