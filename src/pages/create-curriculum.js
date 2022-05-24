@@ -18,7 +18,8 @@ import { CreateComments } from 'src/components/create-curriculum/comments';
 import { getUserLevel } from 'src/components/userModel';
 
 const Dashboard = () => {
-  const [version,setVersion] = useState([])
+  const [tempVersion,setTempVersion] = useState([])
+  const [currentVersion,setCurrentVersion] = useState(0)
 
   useEffect(async() => {
     // const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
@@ -30,7 +31,7 @@ const Dashboard = () => {
         console.log(doc.data())
           temp.push({id:doc.id,data:doc.data()});
       });
-      setVersion(temp)
+      setTempVersion(temp)
     })
   }, [])
   
@@ -105,7 +106,7 @@ const Dashboard = () => {
             xl={3}
             xs={12}
           >
-            <HistoryLog sx={{ height: '100%' }} data={version}/>
+            <HistoryLog sx={{ height: '100%' }} data={tempVersion} setCurrentVersion={setCurrentVersion} />
           </Grid>
           <Grid
             item
@@ -114,7 +115,7 @@ const Dashboard = () => {
             xl={9}
             xs={12}
           >
-            <CreateTables />
+            <CreateTables currentVersion={currentVersion} />
           </Grid>
           <Grid
             item

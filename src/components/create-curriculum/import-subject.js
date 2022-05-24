@@ -17,7 +17,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import React, { Component, useState, useEffect } from 'react';
 import { useAuth } from 'src/contexts/AuthContext';
-import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, where, setDoc, setDocs } from 'firebase/firestore';
+import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, setDoc } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth'
 import { auth } from 'src/firebase/firebase-auth';
 import AddIcon from '@mui/icons-material/Add';
@@ -187,18 +187,6 @@ const curriculum_id = getCurriculumID();
 
   const handleChange = (event) => {
     setSubID(event.target.value)
-  }
-
-  const handleSubmit = (event) => {
-    if(subID){
-        alert("SHEESH")
-        addSubCurr(subID);
-    } else{
-        alert("ARAY")
-        handleChange();
-    }
-    
-    event.preventDefault();
   }
 
   return (

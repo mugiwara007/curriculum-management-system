@@ -40,12 +40,11 @@ import { subAuth } from '../data-handling/subject-crud';
 import { useAuth } from 'src/contexts/AuthContext';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import ArchiveIcon from '@mui/icons-material/Archive';
-import { getCurriculumID, setCurriculumID } from '../create-curriculum/curriculum-model';
+import { getCurriculumID, setCurriculumID, setVersion } from '../create-curriculum/curriculum-model';
 import { useRouter } from 'next/router';
-import { db } from 'src/firebase/firebase-auth';
-import { doc, updateDoc } from "firebase/firestore";
 import { getUserLevel } from '../userModel';
-import { collection, query, where, onSnapshot } from "firebase/firestore"
+import { collection, onSnapshot, query, doc, updateDoc, getDocs } from 'firebase/firestore';
+import { db } from 'src/firebase/firebase-auth';
 
 export default function UpdateModal(props) 
 {
@@ -546,8 +545,15 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
     setPage(newPage);
   };
 
-  function sendData(id) {
+  const sendData = async (id) => {
+    const subs =[]
     setCurriculumID(id)
+    const q = query(collection(db, "curriculumns", id, 'versions'));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      subs.push({ ...doc.data(), id: doc.id });
+    });
+    setVersion(subs.length)
     router.push('/create-curriculum')
   }
 
