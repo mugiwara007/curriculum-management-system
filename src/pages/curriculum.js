@@ -36,7 +36,7 @@ const Curriculum = () => {
       });
     }
     else{
-      const curriculumns = query(collection(db, "curriculumns"), where('on_review', "==", ));
+      const curriculumns = query(collection(db, "curriculumns"), where('on_review', "==", true));
       const unsubscribe = onSnapshot(curriculumns , (querySnapshot) => {
         const temp = [];
         querySnapshot.forEach((doc) => {
