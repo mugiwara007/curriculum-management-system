@@ -523,8 +523,6 @@ export const DeleteSubDialog = (props) =>{
 }
 
 export const CreateTables = (props) => {
-  const [subjects1, setSubjects1] = useState([]);
-  const [subjects2, setSubjects2] = useState([]);
   const { currentUser } = useAuth()
   const [totalLec1, setTotalLec1] = useState(0);
   const [totalLab1, setTotalLab1] = useState(0);
@@ -535,9 +533,11 @@ export const CreateTables = (props) => {
   const [totalUnit2, setTotalUnit2] = useState(0);
   const [totalHr2, setTotalHr2] = useState(0);
   const [yearOption, setYearOption] = useState(10);
+  const [currVersion, setCurrVersion] = useState(0)
 
   function allCurrSub1(){
     const newVersion = getVersion().toString()
+    setCurrVersion(newVersion)
     let year="";
     const curriculum_id = getCurriculumID();
     if (yearOption == 10){
@@ -560,7 +560,7 @@ export const CreateTables = (props) => {
       querySnapshot.forEach((doc) => {
           subs.push({ ...doc.data(), id: doc.id });
       });
-         setSubjects1(subs)
+         props.setSubjects1(subs)
 
         tLec1 = 0
         tLab1 = 0
@@ -581,7 +581,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub1()
-  }, [yearOption, props.currentVersion]);
+  }, [yearOption, currVersion]);
 
   function allCurrSub2(){
     const newVersion = getVersion().toString()
@@ -607,7 +607,7 @@ export const CreateTables = (props) => {
       querySnapshot.forEach((doc) => {
           subs.push({ ...doc.data(), id: doc.id });
       });
-         setSubjects2(subs)
+         props.setSubjects2(subs)
 
         tLec2 = 0
         tLab2 = 0
@@ -628,7 +628,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub2()
-  }, [yearOption, props.currentVersion]);
+  }, [yearOption, currVersion]);
 
   const setOption = (event) =>{
     setYearOption(event.target.value)
@@ -728,7 +728,7 @@ export const CreateTables = (props) => {
 
   {/*First Semester TextFields*/}  
      
-     {currentUser && subjects1.map((subject1) => (
+     {currentUser && props.subjects1.map((subject1) => (
                 <TableRow
                   hover
                   key={subject1.id}
@@ -779,7 +779,7 @@ export const CreateTables = (props) => {
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>TOTAL:</b>
+              <b>TOTAL :</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>{ totalLec1.toFixed(1) }</b>
@@ -859,7 +859,7 @@ export const CreateTables = (props) => {
 
   {/*First Semester TextFields*/}  
      
-     {currentUser && subjects2.map((subject2) => (
+     {currentUser && props.subjects2.map((subject2) => (
                 <TableRow
                   hover
                   key={subject2.id}
@@ -910,7 +910,7 @@ export const CreateTables = (props) => {
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>TOTAL:</b>
+              <b>TOTAL :</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>{ totalLec2.toFixed(1) }</b>
