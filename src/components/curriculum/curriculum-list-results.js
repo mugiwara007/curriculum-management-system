@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -40,11 +40,12 @@ import { subAuth } from '../data-handling/subject-crud';
 import { useAuth } from 'src/contexts/AuthContext';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import ArchiveIcon from '@mui/icons-material/Archive';
-import { getCurriculumID, setCurriculumID, setVersion } from '../create-curriculum/curriculum-model';
+import { getCurriculumID, setCurriculumID } from '../create-curriculum/curriculum-model';
 import { useRouter } from 'next/router';
-import { getUserLevel } from '../userModel';
-import { collection, onSnapshot, query, doc, updateDoc, getDocs } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth';
+import { doc, updateDoc, getDocs } from "firebase/firestore";
+import { getUserLevel } from '../userModel';
+import { collection, query, where, onSnapshot } from "firebase/firestore"
 
 export default function UpdateModal(props) 
 {
@@ -204,42 +205,185 @@ export function DownloadPDF(props)
 {
   const componentRef = useRef();
   const [first_year, setFirstYear] = React.useState([])
+  const first_year_query = query(collection(db, "curriculumns",props.id,"first_year"));
+
+  //1st YR
+  const [subjects1Y1S, setSubjects1Y1S] = useState([]);
+  const [subjects1Y2S, setSubjects1Y2S] = useState([]);
+
+  //2nd YR
+  const [subjects2Y1S, setSubjects2Y1S] = useState([]);
+  const [subjects2Y2S, setSubjects2Y2S] = useState([]);
+
+  //3rd YR
+  const [subjects3Y1S, setSubjects3Y1S] = useState([]);
+  const [subjects3Y2S, setSubjects3Y2S] = useState([]);
+
+  //4th YR
+  const [subjects4Y1S, setSubjects4Y1S] = useState([]);
+  const [subjects4Y2S, setSubjects4Y2S] = useState([]);
+
+  //1st YR SUB INFO
+  const [totalLec1, setTotalLec1] = useState(0);
+  const [totalLab1, setTotalLab1] = useState(0);
+  const [totalUnit1, setTotalUnit1] = useState(0);
+  const [totalHr1, setTotalHr1] = useState(0);
+  const [totalLec2, setTotalLec2] = useState(0);
+  const [totalLab2, setTotalLab2] = useState(0);
+  const [totalUnit2, setTotalUnit2] = useState(0);
+  const [totalHr2, setTotalHr2] = useState(0);
 
   
-  const first_year_query = query(collection(db, "curriculumns",props.id,"first_year"));
-  // const second_year_query = query(collection(db, "curriculumns",props.id,"second_year_"));
-  // const third_year_query = query(collection(db, "curriculumns",props.id,"third_year"));
-  // const fourth_year_query = query(collection(db, "curriculumns",props.id,"fourth_year"));
-  const unsubscribe1 = onSnapshot(first_year_query, (querySnapshot) => {
+
+  const allCurrSub1 = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
+    });
+
+    version = sbjct.length.toString()
+
+    const sub1Ref = collection(db, "curriculumns", currID, 'versions', version, "first_year");
+    const q = query(sub1Ref, where("curr_sem", '==' ,1));
+
+    let tLec1 = 0
+    let tLab1 = 0
+    let tUnit1 = 0
+    let tHrPw1 = 0
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects1Y1S(sbjct)
+
+        tLec1 = 0
+        tLab1 = 0
+        tUnit1 = 0
+        tHrPw1 = 0
+        
+         subs1.map((currSub) => tLec1 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab1 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit1 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw1 += Number(currSub.hour_pw));
+
+         setTotalLec1(tLec1)
+         setTotalLab1(tLab1)
+         setTotalUnit1(tUnit1)
+         setTotalHr1(tHrPw1)
+    });
+
+    // const sub2Ref = collection(db, "curriculumns", currID, 'versions', version, "first_year");
+    // const q2 = query(sub2Ref, where("curr_sem", '==' ,2));
+
+    // let tLec2 = 0
+    // let tLab2 = 0
+    // let tUnit2 = 0
+    // let tHrPw2 = 0
+
+    // const unsubscribe2 = onSnapshot(q2, (querySnapshot) => 
+    // {
+    //   const subs1 = [];
+    //   querySnapshot.forEach((doc) => {
+    //       subs1.push({ ...doc.data(), id: doc.id });
+    //   });
+    //     setSubjects1Y2S(sbjct)
+
+    //     tLec2 = 0
+    //     tLab2 = 0
+    //     tUnit2 = 0
+    //     tHrPw2 = 0
+        
+    //      subs1.map((currSub) => tLec2 += Number(currSub.sub_lec));
+    //      subs1.map((currSub) => tLab2 += Number(currSub.sub_lab));
+    //      subs1.map((currSub) => tUnit2 += Number(currSub.total_units));
+    //      subs1.map((currSub) => tHrPw2 += Number(currSub.hour_pw));
+
+    //      setTotalLec2(tLec2)
+    //      setTotalLab2(tLab2)
+    //      setTotalUnit2(tUnit2)
+    //      setTotalHr2(tHrPw2)
+    // });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub1()
+  }, [props.id]);
+
+  const allCurrSub2 = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
+    });
+
+    version = sbjct.length.toString()
+
+
+    const sub2Ref = collection(db, "curriculumns", currID, 'versions', version, "first_year");
+    const q2 = query(sub2Ref, where("curr_sem", '==' ,2));
+
+    let tLec2 = 0
+    let tLab2 = 0
+    let tUnit2 = 0
+    let tHrPw2 = 0
+
+    const unsubscribe2 = onSnapshot(q2, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects1Y2S(sbjct)
+
+        tLec2 = 0
+        tLab2 = 0
+        tUnit2 = 0
+        tHrPw2 = 0
+        
+         subs1.map((currSub) => tLec2 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab2 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit2 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw2 += Number(currSub.hour_pw));
+
+         setTotalLec2(tLec2)
+         setTotalLab2(tLab2)
+         setTotalUnit2(tUnit2)
+         setTotalHr2(tHrPw2)
+    });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub2()
+  }, [props.id]);
+
+
+  const unsubscribe1 = onSnapshot(first_year_query, (querySnapshot) => 
+  {
     const temp = [];
     querySnapshot.forEach((doc) => {
         temp.push(doc.data());
     });
     setFirstYear(temp)
   });
-  // const unsubscribe2 = onSnapshot(second_year_query, (querySnapshot) => {
-  //   const temp = [];
-  //   querySnapshot.forEach((doc) => {
-  //       temp.push(doc.data());
-  //   });
-  //   setFirstYear(temp)
-  // });
 
-  // const unsubscribe3 = onSnapshot(first_year_query, (querySnapshot) => {
-  //   const temp = [];
-  //   querySnapshot.forEach((doc) => {
-  //       temp.push(doc.data());
-  //   });
-  //   setFirstYear(temp)
-  // });
-  // const unsubscribe4 = onSnapshot(first_year_query, (querySnapshot) => {
-  //   const temp = [];
-  //   querySnapshot.forEach((doc) => {
-  //       temp.push(doc.data());
-  //   });
-  //   setFirstYear(temp)
-  // });
-  
   const downloadPDFButton = useReactToPrint
   ({
     content: () => componentRef.current,
@@ -305,8 +449,8 @@ export function DownloadPDF(props)
       <Divider />
     
     {/*First Semester Header*/}
-            <Table>
-              <TableBody>
+    <Table>
+    <TableBody>
                   <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
                     COURSE CODE
                   </TableCell>
@@ -333,79 +477,71 @@ export function DownloadPDF(props)
                   </TableCell>
                   </TableBody>
 
-                         {/*First Semester TextFields*/}  
-                  
-                  {first_year.map((data)=>{
-                    if(data.curr_sem == 1)
-                    {
-                    return(
-                    <TableRow
-                    hover
-                    >
-                      <TableCell sx={{pl: 3}}>
-                    {data.sub_code}
+  {/*First Semester TextFields*/}  
+     
+     {subjects1Y1S.map((subject1) => (
+                <TableRow
+                  hover
+                  key={subject1.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_code}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                  {data.sub_desc}
+                    {subject1.sub_desc}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.sub_lec}
+                    {Number(subject1.sub_lec).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.sub_lab}
+                    {Number(subject1.sub_lab).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.total_units}
+                    {Number(subject1.total_units).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.hour_pw}
-                  </TableCell>
-                  <TableCell sx={{pl: 1}}>
-                  {data.sub_preReq}
+                    {Number(subject1.hour_pw).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                  {data.sub_coReq}
+                    {subject1.sub_preReq}
                   </TableCell>
-                    </TableRow>
-                    )
-                  }}
-                )}
-               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>TOTAL:</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>3.0</b>
+              <b>{ totalLec1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>3.0</b>
+              <b>{ totalLab1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>1.0</b>
+              <b>{ totalUnit1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>3.0</b>
+              <b>{ totalHr1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
-            </Table> 
-            <Table>
-              <TableRow>
-              </TableRow>
             </Table>
 
  {/*Second Semester Headings*/}
 
-           <Divider />
+ <Divider />
             <TableCell>
               <p><b>Second Semester</b></p>
               </TableCell>
               <Divider />
               <Table>
-                <TableBody>
+    <TableBody>
                   <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
                     COURSE CODE
                   </TableCell>
@@ -432,65 +568,62 @@ export function DownloadPDF(props)
                   </TableCell>
                   </TableBody>
 
-  {/*First Semester TextFields*/} 
-  {first_year.map((data)=>{
-                    if(data.curr_sem == 2)
-                    {
-                    return(
-                    <TableRow
-                    hover
-                    >
-                      <TableCell sx={{pl: 3}}>
-                    {data.sub_code}
+  {/*First Semester TextFields*/}  
+     
+     {subjects1Y2S.map((subject2) => (
+                <TableRow
+                  hover
+                  key={subject2.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_code}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                  {data.sub_desc}
+                    {subject2.sub_desc}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.sub_lec}
+                    {Number(subject2.sub_lec).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.sub_lab}
+                    {Number(subject2.sub_lab).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.total_units}
+                    {Number(subject2.total_units).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.hour_pw}
-                  </TableCell>
-                  <TableCell sx={{pl: 1}}>
-                  {data.sub_preReq}
+                    {Number(subject2.hour_pw).toFixed(1)}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                  {data.sub_coReq}
+                    {subject2.sub_preReq}
                   </TableCell>
-                    </TableRow>
-                    )
-                  }}
-                )}
-
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>TOTAL:</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>2.0</b>
+              <b>{ totalLec2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>2.0</b>
+              <b>{ totalLab2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>2.0</b>
+              <b>{ totalUnit2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>2.0</b>
+              <b>{ totalHr2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
             </Table>
+
             </Box>
           </Card>
         </Box>
@@ -505,38 +638,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
   const [page, setPage] = useState(0);
   const router = useRouter()
 
-  // const handleSelectAll = (event) => {
-  //   let newSelectedCustomerIds;
-
-  //   if (event.target.checked) {
-  //     newSelectedCustomerIds = customers.map((customer) => customer.id);
-  //   } else {
-  //     newSelectedCustomerIds = [];
-  //   }
-
-  //   setSelectedCustomerIds(newSelectedCustomerIds);
-  // };
-
-  // const handleSelectOne = (event, id) => {
-  //   const selectedIndex = selectedCustomerIds.indexOf(id);
-  //   let newSelectedCustomerIds = [];
-
-  //   if (selectedIndex === -1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
-  //   } else if (selectedIndex === 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-  //   } else if (selectedIndex === selectedCustomerIds.length - 1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds.slice(0, selectedIndex),
-  //       selectedCustomerIds.slice(selectedIndex + 1)
-  //     );
-  //   }
-
-  //   setSelectedCustomerIds(newSelectedCustomerIds);
-  // };
-
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -545,15 +646,8 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
     setPage(newPage);
   };
 
-  const sendData = async (id) => {
-    const subs =[]
+  function sendData(id) {
     setCurriculumID(id)
-    const q = query(collection(db, "curriculumns", id, 'versions'));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      subs.push({ ...doc.data(), id: doc.id });
-    });
-    setVersion(subs.length)
     router.push('/create-curriculum')
   }
 
@@ -656,7 +750,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {customer.username}
                     </TableCell>
                   <TableCell>
-                    
                     {getUserLevel() == 2 && customer.accepted != true?
                     <Button
                     variant="outlined"
@@ -678,7 +771,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {customer.on_review == true ?
                     <>
                     <Button
-                    sx={{background:'#0275d8', color:'white'}}
+                    sx={{background:'#0275d8', color:'white', marginRight: 1}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
                       await updateDoc(washingtonRef, {
@@ -692,7 +785,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                       Accept
                     </Button>
                     <Button
-                    sx={{background:'#d9534f', color:'white'}}
+                    sx={{background:'#d9534f', color:'white', marginRight: 1}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
                       await updateDoc(washingtonRef, {
