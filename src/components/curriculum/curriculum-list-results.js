@@ -650,9 +650,11 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {customer.username}
                     </TableCell>
                   <TableCell>
+                    
                     {getUserLevel() == 2 && customer.accepted != true?
                     <Button
                     variant="outlined"
+                    sx={{marginRight: 1}}
                     disabled={customer.on_review == true ? true : false}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
