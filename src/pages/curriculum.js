@@ -15,7 +15,7 @@ const Curriculum = () => {
   useEffect(async() => {
     if(getUserLevel() == 2)
     {
-      const curriculumns = query(collection(db, "curriculumns"), where('email', "==", getEmail()));
+      const curriculumns = query(collection(db, "curriculumns"), where('email', "==", localStorage.getItem('email')));
       const unsubscribe = onSnapshot(curriculumns , (querySnapshot) => {
         const temp = [];
         querySnapshot.forEach((doc) => {
@@ -36,7 +36,7 @@ const Curriculum = () => {
       });
     }
     else{
-      const curriculumns = query(collection(db, "curriculumns"), where('on_review', "==", ));
+      const curriculumns = query(collection(db, "curriculumns"), where('on_review', "==", true));
       const unsubscribe = onSnapshot(curriculumns , (querySnapshot) => {
         const temp = [];
         querySnapshot.forEach((doc) => {
