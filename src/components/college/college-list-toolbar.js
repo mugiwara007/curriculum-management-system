@@ -137,6 +137,7 @@ export default function FormDialog() {
   function showLogo()
   {
     imagesList.map((url) => {
+      // eslint-disable-next-line react/jsx-key
       return <img src={url}/>;
     })
   };

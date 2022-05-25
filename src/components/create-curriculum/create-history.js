@@ -45,6 +45,7 @@ export const HistoryLog = (props) => (
 
         {props.data && props.data.map((data)=>{
           return(
+            // eslint-disable-next-line react/jsx-key
             <ListItem button 
           divider>
           <ListItemText 
