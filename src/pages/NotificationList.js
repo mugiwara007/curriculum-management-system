@@ -69,4 +69,4 @@ function NotificationDiv(props){
   
 
 }
-export default  { NotificationDiv }
+export  { NotificationDiv }
