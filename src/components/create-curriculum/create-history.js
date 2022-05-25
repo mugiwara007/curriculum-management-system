@@ -5,9 +5,7 @@ import {
     import ListItem from '@mui/material/ListItem';
     import ListItemText from '@mui/material/ListItemText';
     import Divider from '@mui/material/Divider';
-  import React, { Component, useState } from 'react';
-  import {setVersion} from './curriculum-model'
-  import {getVersion} from './curriculum-model'
+  import React, { Component } from 'react';
   
     const style = {
       width: '100%',
@@ -23,7 +21,7 @@ import {
       color: 'black',
       fontSize: 15,
       width: '100',
-      paddingLeft:'20px'
+  
     }
     const when = {
       color: 'black',
@@ -31,17 +29,8 @@ import {
       width: '100',
     }
   
-    
-export const HistoryLog = (props) => {
-  let isChecked;
-
-  const handleChange = (event) => {
-    const value = event.target.value
-    props.setCurrentVersion(value)
-    setVersion(value)
-  }
-
-  return (
+    //sample
+export const HistoryLog = (props) => (
   <Card {...props}>
       <List sx={style} 
       component="nav"
@@ -56,14 +45,13 @@ export const HistoryLog = (props) => {
 
         {props.data && props.data.map((data)=>{
           return(
+            // eslint-disable-next-line react/jsx-key
             <ListItem button 
           divider>
-            { data.id == getVersion() ? isChecked = true: isChecked = false}
-          <input type="radio" value={data.id} name="version" checked={isChecked} onChange={handleChange} />
           <ListItemText 
           disableTypography
           style={summary}
-          primary={'v '+data.id}
+          primary={data.id}
           // secondary={<div style={when}>0 minutes ago</div>}
           />
         </ListItem>
@@ -73,5 +61,4 @@ export const HistoryLog = (props) => {
 
       </List>
   </Card>
-  )
-}
+);

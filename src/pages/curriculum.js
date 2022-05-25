@@ -15,7 +15,7 @@ const Curriculum = () => {
   useEffect(async() => {
     if(getUserLevel() == 2)
     {
-      const curriculumns = query(collection(db, "curriculumns"), where('email', "==", getEmail()));
+      const curriculumns = query(collection(db, "curriculumns"), where('email', "==", localStorage.getItem('email')));
       const unsubscribe = onSnapshot(curriculumns , (querySnapshot) => {
         const temp = [];
         querySnapshot.forEach((doc) => {

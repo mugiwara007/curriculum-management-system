@@ -43,7 +43,7 @@ const App = (props) => {
                   <CacheProvider value={emotionCache}>
                     <Head>
                       <title>
-                        Material Kit Pro
+                        Curriculum Management System
                       </title>
                       <meta
                         name="viewport"
