@@ -205,7 +205,7 @@ export function ArchiveModal(props)
 
 export function DownloadPDF(props)
 {
-  console.log("REACT TO PRINT")
+  console.log("TEST")
   const componentRef = useRef();
 
   /******QUERIES*******/
