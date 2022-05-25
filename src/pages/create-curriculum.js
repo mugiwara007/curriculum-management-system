@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [tempVersion,setTempVersion] = useState([])
   const [subjects1, setSubjects1] = useState([]);
   const [subjects2, setSubjects2] = useState([]);
+  const [currVersion, setCurrVersion] = useState(0)
 
   useEffect(async() => {
     // const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
@@ -107,7 +108,7 @@ const Dashboard = () => {
             xl={3}
             xs={12}
           >
-            <HistoryLog sx={{ height: '100%' }} data={tempVersion} />
+            <HistoryLog sx={{ height: '100%' }} data={tempVersion} setCurrVersion={setCurrVersion}/>
           </Grid>
           <Grid
             item
@@ -116,7 +117,7 @@ const Dashboard = () => {
             xl={9}
             xs={12}
           >
-            <CreateTables subjects1={subjects1} subjects2={subjects2} setSubjects1={setSubjects1} setSubjects2={setSubjects2}/>
+            <CreateTables subjects1={subjects1} subjects2={subjects2} setSubjects1={setSubjects1} setSubjects2={setSubjects2} currVersion={currVersion} setCurrVersion={setCurrVersion} />
           </Grid>
           <Grid
             item

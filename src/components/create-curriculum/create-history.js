@@ -24,10 +24,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth'
+import { Style } from '@mui/icons-material';
   
     const style = {
       width: '100%',
       bgcolor: 'background.paper',
+      display: 'inline-block'
     };
     const maintext = {
       color: 'black',
@@ -155,8 +157,6 @@ export const VersionDialog = (props) =>{
 
   const handleClickOpen = () => {
     const value = props.data
-    setVersion(value)
-    alert(props.data)
     setOpen(true);
   };
 
@@ -169,11 +169,12 @@ export const VersionDialog = (props) =>{
   }
 
   return(
-    <div style={{display : 'inline-block'}} >
-      
+  <div style={style} >
+    { props.data != getVersion() ? 
     <ListItem button onClick={handleClickOpen} divider> 
     <ListItemText disableTypography style={summary} primary={'v '+props.data} /> 
-    </ListItem>
+    </ListItem>: null}
+    
     <Dialog open={open}
     onClose={handleClose}
     maxWidth="1000"
@@ -416,7 +417,7 @@ export const VersionDialog = (props) =>{
 }
     
 export const HistoryLog = (props) => {
-  
+
   return (
   <Card {...props}>
       <List sx={style} 
@@ -432,7 +433,9 @@ export const HistoryLog = (props) => {
 
         {props.data && props.data.map((data)=>{
             return ( 
-              <VersionDialog data={data.id} /> 
+              <>
+              <VersionDialog data={data.id} />
+              </>
             )
         })
         }

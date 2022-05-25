@@ -21,7 +21,7 @@ import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, setDoc } f
 import { db } from 'src/firebase/firebase-auth'
 import { auth } from 'src/firebase/firebase-auth';
 import AddIcon from '@mui/icons-material/Add';
-import { getCurriculumID, getYearLevel } from './curriculum-model';
+import { getCurriculumID, getVersion, getYearLevel, setVersion } from './curriculum-model';
 
 export const ImportDialog = (props) =>{
 const { currentUser } = useAuth()
@@ -127,7 +127,8 @@ const curriculum_id = getCurriculumID();
                         addDoc(collection(version_doc,"fourth_year"), doc.data())
                       })
                       addDoc(year_collection, version_data)
-
+                      setVersion(counter.toString())
+                      setSubID("")
                     }).catch((e)=>{
                       alert(e)
                     })
@@ -142,13 +143,12 @@ const curriculum_id = getCurriculumID();
                   })
                 }
 
-
                 } else {
                   
               }
         });
 
-        
+        props.setCurrVersion(getVersion())
         handleClose();
     } else {
       alert("Please select a subject to import.");
