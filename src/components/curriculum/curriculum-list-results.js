@@ -1740,6 +1740,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {getUserLevel() == 2 && customer.accepted != true?
                     <Button
                     variant="outlined"
+                    sx={{marginRight: 1}}
                     disabled={customer.on_review == true ? true : false}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
@@ -1757,7 +1758,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {customer.on_review == true ?
                     <>
                     <Button
-                    sx={{background:'#0275d8', color:'white'}}
+                    sx={{background:'#0275d8', color:'white', marginRight: 1}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
                       await updateDoc(washingtonRef, {
@@ -1771,7 +1772,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                       Accept
                     </Button>
                     <Button
-                    sx={{background:'#d9534f', color:'white'}}
+                    sx={{background:'#d9534f', color:'white', marginRight: 1}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
                       await updateDoc(washingtonRef, {
