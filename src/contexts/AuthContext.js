@@ -5,6 +5,7 @@ import { db } from 'src/firebase/firebase-auth'
 import { collection ,addDoc, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/router';
 import { setEmail } from 'src/components/userModel';
+import { setVersion } from 'src/components/create-curriculum/curriculum-model';
 
 const AuthContext = React.createContext()
 
@@ -25,6 +26,7 @@ export function AuthProvider({ children }) {
     const [userCode, setUserCode] = useState()
     const [userEmail, setUserEmail] = useState()
     const [userPass, setUserPass] = useState()
+    const [currVersion, setCurrVersion] = useState(0)
     const router = useRouter();
     const ulevel = 0
     
@@ -80,6 +82,8 @@ export function AuthProvider({ children }) {
     function signout(){
         signOut(auth).then(() => {
             // Sign-out successful.
+            setCurrVersion(0)
+            setVersion('1')
             setCurrentUser("")
             setUserLevel(0)
             localStorage.removeItem('email');
@@ -107,6 +111,8 @@ export function AuthProvider({ children }) {
         currentUser,
         userLevel,
         docID,
+        currVersion,
+        setCurrVersion,
         register,
         login,
         signout

@@ -15,7 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from 'src/contexts/AuthContext';
-import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc, setDoc, setDocs, getDocs, addDoc } from 'firebase/firestore';
+import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc, setDoc, setDocs, getDocs, addDoc, writeBatch } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -213,7 +213,7 @@ const updateSubject = (newSubCode,newSubDesc,newSubLec,newSubLab,newTotalUnits,n
     } else if (props.year == 40){
       nyear = "fourth_year"
     }                           
-    const subjectDoc = doc(db, "curriculumns", curriculum_id, nyear, props.sub_id);
+    const subjectDoc = doc(db, "curriculumns", curriculum_id, "temp_sub", "temp",nyear, props.sub_id);
     const newFields = { 
       sub_code: newSubCode,
       sub_desc: newSubDesc,
@@ -408,66 +408,8 @@ export const DeleteSubDialog = (props) =>{
     } else if (props.year == 40){
       nyear = "fourth_year"
     }                                         //collection id ng curriculum
-    const subjectDoc = doc(db, "curriculumns", curriculum_id, nyear, props.id);
+    const subjectDoc = doc(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', year, props.id);
     await deleteDoc(subjectDoc);
-
-    const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
-    const version_collection = collection(curriculum_doc,"versions")
-    const querySnapshot = await getDocs(version_collection);
-              var counter = 1
-              querySnapshot.forEach((doc) => {
-                counter++
-              });
-              if(counter > 2){
-                  setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(async()=>{
-                    const version_doc = doc(version_collection,counter.toString())
-                    const old_version = counter - 1
-                    const old_version_doc = doc(version_collection,old_version.toString())
-                    const first_year_collection = collection(old_version_doc,"first_year")
-                    const second_year_collection = collection(old_version_doc,"second_year")
-                    const third_year_collection = collection(old_version_doc,"third_year")
-                    const fourth_year_collection = collection(old_version_doc,"fourth_year")
-                    const first_year_snap = await getDocs(first_year_collection)
-                    const second_year_snap = await getDocs(second_year_collection)
-                    const third_year_snap = await getDocs(third_year_collection)
-                    const fourth_year_snap = await getDocs(fourth_year_collection)
-                    const year_collection = collection(version_doc,getYearLevel())
-                    first_year_snap.forEach((doc) =>{
-                      if(doc.data().sub_code != props.sub_code){
-                        addDoc(collection(version_doc,"first_year"), doc.data())
-                      }
-                    })
-                    second_year_snap.forEach((doc) =>{
-                      if(doc.data().sub_code != props.sub_code){
-                        addDoc(collection(version_doc,"second_year"), doc.data())
-                      }
-                    })
-                    third_year_snap.forEach((doc) =>{
-                      if(doc.data().sub_code != props.sub_code){
-                        addDoc(collection(version_doc,"third_year"), doc.data())
-                      }
-                    })
-                    fourth_year_snap.forEach((doc) =>{
-                      if(doc.data().sub_code != props.sub_code){
-                        addDoc(collection(version_doc,"fourth_year"), doc.data())
-                      }
-                    })
-
-                  }).catch((e)=>{
-                    alert(e)
-                  })
-              }
-              else{
-                setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(()=>{
-                  const version_doc = doc(version_collection,counter.toString())
-                  const year_collection = collection(version_doc,getYearLevel())
-                  addDoc(year_collection, version_data)
-                }).catch((e)=>{
-                  alert(e)
-                })
-              }
-
-
   };
 
 
@@ -514,6 +456,7 @@ export const DeleteSubDialog = (props) =>{
 
 export const CreateTables = (props) => {
   const { currentUser } = useAuth()
+  const { currVersion } = useAuth()
   const [totalLec1, setTotalLec1] = useState(0);
   const [totalLab1, setTotalLab1] = useState(0);
   const [totalUnit1, setTotalUnit1] = useState(0);
@@ -523,9 +466,7 @@ export const CreateTables = (props) => {
   const [totalUnit2, setTotalUnit2] = useState(0);
   const [totalHr2, setTotalHr2] = useState(0);
   const [yearOption, setYearOption] = useState(10);
-
-  const [tempSubject1, setTempSubject1] = useState([])
-  const [tempSubject2, setTempSubject2] = useState([])
+  const batch = writeBatch(db);
 
   const tempAllCurrSub = async () => {
     const newVersion = getVersion().toString()
@@ -533,59 +474,36 @@ export const CreateTables = (props) => {
     const currRef = doc(db, "curriculumns", curriculum_id);
     const tempSubRef = collection(currRef, 'temp_sub')
 
-    // const deleteRef1 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'first_year')
-    // const deleteRef2 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'second_year')
-    // const deleteRef3 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'thirdt_year')
-    // const deleteRef4 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'fourth_year')
-    
-    // const docus1 =[]
-    // const docus2 =[]
-    // const docus3 =[]
-    // const docus4 =[]
+    const deleteRef1 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'first_year')
+    const deleteRef2 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'second_year')
+    const deleteRef3 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'thirdt_year')
+    const deleteRef4 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'fourth_year')
 
-    // const q1 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'first_year'));
-    // const querySnapshot1 = await getDocs(q1);
-    // querySnapshot1.forEach((doc) => {
-    //   deleteDoc(deleteRef4,doc.id)
-    //   // docus1.push({ ...doc.data(), id: doc.id });
-    // });
-    
-    // // docus1.map((docu1) =>
-    // //   deleteDoc(deleteRef1,docu1.id)
-    // // )
+    const q1 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'first_year'));
+    const querySnapshot1 = await getDocs(q1);
+    querySnapshot1.forEach((docu) => {
+      batch.delete(doc(deleteRef1,docu.id))
+    });
 
-    // const q2 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'third_year'));
-    // const querySnapshot2 = await getDocs(q2);
-    // querySnapshot2.forEach((doc) => {
-    //   deleteDoc(deleteRef4,doc.id)
-    //   // docus2.push({ ...doc.data(), id: doc.id });
-    // });
-    
-    // // docus2.map((docu2) =>
-    // //   deleteDoc(deleteRef2,docu2.id)
-    // // )
+    const q2 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'second_year'));
+    const querySnapshot2 = await getDocs(q2);
+    querySnapshot2.forEach((docu) => {
+      batch.delete(doc(deleteRef2,docu.id))
+    });
 
-    // const querySnapshot3 = await getDocs(q3);
-    // querySnapshot3.forEach((doc) => {
-    //   deleteDoc(deleteRef4,doc.id)
-    //   // docus3.push({ ...doc.data(), id: doc.id });
-    // });
-    
-    // // docus3.map((docu3) =>
-    // //   deleteDoc(deleteRef3,docu3.id)
-    // // )
+    const q3 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'second_year'));
+    const querySnapshot3 = await getDocs(q3);
+    querySnapshot3.forEach((docu) => {
+      batch.delete(doc(deleteRef3,docu.id))
+    });
 
-    // const q4 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'fourth_year'));
-    // const querySnapshot4 = await getDocs(q4);
-    // querySnapshot4.forEach((doc) => {
-    //   deleteDoc(deleteRef4,doc.id)
-    //   // docus4.push({ ...doc.data(), id: doc.id });
-    // });
-    
-    // // docus4.map((docu4) =>
-    // //   deleteDoc(deleteRef4,docu4.id)
-    // // )
-    
+    const q4 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'fourth_year'));
+    const querySnapshot4 = await getDocs(q4);
+    querySnapshot4.forEach((docu) => {
+      batch.delete(doc(deleteRef4,docu.id))
+    });
+    await batch.commit();
+
     setDoc(doc(tempSubRef, 'temp'), {temp:true}).then(async()=>{
       const sub1Ref = doc(tempSubRef, 'temp')
       const old_sub1Ref = doc(db, "curriculumns", curriculum_id, 'versions', newVersion)
@@ -637,7 +555,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     tempAllCurrSub()
-  }, [props.currVersion,]);
+  }, [currVersion]);
 
   function allCurrSub1(){
     let year="";
@@ -683,7 +601,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub1()
-  }, [yearOption, props.currVersion]);
+  }, [yearOption, currVersion]);
 
   function allCurrSub2(){
     let year="";
@@ -729,7 +647,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub2()
-  }, [yearOption,props.currVersion]);
+  }, [yearOption,currVersion]);
 
   const setOption = (event) =>{
     setYearOption(event.target.value)
@@ -907,7 +825,7 @@ export const CreateTables = (props) => {
               {getUserLevel() == 2 ?
               <TableRow>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                <ImportDialog value='1' year={yearOption} setCurrVersion={props.setCurrVersion}/>
+                <ImportDialog value='1' year={yearOption} />
               </TableCell>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
                 <AddCurrSubDialog value="1" year={yearOption} />

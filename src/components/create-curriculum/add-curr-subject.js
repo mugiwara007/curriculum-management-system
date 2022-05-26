@@ -12,7 +12,7 @@ import { useAuth } from 'src/contexts/AuthContext';
 import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, where,setDoc, } from 'firebase/firestore';
 import { db } from 'src/firebase/firebase-auth'
 import { auth } from 'src/firebase/firebase-auth';
-import { useFormik } from 'formik';
+import { useFormik } from 'formik'; 
 import * as Yup from 'yup';
 import AddIcon from '@mui/icons-material/Add';
 import { getCurriculumID, getVersion } from './curriculum-model';
@@ -22,67 +22,7 @@ export const AddCurrSubDialog = (props) => {
     const { currentUser } = useAuth()
     const [open, setOpen] = React.useState(false);
     const curriculum_id = getCurriculumID()
-    const updateVersion = async(docSnap) =>{
-      const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
-                const version_collection = collection(curriculum_doc,"versions")
-                const querySnapshot = await getDocs(version_collection);
-                var counter = 1
-                querySnapshot.forEach((doc) => {
-                  counter++
-                });
-                const version_data = {
-                  sub_code: docSnap.data.sub_code,
-                  sub_desc: docSnap.data.sub_desc,
-                  sub_lec: docSnap.data.sub_lec,
-                  sub_lab: docSnap.data.sub_lab,
-                  total_units: docSnap.data.total_units,
-                  hour_pw: docSnap.data.hour_pw,
-                  sub_preReq: docSnap.data.sub_preReq,
-                  sub_coReq: docSnap.data.sub_coReq,
-                  curr_sem: docSnap.data.curr_sem
-                }
-                if(counter > 2){
-                    setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(async()=>{
-                      const version_doc = doc(version_collection,counter.toString())
-                      const old_version = counter - 1
-                      const old_version_doc = doc(version_collection,old_version.toString())
-                      const first_year_collection = collection(old_version_doc,"first_year")
-                      const second_year_collection = collection(old_version_doc,"second_year")
-                      const third_year_collection = collection(old_version_doc,"third_year")
-                      const fourth_year_collection = collection(old_version_doc,"fourth_year")
-                      const first_year_snap = await getDocs(first_year_collection)
-                      const second_year_snap = await getDocs(second_year_collection)
-                      const third_year_snap = await getDocs(third_year_collection)
-                      const fourth_year_snap = await getDocs(fourth_year_collection)
-                      const year_collection = collection(version_doc,getYearLevel())
-                      first_year_snap.forEach((doc) =>{
-                        addDoc(collection(version_doc,"first_year"), doc.data())
-                      })
-                      second_year_snap.forEach((doc) =>{
-                        addDoc(collection(version_doc,"second_year"), doc.data())
-                      })
-                      third_year_snap.forEach((doc) =>{
-                        addDoc(collection(version_doc,"third_year"), doc.data())
-                      })
-                      fourth_year_snap.forEach((doc) =>{
-                        addDoc(collection(version_doc,"fourth_year"), doc.data())
-                      })
-                      addDoc(year_collection, version_data)
-
-                    }).catch((e)=>{
-                      alert(e)
-                    })
-                }
-                else{
-                  setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(()=>{
-                    const version_doc = doc(version_collection,counter.toString())
-                    const year_collection = collection(version_doc,getYearLevel())
-                    addDoc(year_collection, version_data)
-                  }).catch((e)=>{
-                    alert(e)
-                  })
-                }
-    }
+      
     const formik = useFormik({
       initialValues: {
         sCode: '',
@@ -150,18 +90,6 @@ export const AddCurrSubDialog = (props) => {
             formik.values.sPreReq,
             formik.values.sCoReq
           )
-          updateVersion({data:{
-            sub_code:formik.values.sCode,
-            sub_desc:formik.values.sDesc,
-            sub_lec:formik.values.sLec,
-            sub_lab:formik.values.sLab,
-            total_units:formik.values.sTotalUn,
-            hour_pw:formik.values.sHours,
-            sub_preReq:formik.values.sPreReq,
-            sub_coReq:formik.values.sCoReq,
-            curr_sem:Number(props.value)
-          }})
-
           formik.setSubmitting(false)
         }
       }
@@ -171,24 +99,22 @@ export const AddCurrSubDialog = (props) => {
       newSubPreReq,newSubCoReq) =>{
         auth.onAuthStateChanged(async user => {
           if (user) {                                       //collection id ng curriculums
-            const currSubRef = collection(db, "curriculumns", curriculum_id, getYearLevel());
+            const currSubRef = collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', props.year);
             addDoc(currSubRef, {
-                sub_code: newSubCode,
-                sub_desc: newSubDesc,
-                sub_lec: newSubLec,
-                sub_lab: newSubLab,
-                total_units: newTotalUnits,
-                hour_pw: newHrPW,
-                sub_preReq: newSubPreReq,
-                sub_coReq: newSubCoReq,
-                curr_sem: Number(props.value)
+              sub_code: newSubCode,
+              sub_desc: newSubDesc,
+              sub_lec: newSubLec,
+              sub_lab: newSubLab,
+              total_units: newTotalUnits,
+              hour_pw: newHrPW,
+              sub_preReq: newSubPreReq,
+              sub_coReq: newSubCoReq,
+              curr_sem: Number(props.value)
             });
-
-
-            } else {
-                // User is signed out
-                // ...
-            }
+          } else {
+            // User is signed out
+            // ...
+          }
         });
         handleClose();
     };
