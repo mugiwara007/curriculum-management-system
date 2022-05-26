@@ -1,42 +1,33 @@
 import {
-  Avatar,
   Box,
   Card,
-  Checkbox,
   Table,
   TableBody,
-  CardContent,
   TextField,
   TableCell,
-  InputAdornment,
   TableHead,
-  TablePagination,
   TableRow,
-  SvgIcon,
-  Typography,
   Button,
   } from '@mui/material';
-    import Divider from '@mui/material/Divider';
-  import InputLabel from '@mui/material/InputLabel';
-  import FormControl from '@mui/material/FormControl';
-  import NativeSelect from '@mui/material/NativeSelect';
-  import React, { useState, useEffect } from 'react';
-  import { useAuth } from 'src/contexts/AuthContext';
-  import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc, setDoc, setDocs, getDocs, addDoc } from 'firebase/firestore';
-  import { db } from 'src/firebase/firebase-auth'
-  import Dialog from '@mui/material/Dialog';
+import Divider from '@mui/material/Divider';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from 'src/contexts/AuthContext';
+import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc, setDoc, setDocs, getDocs, addDoc } from 'firebase/firestore';
+import { db } from 'src/firebase/firebase-auth'
+import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ImportDialog } from './import-subject';
 import { AddCurrSubDialog } from './add-curr-subject';
-import { sub, subMinutes } from 'date-fns';
 import Delete from '@mui/icons-material/Delete';
 import * as Yup from 'yup';
 import EditIcon from '@mui/icons-material/Edit';
 import { useFormik } from 'formik';
-import { useLocation } from 'react-router-dom';
-import { getCurriculumID, getVersion, setYearLevel } from './curriculum-model';
+import { getCurriculumID, getVersion, setVersion, setYearLevel } from './curriculum-model';
 import { getYearLevel } from './curriculum-model';
 import { getUserLevel } from '../userModel';
 
@@ -113,7 +104,6 @@ export default function UpdateSubDialog(props) {
                         addDoc(collection(version_doc,"fourth_year"), doc.data())
                       }
                     })
-
                   }).catch((e)=>{
                     alert(e)
                   })
@@ -523,8 +513,6 @@ export const DeleteSubDialog = (props) =>{
 }
 
 export const CreateTables = (props) => {
-  const [subjects1, setSubjects1] = useState([]);
-  const [subjects2, setSubjects2] = useState([]);
   const { currentUser } = useAuth()
   const [totalLec1, setTotalLec1] = useState(0);
   const [totalLab1, setTotalLab1] = useState(0);
@@ -536,8 +524,122 @@ export const CreateTables = (props) => {
   const [totalHr2, setTotalHr2] = useState(0);
   const [yearOption, setYearOption] = useState(10);
 
-  function allCurrSub1(){
+  const [tempSubject1, setTempSubject1] = useState([])
+  const [tempSubject2, setTempSubject2] = useState([])
+
+  const tempAllCurrSub = async () => {
     const newVersion = getVersion().toString()
+    const curriculum_id = getCurriculumID();
+    const currRef = doc(db, "curriculumns", curriculum_id);
+    const tempSubRef = collection(currRef, 'temp_sub')
+
+    // const deleteRef1 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'first_year')
+    // const deleteRef2 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'second_year')
+    // const deleteRef3 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'thirdt_year')
+    // const deleteRef4 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'fourth_year')
+    
+    // const docus1 =[]
+    // const docus2 =[]
+    // const docus3 =[]
+    // const docus4 =[]
+
+    // const q1 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'first_year'));
+    // const querySnapshot1 = await getDocs(q1);
+    // querySnapshot1.forEach((doc) => {
+    //   deleteDoc(deleteRef4,doc.id)
+    //   // docus1.push({ ...doc.data(), id: doc.id });
+    // });
+    
+    // // docus1.map((docu1) =>
+    // //   deleteDoc(deleteRef1,docu1.id)
+    // // )
+
+    // const q2 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'third_year'));
+    // const querySnapshot2 = await getDocs(q2);
+    // querySnapshot2.forEach((doc) => {
+    //   deleteDoc(deleteRef4,doc.id)
+    //   // docus2.push({ ...doc.data(), id: doc.id });
+    // });
+    
+    // // docus2.map((docu2) =>
+    // //   deleteDoc(deleteRef2,docu2.id)
+    // // )
+
+    // const querySnapshot3 = await getDocs(q3);
+    // querySnapshot3.forEach((doc) => {
+    //   deleteDoc(deleteRef4,doc.id)
+    //   // docus3.push({ ...doc.data(), id: doc.id });
+    // });
+    
+    // // docus3.map((docu3) =>
+    // //   deleteDoc(deleteRef3,docu3.id)
+    // // )
+
+    // const q4 = query(collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', 'fourth_year'));
+    // const querySnapshot4 = await getDocs(q4);
+    // querySnapshot4.forEach((doc) => {
+    //   deleteDoc(deleteRef4,doc.id)
+    //   // docus4.push({ ...doc.data(), id: doc.id });
+    // });
+    
+    // // docus4.map((docu4) =>
+    // //   deleteDoc(deleteRef4,docu4.id)
+    // // )
+    
+    setDoc(doc(tempSubRef, 'temp'), {temp:true}).then(async()=>{
+      const sub1Ref = doc(tempSubRef, 'temp')
+      const old_sub1Ref = doc(db, "curriculumns", curriculum_id, 'versions', newVersion)
+      const first_year_collection = collection(old_sub1Ref,"first_year")
+      const first_year = await getDocs(first_year_collection)
+      first_year.forEach((doc) =>{
+        addDoc(collection(sub1Ref,"first_year"), doc.data())
+      })
+    }).catch((e)=>{
+      alert(e)
+    })
+
+    setDoc(doc(tempSubRef, 'temp'), {temp:true}).then(async()=>{
+      const sub2Ref = doc(tempSubRef, 'temp')
+      const old_sub2Ref = doc(db, "curriculumns", curriculum_id, 'versions', newVersion)
+      const second_year_collection = collection(old_sub2Ref,"second_year")
+      const second_year = await getDocs(second_year_collection)
+      second_year.forEach((doc) =>{
+        addDoc(collection(sub2Ref,"second_year"), doc.data())
+      })
+    }).catch((e)=>{
+      alert(e)
+    })
+
+    setDoc(doc(tempSubRef, 'temp'), {temp:true}).then(async()=>{
+      const sub3Ref = doc(tempSubRef, 'temp')
+      const old_sub3Ref = doc(db, "curriculumns", curriculum_id, 'versions', newVersion)
+      const third_year_collection = collection(old_sub3Ref,"third_year")
+      const third_year = await getDocs(third_year_collection)
+      third_year.forEach((doc) =>{
+        addDoc(collection(sub3Ref,"third_year"), doc.data())
+      })
+    }).catch((e)=>{
+      alert(e)
+    })
+
+    setDoc(doc(tempSubRef, 'temp'), {temp:true}).then(async()=>{
+      const sub4Ref = doc(tempSubRef, 'temp')
+      const old_sub4Ref = doc(db, "curriculumns", curriculum_id, 'versions', newVersion)
+      const fourth_year_collection = collection(old_sub4Ref,"fourth_year")
+      const fourth_year = await getDocs(fourth_year_collection)
+      fourth_year.forEach((doc) =>{
+        addDoc(collection(sub4Ref,"fourth_year"), doc.data())
+      })
+    }).catch((e)=>{
+      alert(e)
+    })
+  }
+
+  useEffect(() => {
+    tempAllCurrSub()
+  }, [props.currVersion,]);
+
+  function allCurrSub1(){
     let year="";
     const curriculum_id = getCurriculumID();
     if (yearOption == 10){
@@ -549,7 +651,7 @@ export const CreateTables = (props) => {
     } else if (yearOption == 40){
       year = "fourth_year"
     }
-    const sub1Ref = collection(db, "curriculumns", curriculum_id, 'versions', newVersion, year);
+    const sub1Ref = collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', year);
     const q = query(sub1Ref, where("curr_sem", '==' ,1));
     let tLec1 = 0
     let tLab1 = 0
@@ -560,7 +662,7 @@ export const CreateTables = (props) => {
       querySnapshot.forEach((doc) => {
           subs.push({ ...doc.data(), id: doc.id });
       });
-         setSubjects1(subs)
+         props.setSubjects1(subs)
 
         tLec1 = 0
         tLab1 = 0
@@ -581,10 +683,9 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub1()
-  }, [yearOption, props.currentVersion]);
+  }, [yearOption, props.currVersion]);
 
   function allCurrSub2(){
-    const newVersion = getVersion().toString()
     let year="";
     const curriculum_id = getCurriculumID();
     if (yearOption == 10){
@@ -596,7 +697,7 @@ export const CreateTables = (props) => {
     } else if (yearOption == 40){
       year = "fourth_year"
     }
-    const sub2Ref = collection(db, "curriculumns", curriculum_id, "versions", newVersion, year);
+    const sub2Ref = collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', year);
     const q = query(sub2Ref, where("curr_sem", '==', 2));
     let tLec2 = 0
     let tLab2 = 0
@@ -607,7 +708,7 @@ export const CreateTables = (props) => {
       querySnapshot.forEach((doc) => {
           subs.push({ ...doc.data(), id: doc.id });
       });
-         setSubjects2(subs)
+         props.setSubjects2(subs)
 
         tLec2 = 0
         tLab2 = 0
@@ -628,7 +729,7 @@ export const CreateTables = (props) => {
 
   useEffect(() => {
     allCurrSub2()
-  }, [yearOption, props.currentVersion]);
+  }, [yearOption,props.currVersion]);
 
   const setOption = (event) =>{
     setYearOption(event.target.value)
@@ -728,7 +829,7 @@ export const CreateTables = (props) => {
 
   {/*First Semester TextFields*/}  
      
-     {currentUser && subjects1.map((subject1) => (
+     {currentUser && props.subjects1.map((subject1) => (
                 <TableRow
                   hover
                   key={subject1.id}
@@ -779,7 +880,7 @@ export const CreateTables = (props) => {
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>TOTAL:</b>
+              <b>TOTAL :</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>{ totalLec1.toFixed(1) }</b>
@@ -806,7 +907,7 @@ export const CreateTables = (props) => {
               {getUserLevel() == 2 ?
               <TableRow>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                <ImportDialog value='1' year={yearOption} />
+                <ImportDialog value='1' year={yearOption} setCurrVersion={props.setCurrVersion}/>
               </TableCell>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
                 <AddCurrSubDialog value="1" year={yearOption} />
@@ -859,7 +960,7 @@ export const CreateTables = (props) => {
 
   {/*First Semester TextFields*/}  
      
-     {currentUser && subjects2.map((subject2) => (
+     {currentUser && props.subjects2.map((subject2) => (
                 <TableRow
                   hover
                   key={subject2.id}
@@ -910,7 +1011,7 @@ export const CreateTables = (props) => {
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>TOTAL:</b>
+              <b>TOTAL :</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>{ totalLec2.toFixed(1) }</b>
@@ -937,7 +1038,7 @@ export const CreateTables = (props) => {
             {getUserLevel() == 2 ?
               <TableRow>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
-                <ImportDialog value='2' year={yearOption} />
+                <ImportDialog value='2' year={yearOption} setCurrVersion={props.setCurrVersion}/>
               </TableCell>
               <TableCell sx={{textAlign:'center', width: '50%'}}>
                 <AddCurrSubDialog value="2" year={yearOption} />

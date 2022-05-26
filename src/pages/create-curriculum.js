@@ -12,14 +12,16 @@ import { Comments } from 'src/components/create-curriculum/create-comments';
 import HistoryIcon from '@mui/icons-material/History';
 import { useEffect, useState } from 'react';
 import { db } from 'src/firebase/firebase-auth';
-import { doc, setDoc, collection, setDocs, getDocs, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { getCurriculumID } from 'src/components/create-curriculum/curriculum-model';
 import { CreateComments } from 'src/components/create-curriculum/comments';
 import { getUserLevel } from 'src/components/userModel';
 
 const Dashboard = () => {
   const [tempVersion,setTempVersion] = useState([])
-  const [currentVersion,setCurrentVersion] = useState(0)
+  const [subjects1, setSubjects1] = useState([]);
+  const [subjects2, setSubjects2] = useState([]);
+  const [currVersion, setCurrVersion] = useState(0)
 
   useEffect(async() => {
     // const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
@@ -106,7 +108,7 @@ const Dashboard = () => {
             xl={3}
             xs={12}
           >
-            <HistoryLog sx={{ height: '100%' }} data={tempVersion} setCurrentVersion={setCurrentVersion} />
+            <HistoryLog sx={{ height: '100%' }} data={tempVersion} setCurrVersion={setCurrVersion}/>
           </Grid>
           <Grid
             item
@@ -115,7 +117,7 @@ const Dashboard = () => {
             xl={9}
             xs={12}
           >
-            <CreateTables currentVersion={currentVersion} />
+            <CreateTables subjects1={subjects1} subjects2={subjects2} setSubjects1={setSubjects1} setSubjects2={setSubjects2} currVersion={currVersion} setCurrVersion={setCurrVersion} />
           </Grid>
           <Grid
             item
