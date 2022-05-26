@@ -201,6 +201,7 @@ const Login = () => {
         if (docSnap.exists()) {
           setUserLevel(docSnap.data().userlevel)
           setEmail(formik.values.email)
+          localStorage.setItem('email', formik.values.email)
           router.push('/dashboard')
         } else {
           // doc.data() will be undefined in this case

@@ -12,6 +12,7 @@ const DeptCrud = React.createContext()
 
 export function deptAuth()
 {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useContext(DeptCrud)
 }
 
