@@ -176,9 +176,18 @@ export function FormDialog() {
 }
 
 const Login = () => {
+  const [open, setOpen] = React.useState(false);
   const { currentUser } = useAuth()
   const { login } = useAuth()
   const router = useRouter();
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
   function handleSessionControlLogin(){
     //Do your logic here...
@@ -202,7 +211,23 @@ const Login = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        alert(errorMessage)
+        setOpen(true)
+        return (
+          <div>
+          <Stack spacing={2} sx={{ width: '100%' }}>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+                  This is a warning message!
+              </Alert>
+          </Snackbar>
+          
+          {/* <Alert severity="error">This is an error message!</Alert>
+          <Alert severity="warning">This is a warning message!</Alert>
+          <Alert severity="info">This is an information message!</Alert>
+          <Alert severity="success">This is a success message!</Alert> */}
+          </Stack>
+          </div>
+      )
       });
       // login(formik.values.email, formik.values.password);
       formik.setSubmitting(false)

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -43,7 +43,7 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import { getCurriculumID, setCurriculumID } from '../create-curriculum/curriculum-model';
 import { useRouter } from 'next/router';
 import { db } from 'src/firebase/firebase-auth';
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDocs } from "firebase/firestore";
 import { getUserLevel } from '../userModel';
 import { collection, query, where, onSnapshot } from "firebase/firestore"
 
@@ -203,45 +203,569 @@ export function ArchiveModal(props)
 
 export function DownloadPDF(props)
 {
-  console.log("trying to fix this loop")
+  console.log("LOOP")
   const componentRef = useRef();
+
+  /******QUERIES*******/
+  //1st YEAR
   const [first_year, setFirstYear] = React.useState([])
-
-  
   const first_year_query = query(collection(db, "curriculumns",props.id,"first_year"));
-  // const second_year_query = query(collection(db, "curriculumns",props.id,"second_year_"));
-  // const third_year_query = query(collection(db, "curriculumns",props.id,"third_year"));
-  // const fourth_year_query = query(collection(db, "curriculumns",props.id,"fourth_year"));
-  const unsubscribe1 = onSnapshot(first_year_query, (querySnapshot) => {
-    const temp = [];
-    querySnapshot.forEach((doc) => {
-        temp.push(doc.data());
+  //2nd YEAR
+  const [second_year, setSecondYear] = React.useState([])
+  const second_year_query = query(collection(db, "curriculumns",props.id,"second_year"));
+  //3rd YEAR
+  const [third_year, setThirdYear] = React.useState([])
+  const third_year_query = query(collection(db, "curriculumns",props.id,"third_year"));
+  //4th YEAR
+  const [fourth_year, setFourthYear] = React.useState([])
+  const fourth_year_query = query(collection(db, "curriculumns",props.id,"fourth_year"));
+
+
+
+  /******YEAR LEVELS******/
+  //1st YR
+  const [subjects1Y1S, setSubjects1Y1S] = useState([]);
+  const [subjects1Y2S, setSubjects1Y2S] = useState([]);
+
+  //2nd YR
+  const [subjects2Y1S, setSubjects2Y1S] = useState([]);
+  const [subjects2Y2S, setSubjects2Y2S] = useState([]);
+
+  //3rd YR
+  const [subjects3Y1S, setSubjects3Y1S] = useState([]);
+  const [subjects3Y2S, setSubjects3Y2S] = useState([]);
+
+  //4th YR
+  const [subjects4Y1S, setSubjects4Y1S] = useState([]);
+  const [subjects4Y2S, setSubjects4Y2S] = useState([]);
+
+
+
+  /*****SUBJECT INFORMATIONS*******/
+  //1st YR 1st SEM SUB INFO
+  const [totalLec1, setTotalLec1] = useState(0);
+  const [totalLab1, setTotalLab1] = useState(0);
+  const [totalUnit1, setTotalUnit1] = useState(0);
+  const [totalHr1, setTotalHr1] = useState(0);
+  //1st YR 2nd SEM SUB INFO
+  const [totalLec2, setTotalLec2] = useState(0);
+  const [totalLab2, setTotalLab2] = useState(0);
+  const [totalUnit2, setTotalUnit2] = useState(0);
+  const [totalHr2, setTotalHr2] = useState(0);
+
+  //2nd YR 1st SEM SUB INFO
+  const [totalLec2y1s, setTotalLec2y1s] = useState(0);
+  const [totalLab2y1s, setTotalLab2y1s] = useState(0);
+  const [totalUnit2y1s, setTotalUnit2y1s] = useState(0);
+  const [totalHr2y1s, setTotalHr2y1s] = useState(0);
+  //2nd YR 2nd SEM SUB INFO
+  const [totalLec2y2s, setTotalLec2y2s] = useState(0);
+  const [totalLab2y2s, setTotalLab2y2s] = useState(0);
+  const [totalUnit2y2s, setTotalUnit2y2s] = useState(0);
+  const [totalHr2y2s, setTotalHr2y2s] = useState(0);
+
+  //3rd YR 1st SEM SUB INFO
+  const [totalLec3y1s, setTotalLec3y1s] = useState(0);
+  const [totalLab3y1s, setTotalLab3y1s] = useState(0);
+  const [totalUnit3y1s, setTotalUnit3y1s] = useState(0);
+  const [totalHr3y1s, setTotalHr3y1s] = useState(0);
+  //3rd YR 2nd SEM SUB INFO
+  const [totalLec3y2s, setTotalLec3y2s] = useState(0);
+  const [totalLab3y2s, setTotalLab3y2s] = useState(0);
+  const [totalUnit3y2s, setTotalUnit3y2s] = useState(0);
+  const [totalHr3y2s, setTotalHr3y2s] = useState(0);
+
+  //4th YR 1st SEM SUB INFO
+  const [totalLec4y1s, setTotalLec4y1s] = useState(0);
+  const [totalLab4y1s, setTotalLab4y1s] = useState(0);
+  const [totalUnit4y1s, setTotalUnit4y1s] = useState(0);
+  const [totalHr4y1s, setTotalHr4y1s] = useState(0);
+  //4th YR 2nd SEM SUB INFO
+  const [totalLec4y2s, setTotalLec4y2s] = useState(0);
+  const [totalLab4y2s, setTotalLab4y2s] = useState(0);
+  const [totalUnit4y2s, setTotalUnit4y2s] = useState(0);
+  const [totalHr4y2s, setTotalHr4y2s] = useState(0);
+
+
+
+  /*****FUNCTIONS*******/
+  //1st YEAR 1st SEM FUNCTION
+  const allCurrSub1 = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
     });
-    setFirstYear(temp)
-  });
-  // const unsubscribe2 = onSnapshot(second_year_query, (querySnapshot) => {
+
+    version = sbjct.length.toString()
+
+    const sub1Ref = collection(db, "curriculumns", currID, 'versions', version, "first_year");
+    const q = query(sub1Ref, where("curr_sem", '==' ,1));
+
+    let tLec1 = 0
+    let tLab1 = 0
+    let tUnit1 = 0
+    let tHrPw1 = 0
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects1Y1S(subs1)
+
+        tLec1 = 0
+        tLab1 = 0
+        tUnit1 = 0
+        tHrPw1 = 0
+        
+         subs1.map((currSub) => tLec1 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab1 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit1 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw1 += Number(currSub.hour_pw));
+
+         setTotalLec1(tLec1)
+         setTotalLab1(tLab1)
+         setTotalUnit1(tUnit1)
+         setTotalHr1(tHrPw1)
+    });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub1()
+  }, [props.id]);
+
+  //1st YEAR 2nd SEM FUNCTION
+  const allCurrSub2 = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
+    });
+
+    version = sbjct.length.toString()
+
+
+    const sub2Ref = collection(db, "curriculumns", currID, 'versions', version, "first_year");
+    const q2 = query(sub2Ref, where("curr_sem", '==' ,2));
+
+    let tLec2 = 0
+    let tLab2 = 0
+    let tUnit2 = 0
+    let tHrPw2 = 0
+
+    const unsubscribe2 = onSnapshot(q2, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects1Y2S(subs1)
+
+        tLec2 = 0
+        tLab2 = 0
+        tUnit2 = 0
+        tHrPw2 = 0
+        
+         subs1.map((currSub) => tLec2 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab2 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit2 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw2 += Number(currSub.hour_pw));
+
+         setTotalLec2(tLec2)
+         setTotalLab2(tLab2)
+         setTotalUnit2(tUnit2)
+         setTotalHr2(tHrPw2)
+    });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub2()
+  }, [props.id]);
+
+  //2nd YEAR 1st SEM FUNCTION
+  const allCurrSub2Y1S = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
+    });
+
+    version = sbjct.length.toString()
+
+    const sub1Ref = collection(db, "curriculumns", currID, 'versions', version, "second_year");
+    const q = query(sub1Ref, where("curr_sem", '==' ,1));
+
+    let tLec1 = 0
+    let tLab1 = 0
+    let tUnit1 = 0
+    let tHrPw1 = 0
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects2Y1S(subs1)
+
+        tLec1 = 0
+        tLab1 = 0
+        tUnit1 = 0
+        tHrPw1 = 0
+        
+         subs1.map((currSub) => tLec1 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab1 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit1 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw1 += Number(currSub.hour_pw));
+
+         setTotalLec2y1s(tLec1)
+         setTotalLab2y1s(tLab1)
+         setTotalUnit2y1s(tUnit1)
+         setTotalHr2y1s(tHrPw1)
+    });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub2Y1S()
+  }, [props.id]);
+
+  //2nd YEAR 2nd SEM FUNCTION
+  const allCurrSub2Y2S = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
+    });
+
+    version = sbjct.length.toString()
+
+
+    const sub2Ref = collection(db, "curriculumns", currID, 'versions', version, "second_year");
+    const q2 = query(sub2Ref, where("curr_sem", '==' ,2));
+
+    let tLec2 = 0
+    let tLab2 = 0
+    let tUnit2 = 0
+    let tHrPw2 = 0
+
+    const unsubscribe2 = onSnapshot(q2, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects2Y2S(subs1)
+
+        tLec2 = 0
+        tLab2 = 0
+        tUnit2 = 0
+        tHrPw2 = 0
+        
+         subs1.map((currSub) => tLec2 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab2 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit2 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw2 += Number(currSub.hour_pw));
+
+         setTotalLec2y2s(tLec2)
+         setTotalLab2y2s(tLab2)
+         setTotalUnit2y2s(tUnit2)
+         setTotalHr2y2s(tHrPw2)
+    });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub2Y2S()
+  }, [props.id]);
+
+  //3rd YEAR 1st SEM FUNCTION
+  const allCurrSub3Y1S = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
+    });
+
+    version = sbjct.length.toString()
+
+    const sub1Ref = collection(db, "curriculumns", currID, 'versions', version, "third_year");
+    const q = query(sub1Ref, where("curr_sem", '==' ,1));
+
+    let tLec1 = 0
+    let tLab1 = 0
+    let tUnit1 = 0
+    let tHrPw1 = 0
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects3Y1S(subs1)
+
+        tLec1 = 0
+        tLab1 = 0
+        tUnit1 = 0
+        tHrPw1 = 0
+        
+         subs1.map((currSub) => tLec1 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab1 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit1 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw1 += Number(currSub.hour_pw));
+
+         setTotalLec3y1s(tLec1)
+         setTotalLab3y1s(tLab1)
+         setTotalUnit3y1s(tUnit1)
+         setTotalHr3y1s(tHrPw1)
+    });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub3Y1S()
+  }, [props.id]);
+
+  //3rd YEAR 2nd SEM FUNCTION
+  const allCurrSub3Y2S = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
+    });
+
+    version = sbjct.length.toString()
+
+
+    const sub2Ref = collection(db, "curriculumns", currID, 'versions', version, "third_year");
+    const q2 = query(sub2Ref, where("curr_sem", '==' ,2));
+
+    let tLec2 = 0
+    let tLab2 = 0
+    let tUnit2 = 0
+    let tHrPw2 = 0
+
+    const unsubscribe2 = onSnapshot(q2, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects3Y2S(subs1)
+
+        tLec2 = 0
+        tLab2 = 0
+        tUnit2 = 0
+        tHrPw2 = 0
+        
+         subs1.map((currSub) => tLec2 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab2 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit2 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw2 += Number(currSub.hour_pw));
+
+         setTotalLec3y2s(tLec2)
+         setTotalLab3y2s(tLab2)
+         setTotalUnit3y2s(tUnit2)
+         setTotalHr3y2s(tHrPw2)
+    });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub3Y2S()
+  }, [props.id]);
+
+  //4th YEAR 1st SEM FUNCTION
+  const allCurrSub4Y1S = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
+    });
+
+    version = sbjct.length.toString()
+
+    const sub1Ref = collection(db, "curriculumns", currID, 'versions', version, "fourth_year");
+    const q = query(sub1Ref, where("curr_sem", '==' ,1));
+
+    let tLec1 = 0
+    let tLab1 = 0
+    let tUnit1 = 0
+    let tHrPw1 = 0
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects4Y1S(subs1)
+
+        tLec1 = 0
+        tLab1 = 0
+        tUnit1 = 0
+        tHrPw1 = 0
+        
+         subs1.map((currSub) => tLec1 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab1 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit1 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw1 += Number(currSub.hour_pw));
+
+         setTotalLec4y1s(tLec1)
+         setTotalLab4y1s(tLab1)
+         setTotalUnit4y1s(tUnit1)
+         setTotalHr4y1s(tHrPw1)
+    });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub4Y1S()
+  }, [props.id]);
+
+  //4th YEAR 2nd SEM FUNCTION
+  const allCurrSub4Y2S = async () =>
+  {
+    let version;
+    const currID = props.id;
+    const sbjct =[]
+    const qry = query(collection(db, "curriculumns", currID, 'versions'));
+    const querySnapshot1 = await getDocs(qry);
+
+    querySnapshot1.forEach((doc) => 
+    {
+      sbjct.push({ ...doc.data(), id: doc.id });
+    });
+
+    version = sbjct.length.toString()
+
+
+    const sub2Ref = collection(db, "curriculumns", currID, 'versions', version, "fourth_year");
+    const q2 = query(sub2Ref, where("curr_sem", '==' ,2));
+
+    let tLec2 = 0
+    let tLab2 = 0
+    let tUnit2 = 0
+    let tHrPw2 = 0
+
+    const unsubscribe2 = onSnapshot(q2, (querySnapshot) => 
+    {
+      const subs1 = [];
+      querySnapshot.forEach((doc) => {
+          subs1.push({ ...doc.data(), id: doc.id });
+      });
+        setSubjects4Y2S(subs1)
+
+        tLec2 = 0
+        tLab2 = 0
+        tUnit2 = 0
+        tHrPw2 = 0
+        
+         subs1.map((currSub) => tLec2 += Number(currSub.sub_lec));
+         subs1.map((currSub) => tLab2 += Number(currSub.sub_lab));
+         subs1.map((currSub) => tUnit2 += Number(currSub.total_units));
+         subs1.map((currSub) => tHrPw2 += Number(currSub.hour_pw));
+
+         setTotalLec4y2s(tLec2)
+         setTotalLab4y2s(tLab2)
+         setTotalUnit4y2s(tUnit2)
+         setTotalHr4y2s(tHrPw2)
+    });
+  }
+
+  useEffect(() => 
+  {
+    allCurrSub4Y2S()
+  }, [props.id]);
+
+
+
+
+  /******PUSH******/
+  // //1st YEAR
+  // const unsubscribe1 = onSnapshot(first_year_query, (querySnapshot) => 
+  // {
   //   const temp = [];
   //   querySnapshot.forEach((doc) => {
   //       temp.push(doc.data());
   //   });
   //   setFirstYear(temp)
+  // });
+  // // //2nd YEAR
+  // const unsubscribe2 = onSnapshot(second_year_query, (querySnapshot) => 
+  // {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setSecondYear(temp)
+  // });
+  // // //3rd YEAR
+  // const unsubscribe3 = onSnapshot(third_year_query, (querySnapshot) => 
+  // {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setThirdYear(temp)
+  // });
+  // // //4th YEAR
+  // const unsubscribe4 = onSnapshot(fourth_year_query, (querySnapshot) => 
+  // {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setFourthYear(temp)
   // });
 
-  // const unsubscribe3 = onSnapshot(first_year_query, (querySnapshot) => {
-  //   const temp = [];
-  //   querySnapshot.forEach((doc) => {
-  //       temp.push(doc.data());
-  //   });
-  //   setFirstYear(temp)
-  // });
-  // const unsubscribe4 = onSnapshot(first_year_query, (querySnapshot) => {
-  //   const temp = [];
-  //   querySnapshot.forEach((doc) => {
-  //       temp.push(doc.data());
-  //   });
-  //   setFirstYear(temp)
-  // });
-  
   const downloadPDFButton = useReactToPrint
   ({
     content: () => componentRef.current,
@@ -298,17 +822,19 @@ export function DownloadPDF(props)
                 <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: 3.5}}variant="overline" display="block" gutterBottom>
                   (Based on CMO No. 25 s 2015)
                 </Typography>
+
+    {/******* FIRST YEAR *******/}
                 <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1}} variant="subtitle2" gutterBottom component="div" fullWidth>
                 FIRST YEAR
                 </Typography>
               <TableCell>
               <p><b>First Semester</b></p>
               </TableCell>
-      <Divider />
+    <Divider />
     
-    {/*First Semester Header*/}
-            <Table>
-              <TableBody>
+    {/*First Table Header*/}
+    <Table>
+    <TableBody>
                   <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
                     COURSE CODE
                   </TableCell>
@@ -335,79 +861,71 @@ export function DownloadPDF(props)
                   </TableCell>
                   </TableBody>
 
-                         {/*First Semester TextFields*/}  
-                  
-                  {first_year.map((data)=>{
-                    if(data.curr_sem == 1)
-                    {
-                    return(
-                    <TableRow
-                    hover
-                    >
-                      <TableCell sx={{pl: 3}}>
-                    {data.sub_code}
+  {/*First Semester TextFields*/}  
+     
+     {subjects1Y1S.map((subject1) => (
+                <TableRow
+                  hover
+                  key={subject1.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_code}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                  {data.sub_desc}
+                    {subject1.sub_desc}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.sub_lec}
+                    {subject1.sub_lec}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.sub_lab}
+                    {subject1.sub_lab}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.total_units}
+                    {subject1.total_units}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.hour_pw}
-                  </TableCell>
-                  <TableCell sx={{pl: 1}}>
-                  {data.sub_preReq}
+                    {subject1.hour_pw}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                  {data.sub_coReq}
+                    {subject1.sub_preReq}
                   </TableCell>
-                    </TableRow>
-                    )
-                  }}
-                )}
-               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>TOTAL:</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>3.0</b>
+              <b>{ totalLec1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>3.0</b>
+              <b>{ totalLab1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>1.0</b>
+              <b>{ totalUnit1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>3.0</b>
+              <b>{ totalHr1.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
-            </Table> 
-            <Table>
-              <TableRow>
-              </TableRow>
             </Table>
 
  {/*Second Semester Headings*/}
 
-           <Divider />
+ <Divider />
             <TableCell>
               <p><b>Second Semester</b></p>
               </TableCell>
               <Divider />
               <Table>
-                <TableBody>
+    <TableBody>
                   <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
                     COURSE CODE
                   </TableCell>
@@ -434,65 +952,633 @@ export function DownloadPDF(props)
                   </TableCell>
                   </TableBody>
 
-  {/*First Semester TextFields*/} 
-  {first_year.map((data)=>{
-                    if(data.curr_sem == 2)
-                    {
-                    return(
-                    <TableRow
-                    hover
-                    >
-                      <TableCell sx={{pl: 3}}>
-                    {data.sub_code}
+  {/*Second Semester TextFields*/}  
+     
+     {subjects1Y2S.map((subject2) => (
+                <TableRow
+                  hover
+                  key={subject2.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_code}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                  {data.sub_desc}
+                    {subject2.sub_desc}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.sub_lec}
+                    {subject2.sub_lec}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.sub_lab}
+                    {subject2.sub_lab}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.total_units}
+                    {subject2.total_units}
                   </TableCell>
                   <TableCell sx={{textAlign:'center'}}>
-                  {data.hour_pw}
-                  </TableCell>
-                  <TableCell sx={{pl: 1}}>
-                  {data.sub_preReq}
+                    {subject2.hour_pw}
                   </TableCell>
                   <TableCell sx={{pl: 3}}>
-                  {data.sub_coReq}
+                    {subject2.sub_preReq}
                   </TableCell>
-                    </TableRow>
-                    )
-                  }}
-                )}
-
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
               <b>TOTAL:</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>2.0</b>
+              <b>{ totalLec2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>2.0</b>
+              <b>{ totalLab2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>2.0</b>
+              <b>{ totalUnit2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
-              <b>2.0</b>
+              <b>{ totalHr2.toFixed(1) }</b>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
               <TableCell sx={{backgroundColor:'#D0C9C0'}}>
               </TableCell>
             </Table>
+  {/* FIRST YEAR END */}
+
+  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: 5}} variant="subtitle2" gutterBottom component="div" fullWidth>
+                ---------------------------PAGE BREAK---------------------------
+                </Typography>
+
+  {/******* SECOND YEAR *******/}
+  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1}} variant="subtitle2" gutterBottom component="div" fullWidth>
+                SECOND YEAR
+                </Typography>
+              <TableCell>
+              <p><b>First Semester</b></p>
+              </TableCell>
+    <Divider />
+    
+    {/*First Table Header*/}
+    <Table>
+    <TableBody>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+  {/*First Semester TextFields*/}  
+     
+     {subjects2Y1S.map((subject1) => (
+                <TableRow
+                  hover
+                  key={subject1.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_code}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_desc}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.sub_lec}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.sub_lab}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.total_units}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.hour_pw}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_preReq}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLec2y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLab2y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalUnit2y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalHr2y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+            </Table>
+
+ {/*Second Semester Headings*/}
+
+ <Divider />
+            <TableCell>
+              <p><b>Second Semester</b></p>
+              </TableCell>
+              <Divider />
+              <Table>
+    <TableBody>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+  {/*Second Semester TextFields*/}  
+     
+     {subjects2Y2S.map((subject2) => (
+                <TableRow
+                  hover
+                  key={subject2.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_code}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_desc}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.sub_lec}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.sub_lab}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.total_units}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.hour_pw}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_preReq}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLec2y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLab2y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalUnit2y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalHr2y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+            </Table>
+  {/* SECOND YEAR END */}
+
+  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: 5}} variant="subtitle2" gutterBottom component="div" fullWidth>
+                ---------------------------PAGE BREAK---------------------------
+                </Typography>
+
+  {/******* THIRD YEAR *******/}
+  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1}} variant="subtitle2" gutterBottom component="div" fullWidth>
+                THIRD YEAR
+                </Typography>
+              <TableCell>
+              <p><b>First Semester</b></p>
+              </TableCell>
+    <Divider />
+    
+    {/*First Table Header*/}
+    <Table>
+    <TableBody>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+  {/*First Semester TextFields*/}  
+     
+     {subjects3Y1S.map((subject1) => (
+                <TableRow
+                  hover
+                  key={subject1.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_code}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_desc}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.sub_lec}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.sub_lab}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.total_units}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.hour_pw}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_preReq}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLec3y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLab3y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalUnit3y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalHr3y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+            </Table>
+
+ {/*Second Semester Headings*/}
+
+ <Divider />
+            <TableCell>
+              <p><b>Second Semester</b></p>
+              </TableCell>
+              <Divider />
+              <Table>
+    <TableBody>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+  {/*Second Semester TextFields*/}  
+     
+     {subjects3Y2S.map((subject2) => (
+                <TableRow
+                  hover
+                  key={subject2.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_code}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_desc}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.sub_lec}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.sub_lab}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.total_units}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.hour_pw}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_preReq}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLec3y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLab3y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalUnit3y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalHr3y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+            </Table>
+  {/* THIRD YEAR END */}
+
+  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: 5}} variant="subtitle2" gutterBottom component="div" fullWidth>
+                ---------------------------PAGE BREAK---------------------------
+                </Typography>
+
+  {/******* FOURTH YEAR *******/}
+  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1}} variant="subtitle2" gutterBottom component="div" fullWidth>
+                FOURTH YEAR
+                </Typography>
+              <TableCell>
+              <p><b>First Semester</b></p>
+              </TableCell>
+    <Divider />
+    
+    {/*First Table Header*/}
+    <Table>
+    <TableBody>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+  {/*First Semester TextFields*/}  
+     
+     {subjects4Y1S.map((subject1) => (
+                <TableRow
+                  hover
+                  key={subject1.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_code}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_desc}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.sub_lec}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.sub_lab}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.total_units}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject1.hour_pw}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_preReq}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject1.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLec4y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLab4y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalUnit4y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalHr4y1s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+            </Table>
+
+ {/*Second Semester Headings*/}
+
+ <Divider />
+            <TableCell>
+              <p><b>Second Semester</b></p>
+              </TableCell>
+              <Divider />
+              <Table>
+    <TableBody>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
+                    COURSE CODE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    DESCRIPTIVE TITLE
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LEC UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    LAB UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    TOTAL UNITS
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', textAlign:'center', backgroundColor:'#F8ECD1'}}>
+                    HOURS PER WEEK
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    PRE-REQ
+                  </TableCell>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
+                    CO-REQ
+                  </TableCell>
+                  </TableBody>
+
+  {/*Second Semester TextFields*/}  
+     
+     {subjects4Y2S.map((subject2) => (
+                <TableRow
+                  hover
+                  key={subject2.id}
+                >
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_code}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_desc}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.sub_lec}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.sub_lab}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.total_units}
+                  </TableCell>
+                  <TableCell sx={{textAlign:'center'}}>
+                    {subject2.hour_pw}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_preReq}
+                  </TableCell>
+                  <TableCell sx={{pl: 3}}>
+                    {subject2.sub_coReq}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>TOTAL:</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLec4y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalLab4y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalUnit4y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{textAlign:'center', backgroundColor:'#D0C9C0'}}>
+              <b>{ totalHr4y2s.toFixed(1) }</b>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+              <TableCell sx={{backgroundColor:'#D0C9C0'}}>
+              </TableCell>
+            </Table>
+  {/* FOURTH YEAR END */}
+
             </Box>
           </Card>
         </Box>
@@ -654,6 +1740,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {getUserLevel() == 2 && customer.accepted != true?
                     <Button
                     variant="outlined"
+                    sx={{marginRight: 1}}
                     disabled={customer.on_review == true ? true : false}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
@@ -671,7 +1758,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {customer.on_review == true ?
                     <>
                     <Button
-                    sx={{background:'#0275d8', color:'white'}}
+                    sx={{background:'#0275d8', color:'white', marginRight: 1}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
                       await updateDoc(washingtonRef, {
@@ -685,7 +1772,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                       Accept
                     </Button>
                     <Button
-                    sx={{background:'#d9534f', color:'white'}}
+                    sx={{background:'#d9534f', color:'white', marginRight: 1}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
                       await updateDoc(washingtonRef, {

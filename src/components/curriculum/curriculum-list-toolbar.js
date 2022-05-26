@@ -149,6 +149,21 @@ export default function AddCurriculumModal()
     handleClose()
   }
 
+  const handleData = async (currCode,cmo,deptCode) => {
+    const current_date =  new Date()
+    let newSubUser=""
+    const email = getEmail();
+    const userData = query(usersCollectionRef, where("email", "==", email));
+    const querySnapshot = await getDocs(userData)
+    await querySnapshot.forEach((doc) => {
+      const data = doc.data()
+      newSubUser=data.username
+    });
+                    
+    addCurriculum({currCode: currCode,cmo:cmo,currVersion:1,depCode:deptCode,username:newSubUser, dateCreated:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()), dateApproved:'--', email:getEmail(), on_review:false, accepted:false})
+                    
+  }
+
   return (
     <div style={{display : 'inline-block'}} >
         <Button
@@ -227,21 +242,7 @@ export default function AddCurriculumModal()
                 <Button
                   color="primary"
                   variant='contained'
-                  onClick={()=>{
-                    const current_date =  new Date()
-                    let newSubUser=""
-                    auth.onAuthStateChanged(async user => {
-                      const email = user.email;
-                      const userData = query(usersCollectionRef, where("email", "==", email));
-                      const querySnapshot = await getDocs(userData)
-                      await querySnapshot.forEach((doc) => {
-                          const data = doc.data()
-                          newSubUser=data.username
-                          });});
-                    addCurriculum({currCode: formik.values.currCode,cmo:formik.values.cmo,currVersion:1,depCode:DeptCode,username:newSubUser, dateCreated:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()), dateApproved:'--', email:getEmail(), on_review:false, accepted:false})
-                  
-                  }
-                  }>
+                  onClick={() => handleData(formik.values.currCode,formik.values.cmo,DeptCode,)}>
                     Done
                 </Button>
               </Box>

@@ -1,6 +1,7 @@
-var _curriculumId;
+var _curriculumId="1";
 var _yearLevel = 'first_year'
-var _version =1 ;
+var _version ='0';
+
 export const setCurriculumID = (id) =>{
     _curriculumId = id
 }
