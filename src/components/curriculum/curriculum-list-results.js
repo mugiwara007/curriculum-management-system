@@ -203,6 +203,7 @@ export function ArchiveModal(props)
 
 export function DownloadPDF(props)
 {
+  console.log("trying to fix this loop")
   const componentRef = useRef();
   const [first_year, setFirstYear] = React.useState([])
 
