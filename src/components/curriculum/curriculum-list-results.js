@@ -149,7 +149,6 @@ export default function UpdateModal(props)
 
 export function ArchiveModal(props) 
 {
-  console.log("ARCHIVE")
   const [open, setOpen] = useState(false);
   const handleDeleteClickOpen = () => 
   {
@@ -204,7 +203,7 @@ export function ArchiveModal(props)
 
 export function DownloadPDF(props)
 {
-  console.log("TEST")
+  console.log("LOOP")
   const componentRef = useRef();
 
   /******QUERIES*******/
@@ -730,42 +729,42 @@ export function DownloadPDF(props)
 
 
   /******PUSH******/
-  //1st YEAR
-  const unsubscribe1 = onSnapshot(first_year_query, (querySnapshot) => 
-  {
-    const temp = [];
-    querySnapshot.forEach((doc) => {
-        temp.push(doc.data());
-    });
-    setFirstYear(temp)
-  });
-  //2nd YEAR
-  const unsubscribe2 = onSnapshot(second_year_query, (querySnapshot) => 
-  {
-    const temp = [];
-    querySnapshot.forEach((doc) => {
-        temp.push(doc.data());
-    });
-    setSecondYear(temp)
-  });
-  //3rd YEAR
-  const unsubscribe3 = onSnapshot(third_year_query, (querySnapshot) => 
-  {
-    const temp = [];
-    querySnapshot.forEach((doc) => {
-        temp.push(doc.data());
-    });
-    setThirdYear(temp)
-  });
-  //4th YEAR
-  const unsubscribe4 = onSnapshot(fourth_year_query, (querySnapshot) => 
-  {
-    const temp = [];
-    querySnapshot.forEach((doc) => {
-        temp.push(doc.data());
-    });
-    setFourthYear(temp)
-  });
+  // //1st YEAR
+  // const unsubscribe1 = onSnapshot(first_year_query, (querySnapshot) => 
+  // {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setFirstYear(temp)
+  // });
+  // // //2nd YEAR
+  // const unsubscribe2 = onSnapshot(second_year_query, (querySnapshot) => 
+  // {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setSecondYear(temp)
+  // });
+  // // //3rd YEAR
+  // const unsubscribe3 = onSnapshot(third_year_query, (querySnapshot) => 
+  // {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setThirdYear(temp)
+  // });
+  // // //4th YEAR
+  // const unsubscribe4 = onSnapshot(fourth_year_query, (querySnapshot) => 
+  // {
+  //   const temp = [];
+  //   querySnapshot.forEach((doc) => {
+  //       temp.push(doc.data());
+  //   });
+  //   setFourthYear(temp)
+  // });
 
   const downloadPDFButton = useReactToPrint
   ({
