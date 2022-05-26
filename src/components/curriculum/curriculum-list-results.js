@@ -501,6 +501,7 @@ export function DownloadPDF(props)
 
 export const CurriculumListResults = ({ customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
+  const { setCurrVersion } = useAuth()
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
   const router = useRouter()
@@ -553,7 +554,9 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
     querySnapshot.forEach((doc) => {
       subs.push({ ...doc.data(), id: doc.id });
     });
-    setVersion(subs.length)
+    const sub_size = subs.length
+    setCurrVersion(sub_size.toString())
+    setVersion(sub_size.toString())
     router.push('/create-curriculum')
   }
 

@@ -10,8 +10,8 @@ import {
     Typography,
     Button,
   } from '@mui/material';
-  import Dialog from '@mui/material/Dialog';
-  import PerfectScrollbar from 'react-perfect-scrollbar';
+import Dialog from '@mui/material/Dialog';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -52,8 +52,9 @@ const curriculum_id = getCurriculumID();
 
   const importSubCurr = async (subID) => {
     if (subID){
-        auth.onAuthStateChanged(async user => {
-            if (user) {             
+        auth.onAuthStateChanged(async user => {           
+                // const currSubRef = collection(db, "curriculumns", curriculum_id, nyear);
+            if (user) {   
               let nyear="";
               if (props.year == 10){
                 nyear = "first_year"
@@ -63,92 +64,89 @@ const curriculum_id = getCurriculumID();
                 nyear = "third_year"
               } else if (props.year == 40){
                 nyear = "fourth_year"
-              }   
-            }              
-                // const currSubRef = collection(db, "curriculumns", curriculum_id, nyear);
-            if (user) {                                         //collection id ng curriculum
-                const currSubRef = collection(db, "curriculumns", curriculum_id, getYearLevel());
+              }                                         //collection id ng curriculum
+                const currSubRef = collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', nyear);
                 const docRef = doc(db, "subjects", subID);
                 const docSnap = await getDoc(docRef);
-                // addDoc(currSubRef, {
-                //     sub_code: docSnap.data().sub_code,
-                //     sub_desc: docSnap.data().sub_desc,
-                //     sub_lec: docSnap.data().sub_lec,
-                //     sub_lab: docSnap.data().sub_lab,
-                //     total_units: docSnap.data().total_units,
-                //     hour_pw: docSnap.data().hour_pw,
-                //     sub_preReq: docSnap.data().sub_preReq,
-                //     sub_coReq: docSnap.data().sub_coReq,
-                //     curr_sem: Number(props.value)
-                // });
-
-                const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
-                const version_collection = collection(curriculum_doc,"versions")
-                const querySnapshot = await getDocs(version_collection);
-                var counter = 1
-                querySnapshot.forEach((doc) => {
-                  counter++
+                addDoc(currSubRef, {
+                    sub_code: docSnap.data().sub_code,
+                    sub_desc: docSnap.data().sub_desc,
+                    sub_lec: docSnap.data().sub_lec,
+                    sub_lab: docSnap.data().sub_lab,
+                    total_units: docSnap.data().total_units,
+                    hour_pw: docSnap.data().hour_pw,
+                    sub_preReq: docSnap.data().sub_preReq,
+                    sub_coReq: docSnap.data().sub_coReq,
+                    curr_sem: Number(props.value)
                 });
-                const version_data = {
-                  sub_code: docSnap.data().sub_code,
-                  sub_desc: docSnap.data().sub_desc,
-                  sub_lec: docSnap.data().sub_lec,
-                  sub_lab: docSnap.data().sub_lab,
-                  total_units: docSnap.data().total_units,
-                  hour_pw: docSnap.data().hour_pw,
-                  sub_preReq: docSnap.data().sub_preReq,
-                  sub_coReq: docSnap.data().sub_coReq,
-                  curr_sem: Number(props.value)
-                }
-                if(counter > 2){
-                    setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(async()=>{
-                      const version_doc = doc(version_collection,counter.toString())
-                      const old_version = counter - 1
-                      const old_version_doc = doc(version_collection,old_version.toString())
-                      const first_year_collection = collection(old_version_doc,"first_year")
-                      const second_year_collection = collection(old_version_doc,"second_year")
-                      const third_year_collection = collection(old_version_doc,"third_year")
-                      const fourth_year_collection = collection(old_version_doc,"fourth_year")
-                      const first_year_snap = await getDocs(first_year_collection)
-                      const second_year_snap = await getDocs(second_year_collection)
-                      const third_year_snap = await getDocs(third_year_collection)
-                      const fourth_year_snap = await getDocs(fourth_year_collection)
-                      const year_collection = collection(version_doc,getYearLevel())
-                      first_year_snap.forEach((doc) =>{
-                        addDoc(collection(version_doc,"first_year"), doc.data())
-                      })
-                      second_year_snap.forEach((doc) =>{
-                        addDoc(collection(version_doc,"second_year"), doc.data())
-                      })
-                      third_year_snap.forEach((doc) =>{
-                        addDoc(collection(version_doc,"third_year"), doc.data())
-                      })
-                      fourth_year_snap.forEach((doc) =>{
-                        addDoc(collection(version_doc,"fourth_year"), doc.data())
-                      })
-                      addDoc(year_collection, version_data)
-                      setVersion(counter.toString())
-                      setSubID("")
-                    }).catch((e)=>{
-                      alert(e)
-                    })
-                }
-                else{
-                  setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(()=>{
-                    const version_doc = doc(version_collection,counter.toString())
-                    const year_collection = collection(version_doc,getYearLevel())
-                    addDoc(year_collection, version_data)
-                  }).catch((e)=>{
-                    alert(e)
-                  })
-                }
+
+                // const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
+                // const version_collection = collection(curriculum_doc,"versions")
+                // const querySnapshot = await getDocs(version_collection);
+                // var counter = 1
+                // querySnapshot.forEach((doc) => {
+                //   counter++
+                // });
+                // const version_data = {
+                //   sub_code: docSnap.data().sub_code,
+                //   sub_desc: docSnap.data().sub_desc,
+                //   sub_lec: docSnap.data().sub_lec,
+                //   sub_lab: docSnap.data().sub_lab,
+                //   total_units: docSnap.data().total_units,
+                //   hour_pw: docSnap.data().hour_pw,
+                //   sub_preReq: docSnap.data().sub_preReq,
+                //   sub_coReq: docSnap.data().sub_coReq,
+                //   curr_sem: Number(props.value)
+                // }
+                // if(counter > 2){
+                //     setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(async()=>{
+                //       const version_doc = doc(version_collection,counter.toString())
+                //       const old_version = counter - 1
+                //       const old_version_doc = doc(version_collection,old_version.toString())
+                //       const first_year_collection = collection(old_version_doc,"first_year")
+                //       const second_year_collection = collection(old_version_doc,"second_year")
+                //       const third_year_collection = collection(old_version_doc,"third_year")
+                //       const fourth_year_collection = collection(old_version_doc,"fourth_year")
+                //       const first_year_snap = await getDocs(first_year_collection)
+                //       const second_year_snap = await getDocs(second_year_collection)
+                //       const third_year_snap = await getDocs(third_year_collection)
+                //       const fourth_year_snap = await getDocs(fourth_year_collection)
+                //       const year_collection = collection(version_doc,getYearLevel())
+                //       first_year_snap.forEach((doc) =>{
+                //         addDoc(collection(version_doc,"first_year"), doc.data())
+                //       })
+                //       second_year_snap.forEach((doc) =>{
+                //         addDoc(collection(version_doc,"second_year"), doc.data())
+                //       })
+                //       third_year_snap.forEach((doc) =>{
+                //         addDoc(collection(version_doc,"third_year"), doc.data())
+                //       })
+                //       fourth_year_snap.forEach((doc) =>{
+                //         addDoc(collection(version_doc,"fourth_year"), doc.data())
+                //       })
+                //       addDoc(year_collection, version_data)
+
+                //       setVersion(counter.toString())
+                //       setSubID("")
+                //     }).catch((e)=>{
+                //       alert(e)
+                //     })
+                // }
+                // else{
+                //   setDoc(doc(version_collection,counter.toString()),{version:counter.toString()}).then(()=>{
+                //     const version_doc = doc(version_collection,counter.toString())
+                //     const year_collection = collection(version_doc,getYearLevel())
+                //     addDoc(year_collection, version_data)
+                //   }).catch((e)=>{
+                //     alert(e)
+                //   })
+                // }
 
                 } else {
                   
               }
         });
-
-        props.setCurrVersion(getVersion())
+        setSubID(null)
         handleClose();
     } else {
       alert("Please select a subject to import.");
