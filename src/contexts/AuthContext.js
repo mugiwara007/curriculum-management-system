@@ -82,7 +82,6 @@ export function AuthProvider({ children }) {
             // Sign-out successful.
             setCurrentUser("")
             setUserLevel(0)
-            localStorage.removeItem('email');
             router.push("/")
         }).catch((error) => {
             const errorCode = error.code;

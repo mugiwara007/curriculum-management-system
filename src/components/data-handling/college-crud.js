@@ -14,7 +14,6 @@ const CollegeCrud = React.createContext()
 
 export function collAuth()
 {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useContext(CollegeCrud)
 }
    

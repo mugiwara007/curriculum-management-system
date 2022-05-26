@@ -15,7 +15,6 @@ import { auth } from 'src/firebase/firebase-auth';
 const SubjectCrud = React.createContext()
 
 export function subAuth(){
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useContext(SubjectCrud)
 }
 
