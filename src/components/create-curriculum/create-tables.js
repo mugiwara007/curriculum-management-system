@@ -967,7 +967,6 @@ export const CreateTables = (props) => {
               }
             </Table>
        
-
     </Box>
   </Card>
 );
