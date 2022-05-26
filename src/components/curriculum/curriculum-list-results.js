@@ -46,7 +46,6 @@ import { db } from 'src/firebase/firebase-auth';
 import { doc, updateDoc, getDocs } from "firebase/firestore";
 import { getUserLevel } from '../userModel';
 import { collection, query, where, onSnapshot } from "firebase/firestore"
-import { ContentPasteOffOutlined } from '@mui/icons-material';
 
 export default function UpdateModal(props) 
 {
@@ -1595,6 +1594,38 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
   const [page, setPage] = useState(0);
   const router = useRouter()
 
+  // const handleSelectAll = (event) => {
+  //   let newSelectedCustomerIds;
+
+  //   if (event.target.checked) {
+  //     newSelectedCustomerIds = customers.map((customer) => customer.id);
+  //   } else {
+  //     newSelectedCustomerIds = [];
+  //   }
+
+  //   setSelectedCustomerIds(newSelectedCustomerIds);
+  // };
+
+  // const handleSelectOne = (event, id) => {
+  //   const selectedIndex = selectedCustomerIds.indexOf(id);
+  //   let newSelectedCustomerIds = [];
+
+  //   if (selectedIndex === -1) {
+  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
+  //   } else if (selectedIndex === 0) {
+  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
+  //   } else if (selectedIndex === selectedCustomerIds.length - 1) {
+  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
+  //       selectedCustomerIds.slice(0, selectedIndex),
+  //       selectedCustomerIds.slice(selectedIndex + 1)
+  //     );
+  //   }
+
+  //   setSelectedCustomerIds(newSelectedCustomerIds);
+  // };
+
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -1710,7 +1741,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {getUserLevel() == 2 && customer.accepted != true?
                     <Button
                     variant="outlined"
-                    sx={{marginRight: 1}}
                     disabled={customer.on_review == true ? true : false}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
@@ -1728,7 +1758,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     {customer.on_review == true ?
                     <>
                     <Button
-                    sx={{background:'#0275d8', color:'white', marginRight: 1}}
+                    sx={{background:'#0275d8', color:'white'}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
                       await updateDoc(washingtonRef, {
@@ -1742,7 +1772,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                       Accept
                     </Button>
                     <Button
-                    sx={{background:'#d9534f', color:'white', marginRight: 1}}
+                    sx={{background:'#d9534f', color:'white'}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
                       await updateDoc(washingtonRef, {
