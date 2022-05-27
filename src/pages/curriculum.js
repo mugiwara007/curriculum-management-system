@@ -26,7 +26,7 @@ const Curriculum = () => {
             currVersion: doc.data().currVersion,
             dateApproved: doc.data().dateApproved,
             dateCreated: doc.data().dateCreated,
-            depCode: doc.data().depCOde,
+            depCode: doc.data().depCode,
             username: doc.data().username,
             on_review: doc.data().on_review,
             accepted:doc.data().accepted
@@ -47,7 +47,7 @@ const Curriculum = () => {
             currVersion: doc.data().currVersion,
             dateApproved: doc.data().dateApproved,
             dateCreated: doc.data().dateCreated,
-            depCode: doc.data().depCOde,
+            depCode: doc.data().depCode,
             username: doc.data().username,
             on_review: doc.data().on_review,
             accepted:doc.data().accepted

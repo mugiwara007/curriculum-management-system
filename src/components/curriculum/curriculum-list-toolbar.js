@@ -41,7 +41,7 @@ export default function AddCurriculumModal()
 {
   const usersCollectionRef = collection(db, "users");
   const [open, setOpen] = React.useState(false);
-  const [DeptCode, setDeptCode] = React.useState('BSIT');
+  const [DeptCode, setDeptCode] = React.useState([]);
   const [department, setDepartment] = React.useState([])
 
   const handleClickOpen = () => 
@@ -242,7 +242,7 @@ export default function AddCurriculumModal()
                 <Button
                   color="primary"
                   variant='contained'
-                  onClick={() => handleData(formik.values.currCode,formik.values.cmo,DeptCode,)}>
+                  onClick={() => handleData(formik.values.currCode,formik.values.cmo,DeptCode)}>
                     Done
                 </Button>
               </Box>

@@ -45,6 +45,7 @@ import { useRouter } from 'next/router';
 import { db } from 'src/firebase/firebase-auth';
 import { doc, updateDoc, getDocs } from "firebase/firestore";
 import { getUserLevel } from '../userModel';
+import { setVersion } from "src/components/create-curriculum/curriculum-model"
 import { collection, query, where, onSnapshot } from "firebase/firestore"
 
 export default function UpdateModal(props) 
@@ -1594,38 +1595,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
   const [page, setPage] = useState(0);
   const router = useRouter()
 
-  // const handleSelectAll = (event) => {
-  //   let newSelectedCustomerIds;
-
-  //   if (event.target.checked) {
-  //     newSelectedCustomerIds = customers.map((customer) => customer.id);
-  //   } else {
-  //     newSelectedCustomerIds = [];
-  //   }
-
-  //   setSelectedCustomerIds(newSelectedCustomerIds);
-  // };
-
-  // const handleSelectOne = (event, id) => {
-  //   const selectedIndex = selectedCustomerIds.indexOf(id);
-  //   let newSelectedCustomerIds = [];
-
-  //   if (selectedIndex === -1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
-  //   } else if (selectedIndex === 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-  //   } else if (selectedIndex === selectedCustomerIds.length - 1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds.slice(0, selectedIndex),
-  //       selectedCustomerIds.slice(selectedIndex + 1)
-  //     );
-  //   }
-
-  //   setSelectedCustomerIds(newSelectedCustomerIds);
-  // };
-
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -1637,6 +1606,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
   const sendData = async (id) => {
     setCurriculumID(id)
     const q = query(collection(db, "curriculumns", id, 'versions'));
+    const subs= [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       subs.push({ ...doc.data(), id: doc.id });
@@ -1654,17 +1624,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                {/* <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
-                    color="primary"
-                    indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell> */}
                 <TableCell>
                   Curriculum Code
                 </TableCell>
@@ -1698,13 +1657,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                   key={customer.id}
                   selected={selectedCustomerIds.indexOf(customer.id) !== -1}
                 >
-                  {/* <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
-                      value="true"
-                    />
-                  </TableCell> */}
                   <TableCell>
                     <Box
                       sx={{
@@ -1712,18 +1664,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      {/* <Avatar
-                        src={customer.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar>
-                      <Typography
-                        color="textPrimary"
-                        variant="body1"
-                      >
-                        {customer.name}
-                      </Typography> */}
                       {customer.currCode}
                     </Box>
                   </TableCell>
@@ -1770,9 +1710,11 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     sx={{background:'#0275d8', color:'white', marginRight: 1}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
+                      const current_date =  new Date()
                       await updateDoc(washingtonRef, {
                         accepted: true,
-                        on_review: false
+                        on_review: false,
+                        dateApproved:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear())
                       }).then(()=>{
                         alert('Successfully Accepted.')
                       });
