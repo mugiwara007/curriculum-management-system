@@ -1710,9 +1710,11 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     sx={{background:'#0275d8', color:'white', marginRight: 1}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
+                      const current_date =  new Date()
                       await updateDoc(washingtonRef, {
                         accepted: true,
-                        on_review: false
+                        on_review: false,
+                        dateApproved:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear())
                       }).then(()=>{
                         alert('Successfully Accepted.')
                       });
