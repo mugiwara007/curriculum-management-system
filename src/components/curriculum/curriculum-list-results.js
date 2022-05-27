@@ -45,6 +45,7 @@ import { useRouter } from 'next/router';
 import { db } from 'src/firebase/firebase-auth';
 import { doc, updateDoc, getDocs } from "firebase/firestore";
 import { getUserLevel } from '../userModel';
+import { setVersion } from "src/components/create-curriculum/curriculum-model"
 import { collection, query, where, onSnapshot } from "firebase/firestore"
 
 export default function UpdateModal(props) 
@@ -1594,38 +1595,6 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
   const [page, setPage] = useState(0);
   const router = useRouter()
 
-  // const handleSelectAll = (event) => {
-  //   let newSelectedCustomerIds;
-
-  //   if (event.target.checked) {
-  //     newSelectedCustomerIds = customers.map((customer) => customer.id);
-  //   } else {
-  //     newSelectedCustomerIds = [];
-  //   }
-
-  //   setSelectedCustomerIds(newSelectedCustomerIds);
-  // };
-
-  // const handleSelectOne = (event, id) => {
-  //   const selectedIndex = selectedCustomerIds.indexOf(id);
-  //   let newSelectedCustomerIds = [];
-
-  //   if (selectedIndex === -1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
-  //   } else if (selectedIndex === 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-  //   } else if (selectedIndex === selectedCustomerIds.length - 1) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelectedCustomerIds = newSelectedCustomerIds.concat(
-  //       selectedCustomerIds.slice(0, selectedIndex),
-  //       selectedCustomerIds.slice(selectedIndex + 1)
-  //     );
-  //   }
-
-  //   setSelectedCustomerIds(newSelectedCustomerIds);
-  // };
-
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -1637,6 +1606,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
   const sendData = async (id) => {
     setCurriculumID(id)
     const q = query(collection(db, "curriculumns", id, 'versions'));
+    const subs= [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       subs.push({ ...doc.data(), id: doc.id });
