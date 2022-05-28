@@ -927,7 +927,7 @@ export function DownloadPDF(props)
               <Divider />
               <Table>
     <TableBody>
-                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
+                  <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
                     COURSE CODE
                   </TableCell>
                   <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1'}}>
@@ -1009,9 +1009,9 @@ export function DownloadPDF(props)
               </TableCell>
             </Table>
   {/* FIRST YEAR END */}
-
+  
   <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: 5}} variant="subtitle2" gutterBottom component="div" fullWidth>
-                ---------------------------PAGE BREAK---------------------------
+  --------------------------------------------------PAGE BREAK--------------------------------------------------
                 </Typography>
 
   {/******* SECOND YEAR *******/}
@@ -1201,7 +1201,7 @@ export function DownloadPDF(props)
   {/* SECOND YEAR END */}
 
   <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: 5}} variant="subtitle2" gutterBottom component="div" fullWidth>
-                ---------------------------PAGE BREAK---------------------------
+  --------------------------------------------------PAGE BREAK--------------------------------------------------
                 </Typography>
 
   {/******* THIRD YEAR *******/}
@@ -1391,7 +1391,7 @@ export function DownloadPDF(props)
   {/* THIRD YEAR END */}
 
   <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: 5}} variant="subtitle2" gutterBottom component="div" fullWidth>
-                ---------------------------PAGE BREAK---------------------------
+                --------------------------------------------------PAGE BREAK--------------------------------------------------
                 </Typography>
 
   {/******* FOURTH YEAR *******/}
