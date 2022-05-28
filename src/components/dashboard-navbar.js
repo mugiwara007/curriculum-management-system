@@ -6,7 +6,9 @@ import { Bell as BellIcon } from '../icons/bell';
 import { UserCircle as UserCircleIcon } from '../icons/user-circle';
 import { Users as UsersIcon } from '../icons/users';
 import { NotificationDiv } from 'src/components/NotificationList';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from 'src/firebase/firebase-auth';
 import { display } from '@mui/system';
 
 const style = {
@@ -23,6 +25,8 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
   let [visibility,setVisibility] = useState('none');
+  let [badgeNumber, setBadgeNumber] = useState(0)
+  const [notif, setNotif] = useState([])
 
   const handleClick = () => {
     if(visibility == 'none'){
@@ -33,9 +37,28 @@ export const DashboardNavbar = (props) => {
 
   }
 
+  useEffect(() => {
+    const q = query(collection(db, "users", localStorage.getItem('user_id'), "notifications"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const temp = [];
+      let ctr = 0;
+      querySnapshot.forEach((doc) => {
+          temp.push(doc.data());
+          if(doc.data().on_read == false)
+          {
+            ctr += 1
+          }
+          
+      });
+      setNotif(temp)
+      setBadgeNumber(ctr)
+    });
+  }, [])
+  
+
   return (
     <>
-    <NotificationDiv visibility = {visibility}/>
+    <NotificationDiv visibility = {visibility} data={notif} />
       <DashboardNavbarRoot
         sx={{
           left: {
@@ -70,9 +93,8 @@ export const DashboardNavbar = (props) => {
           <Tooltip title="Notifications">
             <IconButton sx={{ ml: 1 }}>
               <Badge
-                badgeContent={4}
+                badgeContent={badgeNumber}
                 color="primary"
-                variant="dot"
               >
                 <BellIcon onClick={handleClick} 
                 fontSize="small" />
@@ -80,7 +102,7 @@ export const DashboardNavbar = (props) => {
               </Badge>
             </IconButton>
           </Tooltip>
-          <Avatar
+          {/* <Avatar
             sx={{
               height: 40,
               width: 40,
@@ -89,7 +111,7 @@ export const DashboardNavbar = (props) => {
             src="/static/images/avatars/avatar_1.png"
           >
             <UserCircleIcon fontSize="small" />
-          </Avatar>
+          </Avatar> */}
         </Toolbar>
       </DashboardNavbarRoot>
     </>

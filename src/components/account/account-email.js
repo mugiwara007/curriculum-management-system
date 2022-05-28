@@ -10,6 +10,10 @@ import {
   TextField
 } from '@mui/material';
 
+import { auth, db } from 'src/firebase/firebase-auth';
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { updateEmail } from "firebase/auth";
+
 
 
 export const AccountEmail = (props) => {
@@ -39,10 +43,10 @@ export const AccountEmail = (props) => {
                 fullWidth
                 label="Current Email"
                 margin="normal"
-                name="currentemail"
+                name="email"
                 onChange={handleChange}
                 type="email"
-                value={values.current}
+                value={values.email}
                 variant="outlined"
               />
               
@@ -54,7 +58,7 @@ export const AccountEmail = (props) => {
                 name="newemail"
                 onChange={handleChange}
                 type="email"
-                value={values.new}
+                value={values.newemail}
                 variant="outlined"
               />
             </CardContent>
@@ -69,6 +73,41 @@ export const AccountEmail = (props) => {
               <Button
                 color="primary"
                 variant="contained"
+                onClick={async()=>{
+                  const user = auth.currentUser;
+    
+                  const docRef = doc(db, "users", localStorage.getItem('user_id'));
+                  const docSnap = await getDoc(docRef);
+    
+                  if (docSnap.exists()) {
+                    if(docSnap.data().email == values.email){
+                      if(values.email == values.newemail){
+                        alert('New password should be different from the current password')
+                      }
+                      else{
+                        updateEmail(auth.currentUser, values.newemail).then(() => {
+                          const washingtonRef = doc(db, "users", localStorage.getItem('user_id'));
+    
+                            // Set the "capital" field of the city 'DC'
+                            updateDoc(washingtonRef, {
+                              email: values.newemail 
+                            }).then(()=>{
+                              alert('Successfully Changes your Email.')
+                              localStorage.setItem('email', values.newemail)
+                            })
+                        }).catch((error) => {
+                          alert('error ' + error)
+                        });
+                      }
+                    }
+                    else{
+                      alert('Incorrect current email.')
+                    }
+                  } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                  }
+                }}
               >
                 Update Email
               </Button>

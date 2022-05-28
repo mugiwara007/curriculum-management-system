@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
-import { Avatar, Box, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Divider, Grid, Typography, CardActions, Button } from '@mui/material';
 import { Clock as ClockIcon } from '../../icons/clock';
 import { Download as DownloadIcon } from '../../icons/download';
 
-export const ProductCard = ({}) => (
+import { doc, updateDoc, collection } from "firebase/firestore";
+import { db } from 'src/firebase/firebase-auth';
+export const ProductCard = (props) => (
   <Card
       sx={{
         display: 'flex',
@@ -14,12 +16,39 @@ export const ProductCard = ({}) => (
  <CardContent>
        <Box
          sx={{
-          display: 'flex',
            justifyContent: 'center',
            pb: 3
          }}
        >
-         No Notification
+         {props.data && props.data.reverse().map((data, key)=>{
+           return(
+            <Card sx={{ width:'100%' }} key={key}>
+              <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                {data.message}
+                </Typography>
+
+                <Typography sx={{ fontSize: 14, fontStyle:'italic' }} color="text.secondary" gutterBottom>
+                {data.date}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                {data.on_read == false ?<Button size="small"
+                onClick={async()=>{
+                  const notif = doc(db, "users", localStorage.getItem('user_id'));
+                  const notif_collection = collection(notif, "notifications")
+
+                  // Set the "capital" field of the city 'DC'
+                  await updateDoc(doc(notif_collection, data.notif_id), {
+                    on_read: true,
+                  });
+                }}
+                >Mark as Read</Button> : <Button size="small" disabled={true}>Mark as Read</Button>}
+              </CardActions>
+            </Card>
+           )
+         })
+        }
        </Box>
        <Typography
          align="center"

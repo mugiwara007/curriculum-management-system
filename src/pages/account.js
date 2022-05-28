@@ -31,14 +31,14 @@ const Account = () => (
           container
           spacing={3}
         >
-          <Grid
+          {/* <Grid
             item
             lg={40}
             md={6}
             xs={12}
           >
             <AccountProfile />
-          </Grid>
+          </Grid> */}
           <Grid
             item
             lg={5}

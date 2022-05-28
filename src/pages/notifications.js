@@ -4,8 +4,26 @@ import { products } from '../__mocks__/notifications';
 import { NotificationsListToolbar } from '../components/notifications/product-list-toolbar';
 import { ProductCard } from '../components/notifications/product-card';
 import { DashboardLayout } from '../components/dashboard-layout';
+import { useEffect, useState } from 'react';
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from 'src/firebase/firebase-auth';
 
-const Notifications = () => (
+
+const Notifications = () => {
+
+  const [notif, setNotif] = useState([])
+  useEffect(() => {
+    const q = query(collection(db, "users", localStorage.getItem('user_id'), "notifications"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const temp = [];
+      querySnapshot.forEach((doc) => {
+          temp.push(doc.data());
+      });
+      setNotif(temp)
+    });
+  }, [])
+  
+  return(
   <>
     <Head>
       <title>
@@ -43,11 +61,11 @@ const Notifications = () => (
                 md={12}
                 xs={12}
               >
-                <ProductCard />
+                <ProductCard data={notif}/>
               </Grid>
           </Grid>
         </Box>
-        <Box
+        {/* <Box
           sx={{
             display: 'flex',
             justifyContent: 'center',
@@ -59,11 +77,12 @@ const Notifications = () => (
             count={3}
             size="small"
           />
-        </Box>
+        </Box> */}
       </Container>
     </Box>
   </>
-);
+)
+};
 
 Notifications.getLayout = (page) => (
   <DashboardLayout>

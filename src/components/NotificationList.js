@@ -46,10 +46,21 @@ function NotificationDiv(props){
 
   }}
   >
+    {props.data.length > 0 ? 
+      props.data.slice(0,3).reverse().map((data, key)=>{
+          return(
+            <ListItem key={key}>
+            <ListItemText primary={data.message} 
+            secondary={data.date} />
+          </ListItem>
+          )
+    })
+    :
     <ListItem>
       <ListItemText primary=" No Notifications Yet" 
       secondary=" " />
     </ListItem>
+    }
     <Divider variant="inset" 
     component="li" />
     <ListItem>

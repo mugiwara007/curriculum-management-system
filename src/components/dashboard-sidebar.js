@@ -100,11 +100,11 @@ const department_head = [
     icon: (<NotificationsActiveIcon fontSize="small" />),
     title: 'All Notification'
   },
-  // {
-  //   href: '/account',
-  //   icon: (<UserIcon fontSize="small" />),
-  //   title: 'Account'
-  // },
+  {
+    href: '/account',
+    icon: (<UserIcon fontSize="small" />),
+    title: 'Account'
+  },
   // {
   //   href: '/settings',
   //   icon: (<CogIcon fontSize="small" />),
@@ -128,11 +128,11 @@ const dean = [
     icon: (<NotificationsActiveIcon fontSize="small" />),
     title: 'All Notification'
   },
-  // {
-  //   href: '/account',
-  //   icon: (<UserIcon fontSize="small" />),
-  //   title: 'Account'
-  // },
+  {
+    href: '/account',
+    icon: (<UserIcon fontSize="small" />),
+    title: 'Account'
+  },
   // {
   //   href: '/settings',
   //   icon: (<CogIcon fontSize="small" />),
@@ -178,7 +178,7 @@ export const DashboardSidebar = (props) => {
           <Box sx={{ mx: 6 }}>
                 <img
               alt="Bulsu Image"
-              src="/static/images/bulsu logo png.png"
+              src={localStorage.getItem('userLevel') == 1 ? "/static/images/bulsu logo png.png" : "/static/images/cict.png"}
               loading="lazy"
               width="85%"
             />

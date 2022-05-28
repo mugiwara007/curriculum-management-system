@@ -199,10 +199,25 @@ const Login = () => {
         const docSnap = await getDoc(user_data);
 
         if (docSnap.exists()) {
-          setUserLevel(docSnap.data().userlevel)
-          setEmail(formik.values.email)
-          localStorage.setItem('email', formik.values.email)
-          router.push('/dashboard')
+          if(!docSnap.data().archive)
+          {
+            setUserLevel(docSnap.data().userlevel)
+            setEmail(formik.values.email)
+            localStorage.setItem('email', formik.values.email)
+            localStorage.setItem('fullName', docSnap.data().name)
+            localStorage.setItem('username', docSnap.data().username)
+            localStorage.setItem('user_id', user.uid)
+            if(formik.values.email == 'curriculum.management.2022@gmail.com'){
+              localStorage.setItem('userLevel',1)
+            }
+            else{
+              localStorage.setItem('userLevel',docSnap.data().userLevel)
+            }
+            router.push('/dashboard')
+          }
+          else{
+            alert("This account is disabled. Try to contact admin.");
+          }
         } else {
           // doc.data() will be undefined in this case
           alert("No such document!");

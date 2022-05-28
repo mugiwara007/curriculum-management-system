@@ -50,7 +50,8 @@ const Curriculum = () => {
             depCode: doc.data().depCode,
             username: doc.data().username,
             on_review: doc.data().on_review,
-            accepted:doc.data().accepted
+            accepted:doc.data().accepted,
+            user_id:doc.data().user_id
           });
         });
         setCurriculum(temp)

@@ -79,6 +79,7 @@ export const ApplyVersionDialog = (props) =>{
 
   return (
     <div style={{display : 'inline-block'}} >
+      {localStorage.getItem('userLevel') == 2 ?
       <Button
           color="success"
           variant="contained"
@@ -87,7 +88,10 @@ export const ApplyVersionDialog = (props) =>{
           onClick={handleClickOpen}
         >
           Apply Version
-        </Button>
+      </Button>
+      :
+      <></>
+      }
       <Dialog open={open}
         onClose={handleClose}>
         <DialogTitle
@@ -215,11 +219,7 @@ const Dashboard = (props) => {
             xl={3}
             xs={12}
           >
-            {getUserLevel() == 3 ?
-            <Comments sx={{ height: '100%' }} />
-            :
-            <></> 
-            }
+            <Comments sx={{ height: '100%' }} data={getCurriculumID()} />
           </Grid>
           <Grid
             item
@@ -228,11 +228,7 @@ const Dashboard = (props) => {
             xl={9}
             xs={12}
           >
-            {getUserLevel() == 3 ?
-            <CreateComments sx={{ height: '100%' }} />
-            :
-            <></> 
-            }
+            <CreateComments sx={{ height: '100%' }} data={getCurriculumID()} />
           </Grid>
 
 

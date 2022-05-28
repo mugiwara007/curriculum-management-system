@@ -7,8 +7,11 @@ import {
     import ListItemText from '@mui/material/ListItemText';
     import Divider from '@mui/material/Divider';
    import TextField from '@mui/material/TextField';
-   import React, { Component } from 'react';
+   import React, { Component, useState } from 'react';
    import SendIcon from '@mui/icons-material/Send';
+   import { db } from 'src/firebase/firebase-auth';
+   import {doc, collection, setDoc, where, onSnapshot} from "firebase/firestore";
+import { getCurriculumID } from './curriculum-model';
   
     const style = {
       width: '100%',
@@ -30,7 +33,12 @@ import {
         width: '100%',
       };
     
-export const Comments = (props) => (
+export const Comments = (props) => {
+  const [commentVal, setComment] = useState()
+  const handleChange = (event) => {
+    setComment(event.target.value);
+  };
+return(
   <Card {...props}>
       <List sx={style} 
       component="nav"
@@ -47,12 +55,29 @@ export const Comments = (props) => (
           label="Comment"
           placeholder="Placeholder"
           multiline
+          value={commentVal}
+          onChange={handleChange}
         />
       </List>
       <Button sx={submit}
       variant="contained" 
-      endIcon={<SendIcon />}>
+      endIcon={<SendIcon />}
+      onClick={async()=>{
+        const comment_doc = doc(db, "curriculumns", getCurriculumID())
+        const comment_collection = collection(comment_doc, "comments")
+        const comment_id = new Date()
+        await setDoc(doc(comment_collection, Date.parse(comment_id).toString()), {
+          comment_id:comment_id,
+          message: commentVal,
+          date: (comment_id.getMonth() + 1) + "/" + comment_id.getDate() + comment_id.getFullYear(),
+          email: localStorage.getItem('email')
+        });
+
+        setComment('')
+      }}
+      >
          Submit
       </Button>
   </Card>
-);
+)
+    };

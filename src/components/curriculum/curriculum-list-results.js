@@ -43,7 +43,7 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import { getCurriculumID, setCurriculumID } from '../create-curriculum/curriculum-model';
 import { useRouter } from 'next/router';
 import { db } from 'src/firebase/firebase-auth';
-import { doc, updateDoc, getDocs } from "firebase/firestore";
+import { doc, updateDoc, getDocs, setDoc } from "firebase/firestore";
 import { getUserLevel } from '../userModel';
 import { setVersion } from "src/components/create-curriculum/curriculum-model"
 import { collection, query, where, onSnapshot } from "firebase/firestore"
@@ -1693,10 +1693,26 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     disabled={customer.on_review == true ? true : false}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
+                      const current_date =  new Date()
                       await updateDoc(washingtonRef, {
                         on_review: true
                       }).then(()=>{
                         alert('Wait for the dean approval.')
+                      });
+                      
+                      const users_notif = query(collection(db, "users"), where("userlevel", "==", 3));
+                      const unsubscribe = onSnapshot(users_notif, (querySnapshot) => {
+                        querySnapshot.forEach((docSnaps) => {
+                          const dean_doc = doc(db, "users",  docSnaps.id);
+                          const dean_notif = collection(dean_doc, "notifications")
+
+                          setDoc(doc(dean_notif, Date.parse(current_date).toString()), {
+                            message: "You receive curriculum review sent by " + localStorage.getItem('email') + ".",
+                            on_read: false,
+                            date:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()),
+                            notif_id: Date.parse(current_date).toString(),
+                          });
+                        });
                       });
                     }}
                     >
@@ -1711,12 +1727,23 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
                       const current_date =  new Date()
+
+                      const dean_doc = doc(db, "users",  customer.user_id);
+                      const dean_notif = collection(dean_doc, "notifications")
+
                       await updateDoc(washingtonRef, {
                         accepted: true,
                         on_review: false,
                         dateApproved:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear())
                       }).then(()=>{
                         alert('Successfully Accepted.')
+                      });
+
+                      await setDoc(doc(dean_notif, Date.parse(current_date).toString()), {
+                          message: "Your curriculum with curriculum code " + customer.currCode +" is accepted.",
+                          on_read: false,
+                          date:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()),
+                          notif_id: Date.parse(current_date).toString(),
                       });
                     }}
                     >
@@ -1726,11 +1753,23 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     sx={{background:'#d9534f', color:'white', marginRight: 1}}
                     onClick={async()=>{
                       const washingtonRef = doc(db, "curriculumns", customer.id);
+                      const current_date =  new Date()
                       await updateDoc(washingtonRef, {
                         on_review: false
                       }).then(()=>{
                         alert('Successfully Rejected.')
                       });
+                      
+                      const dean_doc = doc(db, "users",  customer.user_id);
+                      const dean_notif = collection(dean_doc, "notifications")
+
+                      await setDoc(doc(dean_notif, Date.parse(current_date).toString()), {
+                        message: "Your curriculum with curriculum code " + customer.currCode +" is rejected.",
+                        on_read: false,
+                        date:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()),
+                        notif_id: Date.parse(current_date).toString(),
+                    });
+
                     }}
                     >
                       Reject

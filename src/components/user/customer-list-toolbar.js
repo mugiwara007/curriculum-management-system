@@ -39,7 +39,7 @@ export default function FormDialog() {
 
   const [open, setOpen] = React.useState(false);
   const { addUser } = userAuth()
-  const [userLevel, setUserLevel] = React.useState(getUserLevel())
+  const [userLevel, setUserLevel] = React.useState(2)
 
   
 
@@ -67,14 +67,16 @@ export default function FormDialog() {
       .required
       (
         'Name is required'
-      ),
+      )
+      ,
       Password: Yup
       .string()
-      .max(64)
+      .min(8, 'Password must have atleast 8 minimun characters')
       .required
       (
         'Password is required'
-      ),
+      )
+      ,
       Usercode: Yup
       .string()
       .max(11)
@@ -98,14 +100,23 @@ export default function FormDialog() {
       // )
     }),
     onSubmit: () => {
-      addUser(
-        formik.values.Email,
-        formik.values.Name,
-        formik.values.Password,
-        formik.values.Usercode,
-        formik.values.Username,
-        userLevel,
-      )
+      if(formik.values.Password.match(/^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/g))
+      {
+        addUser(
+          formik.values.Email,
+          formik.values.Name,
+          formik.values.Password,
+          formik.values.Usercode,
+          formik.values.Username,
+          userLevel,
+        )
+        console.log('hello')
+      }
+      else{
+        alert('Password must contain numbers, special characters, small and capital letter.')
+        console.log('hi')
+      }
+      console.log('asdasd')
     }
   });
 

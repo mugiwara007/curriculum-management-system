@@ -160,7 +160,7 @@ export default function AddCurriculumModal()
       newSubUser=data.username
     });
                     
-    addCurriculum({currCode: currCode,cmo:cmo,currVersion:1,depCode:deptCode,username:newSubUser, dateCreated:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()), dateApproved:'--', email:getEmail(), on_review:false, accepted:false})
+    addCurriculum({currCode: currCode,cmo:cmo,currVersion:1,depCode:deptCode,username:newSubUser, dateCreated:((current_date.getMonth()+1) + "/" + current_date.getDate() + "/" + current_date.getFullYear()), dateApproved:'--', email:getEmail(), on_review:false, accepted:false , user_id:localStorage.getItem('user_id')})
                     
   }
 

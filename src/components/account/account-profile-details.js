@@ -10,6 +10,9 @@ import {
   TextField
 } from '@mui/material';
 
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from 'src/firebase/firebase-auth';
+
 const states = [
   {
     value: 'alabama',
@@ -27,15 +30,9 @@ const states = [
 
 export const AccountProfileDetails = (props) => {
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    middleName: 'S.',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    currentEmail: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA',
-    username: '@'
+    name: localStorage.getItem('fullName'),
+    email: localStorage.getItem('email'),
+    username: localStorage.getItem('username'),
   });
 
   const handleChange = (event) => {
@@ -71,7 +68,7 @@ export const AccountProfileDetails = (props) => {
                 sx={{width:'100%'}}
                 fullWidth
                 helperText="Please specify your full name"
-                label="First name"
+                label="Full name"
                 name="name"
                 onChange={handleChange}
                 required
@@ -79,7 +76,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
+            {/* <Grid
               item
               md={6}
               xs={12}
@@ -93,7 +90,7 @@ export const AccountProfileDetails = (props) => {
                 value={values.middleName}
                 variant="outlined"
               />
-            </Grid>
+            </Grid> */}
             <Grid
               item
               md={6}
@@ -102,38 +99,37 @@ export const AccountProfileDetails = (props) => {
               <TextField
                 sx={{width:'100%'}}
                 fullWidth
-                label="Last name"
-                name="lastName"
+                label="Username"
+                name="username"
                 onChange={handleChange}
                 required
-                value={values.lastName}
+                value={values.username}
                 variant="outlined"
               />
             </Grid>
-            <Grid
+            {/* <Grid
               item
               md={6}
               xs={12}
             >
               
-            </Grid>
+            </Grid> */}
             
             <Grid
               item
-              md={6}
               xs={12}
             >
               <TextField
                 fullWidth
-                label="Country"
-                name="country"
+                label="Email"
+                name="email"
                 onChange={handleChange}
                 required
-                value={values.country}
+                value={values.email}
                 variant="outlined"
               />
             </Grid>
-             <Grid
+             {/* <Grid
               item
               md={6}
               xs={12}
@@ -158,8 +154,8 @@ export const AccountProfileDetails = (props) => {
                   </option>
                 ))}
               </TextField>
-            </Grid>
-            <Grid
+            </Grid> */}
+            {/* <Grid
               item
               md={6}
               xs={12}
@@ -173,7 +169,7 @@ export const AccountProfileDetails = (props) => {
                 value={values.username}
                 variant="outlined"
               />
-            </Grid>
+            </Grid> */}
           </Grid>
         </CardContent>
         <Divider />
@@ -187,6 +183,15 @@ export const AccountProfileDetails = (props) => {
           <Button
             color="primary"
             variant="contained"
+            onClick={async()=>{
+              const user_doc = doc(db, "users", localStorage.getItem('user_id'));
+              // Set the "capital" field of the city 'DC'
+              await updateDoc(user_doc, values);
+              localStorage.setItem('email', values.email)
+              localStorage.setItem('fullName', values.name)
+              localStorage.setItem('username', values.username)
+              alert('Successfuly modified your information/s.')
+            }}
           >
             Save details
           </Button>
