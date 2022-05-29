@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { Box, Container, decomposeColor } from '@mui/material';
-import { CurriculumListResults } from '../components/curriculum/curriculum-list-results';
-import { CurriculumListToolbar } from '../components/curriculum/curriculum-list-toolbar';
-import { DashboardLayout } from '../components/dashboard-layout';
+import { CurriculumListResults } from './curriculum/curriculum-list-results';
+import { CurriculumListToolbar } from './curriculum/curriculum-list-toolbar';
+import { DashboardLayout } from './dashboard-layout';
 // import { customers } from '../__mocks__/customers';
 import { db } from 'src/firebase/firebase-auth';
 import { collection, query, where, onSnapshot } from "firebase/firestore";

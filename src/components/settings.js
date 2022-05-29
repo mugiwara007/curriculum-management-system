@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import { Box, Container, Typography } from '@mui/material';
-import { DashboardLayout } from '../components/dashboard-layout';
-import { SettingsNotifications } from '../components/settings/settings-notifications';
-import { SettingsPersonal } from '../components/settings/settings-personal';
-import { SettingsUsername } from '../components/settings/settings-username';
-import { SettingsPassword } from '../components/settings/settings-password';
-import { SettingsEmail } from '../components/settings/settings-change-email';
+import { DashboardLayout } from './dashboard-layout';
+import { SettingsNotifications } from './settings/settings-notifications';
+import { SettingsPersonal } from './settings/settings-personal';
+import { SettingsUsername } from './settings/settings-username';
+import { SettingsPassword } from './settings/settings-password';
+import { SettingsEmail } from './settings/settings-change-email';
 
 
 const Settings = () => (

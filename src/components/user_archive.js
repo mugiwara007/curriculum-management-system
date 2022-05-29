@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import { Box, Container } from '@mui/material';
-import { ArchivesListResults } from '../components/archives/user-archive-result';
-import { ArchivesListToolbar } from '../components/archives/user-archives-toolbar';
-import { DashboardLayout } from '../components/dashboard-layout';
+import { ArchivesListResults } from './archives/user-archive-result';
+import { ArchivesListToolbar } from './archives/user-archives-toolbar';
+import { DashboardLayout } from './dashboard-layout';
 import { customers } from '../__mocks__/customers';
-import { ArchiveProvider } from '../components/archives/archives-list-toolbar';
+import { ArchiveProvider } from './archives/archives-list-toolbar';
 
 const User_Archives = () => (
   

@@ -1,14 +1,14 @@
 import Head from 'next/head';
 import { Box, Container, Grid } from '@mui/material';
-import { TotalUsers } from '../components/dashboard/total-users';
-import { LatestOrders } from '../components/dashboard/latest-orders';
-import { LatestCurriculumGenerated } from '../components/dashboard/latest-curriculum-generated';
-import { Sales } from '../components/dashboard/sales';
-import { TotalDepartments } from '../components/dashboard/total-departments';
-import { TotalSubjects } from '../components/dashboard/total-subjects';
-import { TotalColleges } from '../components/dashboard/total-colleges';
-import { TotalCurriculumsGenerated } from '../components/dashboard/total-curriculums-generated';
-import { DashboardLayout } from '../components/dashboard-layout';
+import { TotalUsers } from './dashboard/total-users';
+import { LatestOrders } from './dashboard/latest-orders';
+import { LatestCurriculumGenerated } from './dashboard/latest-curriculum-generated';
+import { Sales } from './dashboard/sales';
+import { TotalDepartments } from './dashboard/total-departments';
+import { TotalSubjects } from './dashboard/total-subjects';
+import { TotalColleges } from './dashboard/total-colleges';
+import { TotalCurriculumsGenerated } from './dashboard/total-curriculums-generated';
+import { DashboardLayout } from './dashboard-layout';
 import {  withAuth } from '../routes/withAuth'
 import * as React from 'react'
 

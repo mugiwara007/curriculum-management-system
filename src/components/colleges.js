@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { Box, Container } from '@mui/material';
-import { CollegeListResults } from '../components/college/college-list-results';
-import { CollegeListToolbar } from '../components/college/college-list-toolbar';
-import { DashboardLayout } from '../components/dashboard-layout';
+import { CollegeListResults } from './college/college-list-results';
+import { CollegeListToolbar } from './college/college-list-toolbar';
+import { DashboardLayout } from './dashboard-layout';
 import { customers } from '../__mocks__/customers';
 
 const Colleges = () => (
