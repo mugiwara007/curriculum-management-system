@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { Box, Container } from '@mui/material';
-import { SubjectListResults } from './subject/subject-list-results';
-import { SubjectListToolbar } from './subject/subject-list-toolbar';
-import { DashboardLayout } from './dashboard-layout';
+import { SubjectListResults } from '../components/subject/subject-list-results';
+import { SubjectListToolbar } from '../components/subject/subject-list-toolbar';
+import { DashboardLayout } from '../components/dashboard-layout';
 
 const Subjects = () => (
   <>

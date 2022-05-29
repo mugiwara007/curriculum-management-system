@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useAuth } from 'src/contexts/AuthContext';
-import { DashboardLayout } from './dashboard-layout';
+import { DashboardLayout } from '../components/dashboard-layout';
 
 
 const Register = () => {

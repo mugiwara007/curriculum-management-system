@@ -5,9 +5,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box, Container, Grid, Typography, Button } from '@mui/material';
 import Divider from '@mui/material/Divider';
-import { CreateTables } from './create-curriculum/create-tables';
-import { HistoryLog } from './create-curriculum/create-history';
-import { DashboardLayout } from './dashboard-layout';
+import { CreateTables } from '../components/create-curriculum/create-tables';
+import { HistoryLog } from '../components/create-curriculum/create-history';
+import { DashboardLayout } from '../components/dashboard-layout';
 import SaveIcon from '@mui/icons-material/Save';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {  withAuth } from '../routes/withAuth'
