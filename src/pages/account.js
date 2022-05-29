@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import { Box, Container, Grid, Typography } from '@mui/material';
-import { AccountProfile } from './account/account-profile';
-import { AccountProfileDetails } from './account/account-profile-details';
-import { AccountEmail } from './account/account-email';
-import { AccountPassword } from './account/account-password';
-import { DashboardLayout } from './dashboard-layout';
+import { AccountProfile } from '../components/account/account-profile';
+import { AccountProfileDetails } from '../components/account/account-profile-details';
+import { AccountEmail } from '../components/account/account-email';
+import { AccountPassword } from '../components/account/account-password';
+import { DashboardLayout } from '../components/dashboard-layout';
 
 const Account = () => (
   <>
