@@ -1757,7 +1757,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                       await updateDoc(washingtonRef, {
                         on_review: false
                       }).then(()=>{
-                        alert('Successfully Rejected.')
+                        alert('The requested curriculum was rejected.')
                       });
                       
                       const dean_doc = doc(db, "users",  customer.user_id);
