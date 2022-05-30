@@ -211,7 +211,7 @@ const Login = () => {
               localStorage.setItem('userLevel',1)
             }
             else{
-              localStorage.setItem('userLevel',docSnap.data().userLevel)
+              localStorage.setItem('userLevel',docSnap.data().userlevel)
             }
             router.push('/dashboard')
           }
