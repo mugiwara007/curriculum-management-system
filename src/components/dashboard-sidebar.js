@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -149,8 +149,10 @@ export const DashboardSidebar = (props) => {
     noSsr: false
   });
 
+  const [userLevel, setUserLevel] = useState('')
   useEffect(
     () => {
+      setUserLevel(localStorage.getItem('userLevel'))
       if (!router.isReady) {
         return;
       }
@@ -178,7 +180,7 @@ export const DashboardSidebar = (props) => {
           <Box sx={{ mx: 6 }}>
                 <img
               alt="Bulsu Image"
-              src={localStorage.getItem('userLevel') == 1 ? "/static/images/bulsu logo png.png" : "/static/images/cict.png"}
+              src={userLevel == 1 ? "/static/images/bulsu logo png.png" : "/static/images/cict.png"}
               loading="lazy"
               width="85%"
             />

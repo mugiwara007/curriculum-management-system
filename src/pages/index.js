@@ -49,6 +49,8 @@ export function FormDialog() {
   const [open, setOpen] = React.useState(false);
   const [openSB, setOpenSB] = React.useState(false);
   const [openSBF, setOpenSBF] = React.useState(false);
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       email: ''
@@ -112,6 +114,13 @@ export function FormDialog() {
       });
   }
 
+  React.useEffect(() => {
+    if (localStorage.getItem('accessToken') !== null) {
+      router.push('/dashboard')
+    } else {
+      router.push('/')
+    }
+  }, [])
   return (
     <div style={{display : 'inline-block'}}>
       <Link
@@ -207,6 +216,7 @@ const Login = () => {
             localStorage.setItem('fullName', docSnap.data().name)
             localStorage.setItem('username', docSnap.data().username)
             localStorage.setItem('user_id', user.uid)
+            localStorage.setItem('accessToken', user.accessToken)
             if(formik.values.email == 'curriculum.management.2022@gmail.com'){
               localStorage.setItem('userLevel',1)
             }

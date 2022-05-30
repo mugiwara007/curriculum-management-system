@@ -82,11 +82,12 @@ export function AuthProvider({ children }) {
     function signout(){
         signOut(auth).then(() => {
             // Sign-out successful.
+            localStorage.removeItem('email');
+            localStorage.removeItem('accessToken');
             setCurrVersion(0)
             setVersion('1')
             setCurrentUser("")
             setUserLevel(0)
-            localStorage.removeItem('email');
             router.push("/")
         }).catch((error) => {
             const errorCode = error.code;
