@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -29,10 +29,14 @@ const states = [
 ];
 
 export const AccountProfileDetails = (props) => {
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
+
   const [values, setValues] = useState({
-    name: localStorage.getItem('fullName'),
-    email: localStorage.getItem('email'),
-    username: localStorage.getItem('username'),
+    name: fullName,
+    email: email,
+    username: username,
   });
 
   const handleChange = (event) => {
@@ -41,6 +45,12 @@ export const AccountProfileDetails = (props) => {
       [event.target.name]: event.target.value
     });
   };
+
+  useEffect(() =>{
+    setFullName(localStorage.getItem('fullName'))
+    setEmail(localStorage.getItem('email'))
+    setUsername(localStorage.getItem('username'))
+  }, [])
 
   return (
     <form

@@ -76,10 +76,14 @@ export const ApplyVersionDialog = (props) =>{
               handleClose();
   };
 
+  const [userLevel, setUserLevel] = useState('')
 
+  useEffect(() => {
+    setUserLevel(localStorage.getItem('userLevel'))
+  }, [])
   return (
     <div style={{display : 'inline-block'}} >
-      {localStorage.getItem('userLevel') == 2 ?
+      {userLevel == 2 ?
       <Button
           color="success"
           variant="contained"
