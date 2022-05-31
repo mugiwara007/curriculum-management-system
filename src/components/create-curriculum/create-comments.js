@@ -69,7 +69,7 @@ return(
         await setDoc(doc(comment_collection, Date.parse(comment_id).toString()), {
           comment_id:comment_id,
           message: commentVal,
-          date: (comment_id.getMonth() + 1) + "/" + comment_id.getDate() + comment_id.getFullYear(),
+          date: (comment_id.getMonth() + 1) + "/" + comment_id.getDate() + "/" + comment_id.getFullYear(),
           email: localStorage.getItem('email')
         });
 

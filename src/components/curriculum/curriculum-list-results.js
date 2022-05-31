@@ -47,6 +47,7 @@ import { doc, updateDoc, getDocs, setDoc } from "firebase/firestore";
 import { getUserLevel } from '../userModel';
 import { setVersion } from "src/components/create-curriculum/curriculum-model"
 import { collection, query, where, onSnapshot } from "firebase/firestore"
+import { LocalSeeOutlined } from '@mui/icons-material';
 
 export default function UpdateModal(props) 
 {
@@ -1612,6 +1613,8 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
       subs.push({ ...doc.data(), id: doc.id });
     });
     const sub_size = subs.length
+    localStorage.setItem('CurrID',id)
+    localStorage.setItem('CurrVer', sub_size.toString())
     setCurrVersion(sub_size.toString())
     setVersion(sub_size.toString())
     router.push('/create-curriculum')

@@ -328,23 +328,6 @@ export const SubjectListToolbar = (props) => {
       <Card>
         <CardContent>
           <Box sx={{ maxWidth: 500 }}>
-            <TextField
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SvgIcon
-                      color="action"
-                      fontSize="small"
-                    >
-                      <SearchIcon />
-                    </SvgIcon>
-                  </InputAdornment>
-                )
-              }}
-              placeholder="Search"
-              variant="outlined"
-            />
             <Link onClick={()=>{router.push('/subjects_archive')}} sx={{marginTop:'auto', cursor:'pointer'}}>Subject Archive List</Link>
           </Box>
         </CardContent>

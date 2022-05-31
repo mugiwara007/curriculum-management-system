@@ -18,21 +18,9 @@ export function useAuth(){
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [docID, setDocID] = useState()
-    const [userID, setUserID] = useState()
-    const [userEmailPassID, setUserEmailPassID] = useState()
     let userLevel = 0
-    const [name, setName] = useState()
-    const [userName, setUserName] = useState()
-    const [userCode, setUserCode] = useState()
-    const [userEmail, setUserEmail] = useState()
-    const [userPass, setUserPass] = useState()
     const [currVersion, setCurrVersion] = useState(0)
     const router = useRouter();
-    const ulevel = 0
-    
-      const handleClose = () => {
-        setOpen(false);
-      };
     
     function register(fname,mname,sname,email, password){
         const res = createUserWithEmailAndPassword(auth, email, password);

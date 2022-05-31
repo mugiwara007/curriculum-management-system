@@ -71,7 +71,7 @@ export const CommentBox = (props) =>{
 export const CreateComments = (props) => {
   const [comment, setComment] = useState([])
   useEffect(() => {
-    const q = query(collection(db, "curriculumns", props.data, "comments"));
+    const q = query(collection(db, "curriculumns", localStorage.getItem('CurrID'), "comments"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const temp = [];
       querySnapshot.forEach((doc) => {

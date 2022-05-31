@@ -91,13 +91,6 @@ export default function FormDialog() {
       (
         'Username is required'
       ),
-      // Userlevel: Yup
-      // .number()
-      // .max(50)
-      // .required
-      // (
-      //   'User level is required'
-      // )
     }),
     onSubmit: () => {
       if(formik.values.Password.match(/^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/g))
@@ -213,18 +206,6 @@ export default function FormDialog() {
               variant="outlined"
               />
 
-              {/* <TextField
-              error={Boolean(formik.touched.Userlevel && formik.errors.Userlevel)}
-              fullWidth
-              helperText={formik.touched.Userlevel && formik.errors.Userlevel}
-              label="User level"
-              margin="normal"
-              name="Userlevel"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.Userlevel}
-              variant="outlined"
-              /> */}
               <FormControl sx={{marginLeft:1, marginTop:2}}>
                 <FormLabel id="demo-radio-buttons-group-label">User Level</FormLabel>
                 <RadioGroup
@@ -376,23 +357,6 @@ export const CustomerListToolbar = (props) => {
       <Card>
         <CardContent>
           <Box sx={{ maxWidth: 500 }}>
-            <TextField
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SvgIcon
-                      color="action"
-                      fontSize="small"
-                    >
-                      <SearchIcon />
-                    </SvgIcon>
-                  </InputAdornment>
-                )
-              }}
-              placeholder="Search customer"
-              variant="outlined"
-            />
             <Link onClick={()=>{router.push('/user_archive')}} sx={{marginTop:'auto', cursor:'pointer'}}>User Archive List</Link>
           </Box>
         </CardContent>

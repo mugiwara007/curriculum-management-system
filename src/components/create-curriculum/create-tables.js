@@ -27,7 +27,7 @@ import Delete from '@mui/icons-material/Delete';
 import * as Yup from 'yup';
 import EditIcon from '@mui/icons-material/Edit';
 import { useFormik } from 'formik';
-import { getCurriculumID, getVersion, setVersion, setYearLevel } from './curriculum-model';
+import { getCurriculumID, getVersion, setCurriculumID, setVersion, setYearLevel } from './curriculum-model';
 import { getYearLevel } from './curriculum-model';
 import { getUserLevel } from '../userModel';
 
@@ -408,7 +408,7 @@ export const DeleteSubDialog = (props) =>{
     } else if (props.year == 40){
       nyear = "fourth_year"
     }                                         //collection id ng curriculum
-    const subjectDoc = doc(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', year, props.id);
+    const subjectDoc = doc(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', nyear, props.id);
     await deleteDoc(subjectDoc);
   };
 
@@ -469,10 +469,14 @@ export const CreateTables = (props) => {
   const batch = writeBatch(db);
 
   const tempAllCurrSub = async () => {
+    setVersion(localStorage.getItem('CurrVer'))
+    setCurriculumID(localStorage.getItem('CurrID'))
     const newVersion = getVersion().toString()
     const curriculum_id = getCurriculumID();
     const currRef = doc(db, "curriculumns", curriculum_id);
     const tempSubRef = collection(currRef, 'temp_sub')
+    alert('Curr ID: '+ curriculum_id)
+    alert('Version :'+ newVersion)
 
     const deleteRef1 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'first_year')
     const deleteRef2 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'second_year')
@@ -557,7 +561,7 @@ export const CreateTables = (props) => {
     tempAllCurrSub()
   }, [currVersion]);
 
-  function allCurrSub1(){
+  function allCurrSub(){
     let year="";
     const curriculum_id = getCurriculumID();
     if (yearOption == 10){
@@ -597,31 +601,14 @@ export const CreateTables = (props) => {
          setTotalUnit1(tUnit1)
          setTotalHr1(tHrPw1)
       });
-  }
 
-  useEffect(() => {
-    allCurrSub1()
-  }, [yearOption, currVersion]);
-
-  function allCurrSub2(){
-    let year="";
-    const curriculum_id = getCurriculumID();
-    if (yearOption == 10){
-      year = "first_year"
-    } else if (yearOption == 20){
-      year = "second_year"
-    } else if (yearOption == 30){
-      year = "third_year"
-    } else if (yearOption == 40){
-      year = "fourth_year"
-    }
     const sub2Ref = collection(db, "curriculumns", curriculum_id, 'temp_sub', 'temp', year);
-    const q = query(sub2Ref, where("curr_sem", '==', 2));
+    const q2 = query(sub2Ref, where("curr_sem", '==', 2));
     let tLec2 = 0
     let tLab2 = 0
     let tUnit2 = 0
     let tHrPw2 = 0
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const unsubscribe2 = onSnapshot(q2, (querySnapshot) => {
       const subs = [];
       querySnapshot.forEach((doc) => {
           subs.push({ ...doc.data(), id: doc.id });
@@ -646,8 +633,9 @@ export const CreateTables = (props) => {
   }
 
   useEffect(() => {
-    allCurrSub2()
-  }, [yearOption,currVersion]);
+    allCurrSub()
+  }, [yearOption, currVersion]);
+
 
   const setOption = (event) =>{
     setYearOption(event.target.value)
