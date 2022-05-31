@@ -72,6 +72,8 @@ export function AuthProvider({ children }) {
             // Sign-out successful.
             localStorage.removeItem('email');
             localStorage.removeItem('accessToken');
+            localStorage.removeItem('CurrID');
+            localStorage.removeItem('CurrVer');
             setCurrVersion(0)
             setVersion('1')
             setCurrentUser("")
