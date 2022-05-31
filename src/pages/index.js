@@ -242,7 +242,7 @@ const Login = () => {
           <Stack spacing={2} sx={{ width: '100%' }}>
           <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-                  This is a warning message!
+                  Invalid username or password.
               </Alert>
           </Snackbar>
           

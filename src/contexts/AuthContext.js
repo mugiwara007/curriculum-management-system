@@ -6,6 +6,7 @@ import { collection ,addDoc, query, where, getDocs, doc, getDoc } from "firebase
 import { useRouter } from 'next/router';
 import { setEmail } from 'src/components/userModel';
 import { setVersion } from 'src/components/create-curriculum/curriculum-model';
+import { Dialog } from '@mui/material';
 
 const AuthContext = React.createContext()
 
@@ -20,8 +21,13 @@ export function AuthProvider({ children }) {
     const [docID, setDocID] = useState()
     let userLevel = 0
     const [currVersion, setCurrVersion] = useState(0)
+    const [open, setOpen] = React.useState(false);
     const router = useRouter();
     
+    const handleClose = () => {
+        setOpen(false);
+      };
+
     function register(fname,mname,sname,email, password){
         const res = createUserWithEmailAndPassword(auth, email, password);
         const user = res.user;
@@ -48,9 +54,6 @@ export function AuthProvider({ children }) {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            // alert("User not found.")
-            // alert(errorMessage)
-            
         });
 
         return 

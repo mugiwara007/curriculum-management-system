@@ -475,8 +475,6 @@ export const CreateTables = (props) => {
     const curriculum_id = getCurriculumID();
     const currRef = doc(db, "curriculumns", curriculum_id);
     const tempSubRef = collection(currRef, 'temp_sub')
-    alert('Curr ID: '+ curriculum_id)
-    alert('Version :'+ newVersion)
 
     const deleteRef1 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'first_year')
     const deleteRef2 = collection(db, 'curriculumns', curriculum_id, 'temp_sub', 'temp', 'second_year')
