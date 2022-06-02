@@ -6,6 +6,7 @@ import { collection ,addDoc, query, where, getDocs, doc, getDoc } from "firebase
 import { useRouter } from 'next/router';
 import { setEmail } from 'src/components/userModel';
 import { setVersion } from 'src/components/create-curriculum/curriculum-model';
+import { Dialog } from '@mui/material';
 
 const AuthContext = React.createContext()
 
@@ -18,22 +19,10 @@ export function useAuth(){
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [docID, setDocID] = useState()
-    const [userID, setUserID] = useState()
-    const [userEmailPassID, setUserEmailPassID] = useState()
     let userLevel = 0
-    const [name, setName] = useState()
-    const [userName, setUserName] = useState()
-    const [userCode, setUserCode] = useState()
-    const [userEmail, setUserEmail] = useState()
-    const [userPass, setUserPass] = useState()
     const [currVersion, setCurrVersion] = useState(0)
     const router = useRouter();
-    const ulevel = 0
-    
-      const handleClose = () => {
-        setOpen(false);
-      };
-    
+
     function register(fname,mname,sname,email, password){
         const res = createUserWithEmailAndPassword(auth, email, password);
         const user = res.user;
@@ -60,12 +49,7 @@ export function AuthProvider({ children }) {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            // alert("User not found.")
-            // alert(errorMessage)
-            
         });
-
-        return 
     }
         const addDocID = async (email_id) => {
             const userData = query(usersCollectionRef, where("uid", "==", email_id));
@@ -84,6 +68,8 @@ export function AuthProvider({ children }) {
             // Sign-out successful.
             localStorage.removeItem('email');
             localStorage.removeItem('accessToken');
+            localStorage.removeItem('CurrID');
+            localStorage.removeItem('CurrVer');
             setCurrVersion(0)
             setVersion('1')
             setCurrentUser("")

@@ -189,13 +189,12 @@ const Login = () => {
   const { currentUser } = useAuth()
   const { login } = useAuth()
   const router = useRouter();
+  const [authOpen, setAuthOpen] = React.useState(false);
+  const [count, setCount] = React.useState(0);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleLogClose = () => {
+    setCount(0)
+    setAuthOpen(false);
   };
 
   function handleSessionControlLogin(){
@@ -206,7 +205,8 @@ const Login = () => {
         const user = userCredential.user;
         const user_data = doc(db, "users", user.uid);
         const docSnap = await getDoc(user_data);
-
+        setCount(1)
+        setAuthOpen(true)
         if (docSnap.exists()) {
           if(!docSnap.data().archive)
           {
@@ -226,33 +226,27 @@ const Login = () => {
             router.push('/dashboard')
           }
           else{
-            alert("This account is disabled. Try to contact admin.");
+            // alert("This account is disabled. Try to contact admin.");
+            setCount(2)
+            setAuthOpen(true)
           }
         } else {
           // doc.data() will be undefined in this case
-          alert("No such document!");
+          // alert("No such document!");
+          setCount(3)
+          setAuthOpen(true)
         }
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
-        setOpen(true)
-        return (
-          <div>
-          <Stack spacing={2} sx={{ width: '100%' }}>
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-              <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-                  This is a warning message!
-              </Alert>
-          </Snackbar>
-          
-          {/* <Alert severity="error">This is an error message!</Alert>
-          <Alert severity="warning">This is a warning message!</Alert>
-          <Alert severity="info">This is an information message!</Alert>
-          <Alert severity="success">This is a success message!</Alert> */}
-          </Stack>
-          </div>
-      )
+        const errorMessage = error.message
+        if (errorMessage == "Firebase: Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later. (auth/too-many-requests)."){
+          setCount(4)
+          setAuthOpen(true)
+        } else {
+          setCount(5)
+          setAuthOpen(true)
+        }
       });
       // login(formik.values.email, formik.values.password);
       formik.setSubmitting(false)
@@ -444,6 +438,43 @@ const Login = () => {
                 </Typography>
               </form>
             </Container>
+            <div>
+            <Stack spacing={2} sx={{ width: '100%', float: 'right' }}>
+            <Snackbar anchorOrigin={{ vertical:'bottom', horizontal:'right' }} open={authOpen} autoHideDuration={6000} onClose={handleLogClose}>
+              { count === 1 ? <Alert onClose={handleLogClose} severity="success" sx={{ width: '100%' }}>Login Successfully!</Alert> :
+              count === 2 ? <Alert onClose={handleLogClose} severity="warning" sx={{ width: '100%' }}>This account is disabled. Try to contact admin</Alert> :
+              count === 3 ? <Alert onClose={handleLogClose} severity="error" sx={{ width: '100%' }}>No such document!</Alert> :
+              count === 4 ? <Alert onClose={handleLogClose} severity="warning" sx={{ width: '100%' }}>Access to this account has been temporarily disabled due <br></br> to many failed login attempts. You can immediately restore <br></br> it by resetting your password or you can try again later.</Alert> :
+              count === 5 ? <Alert onClose={handleLogClose} severity="error" sx={{ width: '100%' }}>Invalid email/password!</Alert>: null}
+            </Snackbar>
+            </Stack>
+            </div>
+            {/* <Dialog open={authOpen}
+            onClose={handleLogClose}
+            >
+
+            <DialogTitle
+            display="flex"
+            justifyContent="center" >Login Failed</DialogTitle>
+
+            <DialogContent>
+            <p>Invalid email or password.</p>
+            </DialogContent>
+
+            <DialogActions>
+            <Box p={2}>
+              <Button
+                color="info"
+                variant='contained'
+                disabled={!authOpen}
+                type="submit"
+                onClick={handleLogClose}
+              >
+                OK
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog> */}
       </Box>
     </>
   );

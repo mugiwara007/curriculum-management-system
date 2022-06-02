@@ -225,7 +225,7 @@ export const VersionDialog = (props) =>{
     <Divider />
     
     {/*First Semester Header*/}
-    <Table>
+    <Table style={{overflow: 'auto', display: 'block'}}>
     <TableBody>
                   <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
                     COURSE CODE
@@ -316,7 +316,7 @@ export const VersionDialog = (props) =>{
               <p><b>Second Semester</b></p>
               </TableCell>
               <Divider />
-              <Table>
+              <Table style={{overflow: 'auto', display: 'block'}}>
     <TableBody>
                   <TableCell sx={{fontWeight: 'bold', backgroundColor:'#F8ECD1' }}>
                     COURSE CODE

@@ -265,23 +265,6 @@ export const DepartmentListToolbar = (props) => {
       <Card>
         <CardContent>
           <Box sx={{ maxWidth: 500 }}>
-            <TextField
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SvgIcon
-                      color="action"
-                      fontSize="small"
-                    >
-                      <SearchIcon />
-                    </SvgIcon>
-                  </InputAdornment>
-                )
-              }}
-              placeholder="Search customer"
-              variant="outlined"
-            />
             <Link onClick={()=>{router.push('/department_archive')}} sx={{marginTop:'auto', cursor:'pointer'}}>Department Archive List</Link>
           </Box>
         </CardContent>

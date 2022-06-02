@@ -16,7 +16,7 @@ import { Comments } from 'src/components/create-curriculum/create-comments';
 import HistoryIcon from '@mui/icons-material/History';
 import { useEffect, useState } from 'react';
 import { db } from 'src/firebase/firebase-auth';
-import { getCurriculumID, getYearLevel, setVersion, getVersion } from 'src/components/create-curriculum/curriculum-model';
+import { getCurriculumID, getYearLevel, setVersion, getVersion, setCurriculumID } from 'src/components/create-curriculum/curriculum-model';
 import { CreateComments } from 'src/components/create-curriculum/comments';
 import { getUserLevel } from 'src/components/userModel';
 import { getDocs, collection, doc, getDoc, onSnapshot, query, addDoc, where,setDoc, } from 'firebase/firestore';
@@ -70,6 +70,7 @@ export const ApplyVersionDialog = (props) =>{
                     })
                     setVersion(counter.toString())
                     setCurrVersion(Number(getVersion()))
+                    localStorage.setItem('CurrVer', counter.toString())
                   }).catch((e)=>{
                     alert(e)
                   })
@@ -135,6 +136,8 @@ const Dashboard = (props) => {
   useEffect(async() => {
     // const curriculum_doc = doc(db,"curriculumns", getCurriculumID())
     // const version_collection = collection(curriculum_doc,"versions")
+    const currID = localStorage.getItem('CurrID')
+    setCurriculumID(currID)
     const q = query(collection(db,"curriculumns", getCurriculumID(),"versions"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const temp = [];
