@@ -189,13 +189,10 @@ const Login = () => {
   const { currentUser } = useAuth()
   const { login } = useAuth()
   const router = useRouter();
+  const [authOpen, setAuthOpen] = React.useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleLogClose = () => {
+    setAuthOpen(false);
   };
 
   function handleSessionControlLogin(){
@@ -236,23 +233,7 @@ const Login = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        setOpen(true)
-        return (
-          <div>
-          <Stack spacing={2} sx={{ width: '100%' }}>
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-              <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-                  Invalid username or password.
-              </Alert>
-          </Snackbar>
-          
-          {/* <Alert severity="error">This is an error message!</Alert>
-          <Alert severity="warning">This is a warning message!</Alert>
-          <Alert severity="info">This is an information message!</Alert>
-          <Alert severity="success">This is a success message!</Alert> */}
-          </Stack>
-          </div>
-      )
+        setAuthOpen(true)
       });
       // login(formik.values.email, formik.values.password);
       formik.setSubmitting(false)
@@ -444,6 +425,41 @@ const Login = () => {
                 </Typography>
               </form>
             </Container>
+            <div>
+            <Stack spacing={2} sx={{ width: '100%', float: 'right' }}>
+            <Snackbar anchorOrigin={{ vertical:'bottom', horizontal:'right' }} open={authOpen} autoHideDuration={6000} onClose={handleLogClose}>
+              <Alert onClose={handleLogClose} severity="error" sx={{ width: '100%' }}>
+                Invalid email / password!
+              </Alert>
+            </Snackbar>
+            </Stack>
+            </div>
+            {/* <Dialog open={authOpen}
+            onClose={handleLogClose}
+            >
+
+            <DialogTitle
+            display="flex"
+            justifyContent="center" >Login Failed</DialogTitle>
+
+            <DialogContent>
+            <p>Invalid email or password.</p>
+            </DialogContent>
+
+            <DialogActions>
+            <Box p={2}>
+              <Button
+                color="info"
+                variant='contained'
+                disabled={!authOpen}
+                type="submit"
+                onClick={handleLogClose}
+              >
+                OK
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog> */}
       </Box>
     </>
   );

@@ -21,12 +21,7 @@ export function AuthProvider({ children }) {
     const [docID, setDocID] = useState()
     let userLevel = 0
     const [currVersion, setCurrVersion] = useState(0)
-    const [open, setOpen] = React.useState(false);
     const router = useRouter();
-    
-    const handleClose = () => {
-        setOpen(false);
-      };
 
     function register(fname,mname,sname,email, password){
         const res = createUserWithEmailAndPassword(auth, email, password);
@@ -55,8 +50,6 @@ export function AuthProvider({ children }) {
             const errorCode = error.code;
             const errorMessage = error.message;
         });
-
-        return 
     }
         const addDocID = async (email_id) => {
             const userData = query(usersCollectionRef, where("uid", "==", email_id));

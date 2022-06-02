@@ -173,7 +173,7 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
     <Card {...rest}>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
-          <Table>
+          <Table style={{overflow: 'auto', display: 'block'}}>
             <TableHead>
               <TableRow>
                 {/* <TableCell padding="checkbox">

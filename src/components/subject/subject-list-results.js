@@ -460,20 +460,9 @@ export const SubjectListResults = () => {
     <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
-          <Table>
+          <Table style={{overflow: 'auto', display: 'block'}}>
             <TableHead>
               <TableRow>
-                {/* <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedSubjectIds.length === subjects.length}
-                    color="primary"
-                    indeterminate={
-                      selectedSubjectIds.length > 0
-                      && selectedSubjectIds.length < subjects.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell> */}
                 <TableCell>
                   Subject Code
                 </TableCell>
