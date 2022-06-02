@@ -208,7 +208,7 @@ const curriculum_id = getCurriculumID();
     <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
-          <Table>
+          <Table style={{overflow: 'auto', display: 'block'}}>
             <TableHead>
               <TableRow>
                 <TableCell />
