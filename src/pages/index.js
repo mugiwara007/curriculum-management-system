@@ -244,6 +244,7 @@ const Login = () => {
           setCount(4)
           setAuthOpen(true)
         } else {
+          setCount(5)
           setAuthOpen(true)
         }
       });
@@ -441,10 +442,10 @@ const Login = () => {
             <Stack spacing={2} sx={{ width: '100%', float: 'right' }}>
             <Snackbar anchorOrigin={{ vertical:'bottom', horizontal:'right' }} open={authOpen} autoHideDuration={6000} onClose={handleLogClose}>
               { count === 1 ? <Alert onClose={handleLogClose} severity="success" sx={{ width: '100%' }}>Login Successfully!</Alert> :
-              count === 2 ? <Alert onClose={handleLogClose} severity="warning" sx={{ width: '100%' }}>This account is disabled. Try to contact admin.!</Alert> :
+              count === 2 ? <Alert onClose={handleLogClose} severity="warning" sx={{ width: '100%' }}>This account is disabled. Try to contact admin</Alert> :
               count === 3 ? <Alert onClose={handleLogClose} severity="error" sx={{ width: '100%' }}>No such document!</Alert> :
-              count === 4 ? <Alert onClose={handleLogClose} severity="info" sx={{ width: '100%' }}>Access to this account has been temporarily disabled due <br></br> to many failed login attempts. You can immediately restore <br></br> it by resetting your password or you can try again later.</Alert> :
-              <Alert onClose={handleLogClose} severity="error" sx={{ width: '100%' }}>Invalid email/password!</Alert>}
+              count === 4 ? <Alert onClose={handleLogClose} severity="warning" sx={{ width: '100%' }}>Access to this account has been temporarily disabled due <br></br> to many failed login attempts. You can immediately restore <br></br> it by resetting your password or you can try again later.</Alert> :
+              count === 5 ? <Alert onClose={handleLogClose} severity="error" sx={{ width: '100%' }}>Invalid email/password!</Alert>: null}
             </Snackbar>
             </Stack>
             </div>
