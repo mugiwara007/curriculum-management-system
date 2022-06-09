@@ -48,6 +48,7 @@ import { getUserLevel } from '../userModel';
 import { setVersion } from "src/components/create-curriculum/curriculum-model"
 import { collection, query, where, onSnapshot } from "firebase/firestore"
 import { LocalSeeOutlined } from '@mui/icons-material';
+import styles from './pageBreak.module.css'
 
 export default function UpdateModal(props) 
 {
@@ -1011,12 +1012,10 @@ export function DownloadPDF(props)
             </Table>
   {/* FIRST YEAR END */}
   
-  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: 5}} variant="subtitle2" gutterBottom component="div" fullWidth>
-  --------------------------------------------------PAGE BREAK--------------------------------------------------
-                </Typography>
+                <div className={styles.pageBreak}/>
 
   {/******* SECOND YEAR *******/}
-  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1}} variant="subtitle2" gutterBottom component="div" fullWidth>
+  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1, marginTop: 2}} variant="subtitle2" gutterBottom component="div" fullWidth>
                 SECOND YEAR
                 </Typography>
               <TableCell>
@@ -1201,12 +1200,10 @@ export function DownloadPDF(props)
             </Table>
   {/* SECOND YEAR END */}
 
-  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: 5}} variant="subtitle2" gutterBottom component="div" fullWidth>
-  --------------------------------------------------PAGE BREAK--------------------------------------------------
-                </Typography>
+  <div className={styles.pageBreak}/>
 
   {/******* THIRD YEAR *******/}
-  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1}} variant="subtitle2" gutterBottom component="div" fullWidth>
+  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1, marginTop: 2}} variant="subtitle2" gutterBottom component="div" fullWidth>
                 THIRD YEAR
                 </Typography>
               <TableCell>
@@ -1391,12 +1388,10 @@ export function DownloadPDF(props)
             </Table>
   {/* THIRD YEAR END */}
 
-  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginTop: 5}} variant="subtitle2" gutterBottom component="div" fullWidth>
-                --------------------------------------------------PAGE BREAK--------------------------------------------------
-                </Typography>
+  <div className={styles.pageBreak}/>
 
   {/******* FOURTH YEAR *******/}
-  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1}} variant="subtitle2" gutterBottom component="div" fullWidth>
+  <Typography sx={{textAlign: 'center', alignSelf: 'center', marginBottom: -1, marginTop: 2}} variant="subtitle2" gutterBottom component="div" fullWidth>
                 FOURTH YEAR
                 </Typography>
               <TableCell>
