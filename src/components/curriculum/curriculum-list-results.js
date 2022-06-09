@@ -48,7 +48,7 @@ import { getUserLevel } from '../userModel';
 import { setVersion } from "src/components/create-curriculum/curriculum-model"
 import { collection, query, where, onSnapshot } from "firebase/firestore"
 import { LocalSeeOutlined } from '@mui/icons-material';
-import styles from './pageBreak.module.css'
+import styles from 'src/pageBreak.module.css'
 
 export default function UpdateModal(props) 
 {
