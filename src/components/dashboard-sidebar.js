@@ -140,6 +140,34 @@ const dean = [
   // }
 ];
 
+const committee = [
+  {
+    href: '/dashboard',
+    icon: (<ChartBarIcon fontSize="small" />),
+    title: 'Dashboard'
+  },
+  {
+    href: '/curriculum',
+    icon: (<LocalLibraryIcon fontSize="small" />),
+    title: 'Curriculum'
+  },
+  // {
+  //   href: '/notifications',
+  //   icon: (<NotificationsActiveIcon fontSize="small" />),
+  //   title: 'All Notification'
+  // },
+  {
+    href: '/account',
+    icon: (<UserIcon fontSize="small" />),
+    title: 'Account'
+  },
+  // {
+  //   href: '/settings',
+  //   icon: (<CogIcon fontSize="small" />),
+  //   title: 'Settings'
+  // }
+];
+
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
   const router = useRouter();
@@ -285,6 +313,28 @@ export const DashboardSidebar = (props) => {
         {getUserLevel() == 3 ?
          <Box sx={{ flexGrow: 1 }}>
          {dean.map((item) => (
+         <NavItem
+         key={item.title}
+         icon={item.icon}
+         href={item.href}
+         title={item.title}
+       />
+       ))}
+        <NavItem
+           key="Sign Out"
+           icon={(<LogoutIcon fontSize="small" />)}
+           href="/"
+           title="Sign Out"
+           onClick={() => signout()}
+         />
+        </Box>
+        :
+        <></>
+        }
+
+      {getUserLevel() == 4 ?
+         <Box sx={{ flexGrow: 1 }}>
+         {committee.map((item) => (
          <NavItem
          key={item.title}
          icon={item.icon}

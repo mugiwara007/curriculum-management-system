@@ -218,6 +218,7 @@ export default function FormDialog() {
                   >
                     <FormControlLabel value="2" control={<Radio />} label="Department Chair" />
                     <FormControlLabel value="3" control={<Radio />} label="Dean" />
+                    <FormControlLabel value="4" control={<Radio />} label="College Committee" />
                 </RadioGroup>
               </FormControl>
         </DialogContent>

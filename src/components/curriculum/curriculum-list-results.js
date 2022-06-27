@@ -1718,7 +1718,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     </Button>
                     :
                     <>
-                    {customer.on_review == true ?
+                    {customer.on_review == true && getUserLevel() == 3?
                     <>
                     <Button
                     sx={{background:'#0275d8', color:'white', marginRight: 1}}
