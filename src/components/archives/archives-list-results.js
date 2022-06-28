@@ -185,17 +185,6 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
           <Table style={{overflow: 'auto', display: 'block'}}>
             <TableHead>
               <TableRow>
-                {/* <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
-                    color="primary"
-                    indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell> */}
                 <TableCell>
                   Subject Code
                 </TableCell>
@@ -231,15 +220,7 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
                 <TableRow
                   hover
                   key={archSub.id}
-                   //selected={selectedArchSubIds.indexOf(archSub.id) !== -1}
                 >
-                  {/* <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedSubjectIds.indexOf(subject.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, subject.id)}
-                      value="true"
-                    />
-                  </TableCell> */}
                   <TableCell>
                     <Box
                       sx={{
@@ -247,12 +228,6 @@ export const ArchivesListResults = ({ customers, ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      {/* <Avatar
-                        src={subject.avatarUrl}
-                        sx={{ mr: 2 }}
-                      >
-                        {getInitials(subject.name)}
-                      </Avatar> */}
                       <Typography
                         color="textPrimary"
                         variant="body1"
