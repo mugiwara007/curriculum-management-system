@@ -269,17 +269,6 @@ export const CollegeListResults = ({ customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={checkAll}
-                    color="primary"
-                    indeterminate={
-                      selectedCollegeIds.length > 0
-                      && selectedCollegeIds.length < customers.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell>
                 <TableCell>
                   Logo
                 </TableCell>
@@ -301,13 +290,6 @@ export const CollegeListResults = ({ customers, ...rest }) => {
                   key={college.id}
                   selected={selectedCollegeIds.indexOf(college.id) !== -1}
                 >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedCollegeIds.indexOf(college.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, college.id)}
-                      value="true"
-                    />
-                  </TableCell>
                   <TableCell>
                     <Avatar alt={college.coll_code} src={college.coll_logo}  sx={{width:100, height:100}}/>
                   </TableCell>

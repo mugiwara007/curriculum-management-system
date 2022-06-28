@@ -1619,7 +1619,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
     <Card {...rest}>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
-          <Table style={{overflow: 'auto', display: 'block'}}>
+          <Table sx={{overflow: 'auto', width: '100%'}}>
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -1643,7 +1643,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                 <TableCell>
                   Username
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ textAlign: 'center' }}>
                   Actions
                 </TableCell>
               </TableRow>
@@ -1683,7 +1683,7 @@ export const CurriculumListResults = ({ customers, ...rest }) => {
                     <TableCell>
                     {customer.username}
                     </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ textAlign: 'center' }}>
                     {getUserLevel() == 2 && customer.accepted != true?
                     <Button
                     variant="outlined"

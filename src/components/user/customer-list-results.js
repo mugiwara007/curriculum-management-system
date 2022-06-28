@@ -284,7 +284,7 @@ export const CustomerListResults = () => {
     <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
-          <Table style={{overflow: 'auto', display: 'block'}}>
+          <Table style={{overflow: 'auto', width:'100%'}}>
             <TableHead>
               <TableRow>
                 <TableCell>
@@ -314,13 +314,6 @@ export const CustomerListResults = () => {
                   key={user.id}
                   selected={selectedCustomerIds.indexOf(user.id) !== -1}
                 >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedCustomerIds.indexOf(user.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, user.id)}
-                      value="true"
-                    />
-                  </TableCell>
                   <TableCell>
                     <Box
                       sx={{

@@ -14,6 +14,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import * as React from 'react';
 import { getArchiveVal, setArchiveVal } from '../userModel';
+import Link from '@mui/material/Link';
+import { useRouter } from 'next/router';
 
 export default function CenteredTabs() {
   const [value, setValue] = React.useState(0);
@@ -35,7 +37,9 @@ export default function CenteredTabs() {
   );
 }
 
-export const ArchivesListToolbar = (props) => (
+export const ArchivesListToolbar = (props) => {
+  const router = useRouter();
+  return(
   <Box {...props}>
     <Box
       sx={{
@@ -54,8 +58,18 @@ export const ArchivesListToolbar = (props) => (
         Subjects Archives
       </Typography>
     </Box>
+    <Box sx={{ mt: 3 }}>
+      <Card>
+        <CardContent>
+          <Box sx={{ maxWidth: 500 }}>
+            <Link onClick={()=>{router.push('/subjects')}} sx={{marginTop:'auto', cursor:'pointer'}}>Subject List</Link>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   </Box>
-);
+  )
+}
 
 
 

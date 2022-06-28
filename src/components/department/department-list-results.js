@@ -267,10 +267,10 @@ export const DepartmentListResults = () => {
     <Card>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
-          <Table style={{overflow: 'auto', display: 'block'}}>
+          <Table style={{overflow: 'auto', width: '100%'}}>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                   <Checkbox
                     checked={checkAll}
                     color="primary"
@@ -280,7 +280,7 @@ export const DepartmentListResults = () => {
                     }
                     onChange={handleSelectAll}
                   />
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   Department Code
                 </TableCell>
@@ -302,13 +302,6 @@ export const DepartmentListResults = () => {
                   key={dept.id}
                   selected={selectedDeptIds.indexOf(dept.id) !== -1}
                 >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={selectedDeptIds.indexOf(dept.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, dept.id)}
-                      value="true"
-                    />
-                  </TableCell>
                   <TableCell>
                     <Box
                       sx={{
