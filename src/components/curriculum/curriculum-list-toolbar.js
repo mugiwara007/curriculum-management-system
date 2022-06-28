@@ -152,7 +152,7 @@ export default function AddCurriculumModal()
   const handleData = async (currCode,cmo,deptCode) => {
     const current_date =  new Date()
     let newSubUser=""
-    const email = localStorage.getItem('email');
+    const email = getEmail();
     const userData = query(usersCollectionRef, where("email", "==", email));
     const querySnapshot = await getDocs(userData)
     await querySnapshot.forEach((doc) => {
